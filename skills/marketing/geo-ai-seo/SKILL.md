@@ -26,7 +26,7 @@ Traditional SEO optimizes for a human scanning a blue link. GEO optimizes for an
 - Optimizing content that needs to appear in Google AI Overviews, Perplexity answers, or ChatGPT citations
 - Building content strategy for AI-native distribution
 
-Don't use for: technical schema implementation (use `hermes-agent` for structured data), paid search campaigns, or social media copy.
+Don't use for: technical schema/structured-data implementation (that's a developer task, not content), paid search campaigns, or social media copy.
 
 ## AI Search Landscape
 
@@ -37,7 +37,7 @@ Don't use for: technical schema implementation (use `hermes-agent` for structure
 | ChatGPT (Search mode) | Inline reference links | Clear definitions, step-by-step, authoritative tone |
 | Bing Copilot | Source links in sidebar | Structured data, Q\&A format, freshness |
 | You.com | Source attribution cards | Depth, uniqueness, expert perspective |
-| Brave Search (LeChat) | Citation bubbles | Concise accuracy, first-position clarity |
+| Brave Search (AI answers) | Citation bubbles | Concise accuracy, first-position clarity |
 
 ## Content Structure for GEO
 
@@ -64,7 +64,7 @@ Don't use for: technical schema implementation (use `hermes-agent` for structure
 | Rule | Bad Example | Good Example |
 |------|-------------|-------------|
 | Answer-first | "Many people wonder about X and there are many factors..." | "X costs between $500–$2000 depending on size. Here's the breakdown:" |
-| Data specificity | "Many businesses use this approach" | "73% of B2B marketers reported increased ROI using this approach (Source: HubSpot, 2025)" |
+| Data specificity | "Many businesses use this approach" | "[X]% of B2B marketers reported increased ROI using this approach (Source: [named study], [year])" |
 | Self-contained steps | "Then you configure it properly" | "Step 3: Navigate to Settings > API Keys and generate a new token with read/write scope" |
 | Entity density | "the platform can help with your needs" | "HubSpot's marketing hub manages 2.9 million contacts on average per enterprise account" |
 | Definition clarity | "There are various interpretations of what X means" | "X (conversion rate optimization) is the process of increasing the percentage of visitors who complete a desired action on your website" |

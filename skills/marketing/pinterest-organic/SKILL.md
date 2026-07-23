@@ -41,7 +41,7 @@ Visit the provided URL and extract:
 | **Monthly saves** | Pinterest Analytics → Overview | Signal of content value |
 | **Monthly outbound clicks** | Pinterest Analytics → Overview | Traffic-driving effectiveness |
 | **Top-performing pins** | Pinterest Analytics → Top Pins | What already works |
-| **Pin formats used** | Scroll recent pins | Idea Pins vs standard pins vs video pins |
+| **Pin formats used** | Scroll recent pins | Static image vs video vs carousel (multi-image) Pins |
 | **Posting frequency** | Recent activity | Consistency and cadence |
 | **Board naming** | Board list | Keyword usage for search |
 
@@ -106,7 +106,7 @@ BOARD: [Tertiary keyword — e.g., "Social Media Tips"]
 |----------|-------------|-------------|
 | **Static pin** | Vertical image 2:3 with text overlay | Core content — evergreen, searchable |
 | **Video pin** | 6-15s vertical video | When showing process, before/after, or quick demo |
-| **Idea Pin** | Multi-page, native to Pinterest app | For step-by-step guides, carousels — high reach but lower click-out |
+| **Carousel pin** | Multi-image swipeable pin (2-5 images) | Step-by-step guides, before/afters, multi-angle product — high engagement but lower click-out per image |
 | **Infographic pin** | Long vertical (1000×2500px) with data or steps | High save rate — people save for later |
 | **Quote pin** | Text on a branded background | Brand awareness and shares |
 
@@ -161,7 +161,7 @@ Use **Tailwind** or **Pinterest's native scheduler** to batch-schedule pins. Pin
 | Follower Count | Strategy Shift |
 |---------------|----------------|
 | < 500 | 5 new pins/day minimum. 8 keyword-optimized boards. Enable Rich Pins. Join 1-2 group boards if available. |
-| 500-5K | Scale to 8-10 pins/day. Add new boards every 2 weeks. Start Idea Pins for reach. |
+| 500-5K | Scale to 8-10 pins/day. Add new boards every 2 weeks. Add video pins for reach. |
 | 5K-20K | Batch-create 30+ pin designs monthly. Use Pinterest Trends for seasonal content. Start a pinned blog/content calendar synced with pins. |
 | > 20K | Outsource pin design. Run Pinterest Ads on top-performing pins. Optimize for outbound clicks over follower count. |
 
@@ -199,7 +199,7 @@ Followers: X | Boards: Y | Total Pins: Z | Monthly Impressions: W
 Monthly Saves: A | Monthly Outbound Clicks: B
 
 --- CURRENT STATE ---
-Pin Mix: [Static %, Video %, Idea Pin %]
+Pin Mix: [Static %, Video %, Carousel %]
 Posting Frequency: X pins/day
 Board Structure: [Assessment — keyword-optimized or vague?]
 Top 3 Pins: [Pin titles + impression counts]
@@ -248,7 +248,7 @@ Rich Pins: [Enable/disable recommendation]
 ## Verification Checklist
 
 - [ ] Profile audited (boards, pins, follower count, analytics)
-- [ ] Pin format mix assessed (static/video/idea pin)
+- [ ] Pin format mix assessed (static/video/carousel)
 - [ ] Board structure evaluated for keyword optimization
 - [ ] Recommended board structure provided (8-12 boards with sections)
 - [ ] Pin design direction specified (ratio, text overlay, branding)

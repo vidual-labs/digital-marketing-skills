@@ -1,12 +1,12 @@
 ---
 name: meta-ads-diagnostics
-description: Use when analyzing Meta Ads performance data and proposing concrete campaign changes — budget allocation, targeting, schedule, LLA, segments, and structural fixes.
+description: Use when analyzing Meta Ads performance data and proposing concrete campaign changes — budget allocation, targeting, schedule, learning phase, lookalikes, segments, and structural fixes.
 version: 1.0.0
 author: Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [meta-ads, facebook-ads, diagnostics, campaign-optimization, LLA, budget, targeting, scheduling]
+    tags: [meta-ads, facebook-ads, diagnostics, campaign-optimization, learning-phase, lookalike-audiences, budget, targeting, scheduling]
     related_skills: [meta-ads-creative, landing-page-funnel, google-ads-diagnostics]
 ---
 
@@ -14,7 +14,7 @@ metadata:
 
 ## Overview
 
-Analyze Meta Ads campaign data and produce actionable change recommendations across budget, targeting, scheduling, learning phase (LLA), segment allocation, and campaign structure. This skill takes raw performance metrics and translates them into specific configuration changes with expected impact.
+Analyze Meta Ads campaign data and produce actionable change recommendations across budget, targeting, scheduling, learning phase, segment allocation, and campaign structure. This skill takes raw performance metrics and translates them into specific configuration changes with expected impact.
 
 ## When to Use
 
@@ -22,7 +22,7 @@ Analyze Meta Ads campaign data and produce actionable change recommendations acr
 - Diagnosing why a campaign is underperforming
 - Optimizing budget allocation across ad sets and campaigns
 - Adjusting targeting, audiences, or placement
-- Fixing learning phase (LLA) issues
+- Fixing learning phase issues (getting an ad set out of "Learning" or "Learning Limited")
 - Proposing bid strategy changes (lowest cost vs. cost cap)
 - Scheduling optimization (dayparting, ad rotation)
 
@@ -75,9 +75,9 @@ Check these first — structural problems make optimization pointless.
 
 **Creative refresh cycle:** Plan new creative every 7-14 days. Do not wait for fatigue to set in — front-load refresh planning.
 
-### Phase 3: Learning Phase (LLA) Management
+### Phase 3: Learning Phase Management
 
-Meta's algorithm enters "learning" whenever a significant edit is made. It needs ~50 optimization events in a 7-day window to exit learning and optimize efficiently.
+Meta's algorithm enters "learning" whenever a significant edit is made. An ad set needs ~50 optimization events in a 7-day window to exit learning and optimize efficiently. (Lookalike audiences are a separate lever — see targeting in Phase 1.)
 
 | Status | Conversion count (7d) | Action |
 |--------|----------------------|--------|
@@ -197,7 +197,7 @@ IMPLEMENTATION ORDER: [Specific sequence to avoid resetting learning]
 ## Verification Checklist
 
 - [ ] Diagnostic based on ≥ 3 days of data (7 days preferred)
-- [ ] All 7 phases evaluated (structure, budget, targeting, fatigue, LLA, bid, placements)
+- [ ] All 7 phases evaluated (structure, budget, targeting, fatigue, learning phase, bid, placements)
 - [ ] Priority changes listed in implementation order
 - [ ] Changes that reset learning flagged and sequenced carefully
 - [ ] Budget scaling respects 20%/day rule

@@ -6,7 +6,7 @@ author: Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [google-ads, ppc, diagnostics, campaign-optimization, keywords, search-terms, ROAS, QSC]
+    tags: [google-ads, ppc, diagnostics, campaign-optimization, keywords, search-terms, ROAS, quality-score]
     related_skills: [google-ads-keywords, landing-page-funnel, meta-ads-diagnostics]
 ---
 
@@ -99,8 +99,8 @@ NEGATIVE KEYWORDS:
 [free trial], [how to], [what is a], [vs], [alternatives]
 ```
 
-**Cannibalism check:**
-- If your exact match keyword "buy running shoes" is spending $200 on queries like "best running shoes for runners" — that's your phrase match working. But if it's triggering "running shoe repair" — add "repair" as a negative.
+**Cannibalization check:**
+- If your phrase match keyword `"buy running shoes"` is spending $200 on queries like "best running shoes for runners" — that's phrase match doing its job. But if it's triggering "running shoe repair" — add `"repair"` as a negative.
 
 ### Phase 4: Quality Score Optimization
 
