@@ -79,7 +79,7 @@ The first 125 characters of primary text are all users see before "See More." Ev
 
 [PROOF — 1 line with specific data, testimonial, or social proof]
 
-[CTLEAD — 1 line that naturally leads to the headline/CTA]
+[LEAD-IN — 1 line that naturally leads to the headline/CTA]
 ```
 
 **Body rules:**

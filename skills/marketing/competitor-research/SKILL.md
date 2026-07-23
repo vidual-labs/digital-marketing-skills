@@ -73,7 +73,7 @@ For each of the top 5 competitors, document:
 | **Website** | Traffic estimate (monthly), top pages, content volume, design quality | SEMrush / SimilarWeb (if available), manual browse |
 | **SEO** | Domain authority, top-ranking keywords, organic traffic share | Manual Google search for core keywords, check position |
 | **Google Ads** | Active ads? Search keywords? Display? Video? | Search target keywords and note ad presence |
-| **Meta Ads** | Active campaigns? Creative style? Target audience signals? | Meta Ad Library (adlibrary.facebook.com) — search competitor name |
+| **Meta Ads** | Active campaigns? Creative style? Target audience signals? | Meta Ad Library (facebook.com/ads/library) — search competitor name |
 | **TikTok** | Organic presence? Ad presence? Content style? | TikTok search + TikTok Ad Library |
 | **Instagram** | Followers, posts/month, engagement rate, content mix | Manual profile visit |
 | **LinkedIn** | Followers (page) / Connections (personal), posting frequency, content type | Manual page visit |

@@ -120,7 +120,7 @@ GTM's built-in debug mode is the single most useful tool. Run it before any fix.
 | **GA4 event tag** firing duplicate events | Multiple triggers attached (e.g., "All Pages" + custom event that also fires on page load) | Remove redundant triggers. Ensure mutual exclusivity |
 | **Meta Pixel** not firing | Pixel ID wrong, or trigger not matching, or consent blocker active | Verify pixel ID in tag config. Check trigger in preview. Verify consent mode status |
 | **Server-side GTM** — events not forwarded | Server container not listening, or macro variable misconfigured | Check server container tags → "Forwarding Request" tag is firing. Verify cloud logs for errors |
-| **Enhanced E-commerce** — product data missing | `ecommerce` or `event` data layer structure incorrect | Validate data layer structure against the specific tracking spec (GA4 vs universal analytics) |
+| **Enhanced E-commerce** — product data missing | `ecommerce` or `event` data layer structure incorrect | Validate the data layer against the GA4 e-commerce spec (`items` array, `item_id`/`item_name`, event-scoped `ecommerce` object) |
 
 ### Phase 6: Consent & Ad Blockers
 

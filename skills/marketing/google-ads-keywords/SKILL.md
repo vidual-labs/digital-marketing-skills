@@ -1,6 +1,6 @@
 ---
 name: google-ads-keywords
-description: Use when generating keyword lists for Google Ads campaigns. Always outputs exact match ("keyword") or phrase match ([keyword]) — never broad match, never bullet points.
+description: Use when generating keyword lists for Google Ads campaigns. Always outputs exact match ([keyword]) or phrase match ("keyword") — never broad match, never bullet points.
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -32,17 +32,19 @@ Only two match types are used:
 
 | Match Type | Syntax | Behavior |
 |-----------|--------|----------|
-| **Exact Match** | `"keyword"` | Matches the keyword or close variants (misspellings, plurals, reordering, removed stop words) with the same intent |
-| **Phrase Match** | `[keyword]` | Contains the keyword or close variants with the same intent. Can have additional words before or after |
+| **Exact Match** | `[keyword]` | Matches the keyword or close variants (misspellings, plurals, reordering, removed stop words) with the same intent. Tightest control. |
+| **Phrase Match** | `"keyword"` | Matches searches that include the meaning of the keyword. Can have additional words before, after, or within, as long as the intent is preserved. |
 
-**Never use broad match** (no quotes or brackets). Broad match wastes budget on irrelevant traffic and destroys campaign quality score.
+**Never use broad match** (no quotes or brackets). Broad match wastes budget on irrelevant traffic and drags down campaign quality.
+
+> Syntax check: square brackets `[ ]` = exact, quotation marks `" "` = phrase. A naked word with no delimiter is broad match and must never appear in output.
 
 ## Output Format
 
 All keywords are output as comma-separated values. Each keyword is wrapped in its match-type delimiters. No bullet points, no numbering, no line breaks between keywords within a group.
 
 ```
-"exact match keyword", "another exact", [phrase match keyword], [another phrase]
+[exact match keyword], [another exact], "phrase match keyword", "another phrase"
 ```
 
 ### Ad Group Structure
@@ -51,10 +53,12 @@ When organizing by ad group, output:
 
 ```
 AD GROUP: [Ad Group Name]
-"exact 1", "exact 2", [phrase 1], [phrase 2]
+[exact 1], [exact 2], "phrase 1", "phrase 2"
 ```
 
 ### Negative Keywords
+
+Negative keywords also take a match type. Use phrase negatives (`"..."`) to block any query containing the term, and exact negatives (`[...]`) to block only that precise query.
 
 ```
 NEGATIVE KEYWORDS:
@@ -71,19 +75,19 @@ From the product/service, extract core seed terms representing the primary inten
 
 For each seed, generate:
 
-- **Synonyms:** "shoes", "footwear", "sneakers"
-- **Commercial intent modifiers:** "buy [product]", "[product] near me", "[product] store"
-- **Transactional modifiers:** "[product] price", "[product] deal", "[product] discount"
-- **Question-based for phrase match:** [what is [product]], [how to choose [product]]
-- **Brand-adjacent:** "[competitor] alternative", "[competitor] vs [your brand]"
-- **Long-tail specific:** "[product] for [use case]", "[product] with [feature]"
+- **Synonyms:** shoes, footwear, sneakers
+- **Commercial intent modifiers:** buy [product], [product] near me, [product] store
+- **Transactional modifiers:** [product] price, [product] deal, [product] discount
+- **Question-based (usually phrase match):** what is [product], how to choose [product]
+- **Brand-adjacent:** [competitor] alternative, [competitor] vs [your brand]
+- **Long-tail specific:** [product] for [use case], [product] with [feature]
 
 ### 3. Quality Filtering
 
 Exclude keywords that:
 
 - Have no commercial intent (informational only, unless that's the campaign goal)
-- Are too broad (single generic word, use phrase or exact instead)
+- Are too broad (a single generic word — tighten to phrase or exact)
 - Conflict with brand positioning
 - Target a different product/use case than the campaign
 
@@ -99,12 +103,12 @@ Use this decision framework:
 
 | Intent | Match Type | Example |
 |--------|-----------|---------|
-| High-intent commercial | Exact | "buy running shoes online" |
-| Commercial with variation | Phrase | [buy running shoes] |
-| Brand-specific | Exact | "[brand] running shoes" |
-| Long-tail specific | Exact | "waterproof running shoes for trail" |
-| Broader search patterns | Phrase | [running shoes for wide feet] |
-| Competitor comparison | Exact | "[brand] vs [competitor]" |
+| High-intent commercial | Exact | `[buy running shoes online]` |
+| Commercial with variation | Phrase | `"buy running shoes"` |
+| Brand-specific | Exact | `[brand running shoes]` |
+| Long-tail specific | Exact | `[waterproof running shoes for trail]` |
+| Broader search patterns | Phrase | `"running shoes for wide feet"` |
+| Competitor comparison | Exact | `[brand vs competitor]` |
 
 ## Keyword Density Rules
 
@@ -125,13 +129,13 @@ OBJECTIVE: [Conversions/Leads/Sales/Traffic]
 TARGET AUDIENCE: [Description]
 
 AD GROUP: [Ad Group 1 Name]
-"exact keyword 1", "exact keyword 2", "exact keyword 3", [phrase keyword 1], [phrase keyword 2]
+[exact keyword 1], [exact keyword 2], [exact keyword 3], "phrase keyword 1", "phrase keyword 2"
 
 AD GROUP: [Ad Group 2 Name]
-"exact keyword 1", "exact keyword 2", "exact keyword 3", [phrase keyword 1], [phrase keyword 2]
+[exact keyword 1], [exact keyword 2], [exact keyword 3], "phrase keyword 1", "phrase keyword 2"
 
 AD GROUP: [Ad Group 3 Name]
-"exact keyword 1", "exact keyword 2", [phrase keyword 1], [phrase keyword 2], [phrase keyword 3]
+[exact keyword 1], [exact keyword 2], "phrase keyword 1", "phrase keyword 2", "phrase keyword 3"
 
 NEGATIVE KEYWORDS:
 "free", "cheap", "jobs", "login", "hire", "career", "internship", "salary", [free trial], [how to make], [what is], [tutorial]
@@ -139,23 +143,26 @@ NEGATIVE KEYWORDS:
 
 ## Common Pitfalls
 
-1. **Using broad match.** Every keyword must be wrapped in `"quotes"` or `[brackets]`. No exceptions.
+1. **Using broad match.** Every keyword must be wrapped in `[brackets]` (exact) or `"quotes"` (phrase). A naked word with no delimiter is broad match — no exceptions.
 
-2. **Bullet points or numbered lists.** Output is always comma-separated keywords. Never use bullets, numbers, or line breaks within a keyword group.
+2. **Swapping the delimiters.** Square brackets are exact, quotation marks are phrase. Reversing them changes the targeting entirely. Double-check every line.
 
-3. **Ad groups that are too broad.** If a keyword's search intent doesn't match the ad and landing page for that group, move it to a different group. Tightly themed groups give better quality scores and lower CPC.
+3. **Bullet points or numbered lists.** Output is always comma-separated keywords. Never use bullets, numbers, or line breaks within a keyword group.
 
-4. **Forgetting negative keywords.** Always include a negative keyword section. Even a basic set saves budget from unqualified clicks.
+4. **Ad groups that are too broad.** If a keyword's search intent doesn't match the ad and landing page for that group, move it to a different group. Tightly themed groups give better Quality Scores and lower CPC.
 
-5. **Duplicate keywords with different match types.** Having both "keyword" and [keyword] for the same root can cause internal competition. Use exact for precise targeting and phrase for broader intent capture — but not identical phrases in both.
+5. **Forgetting negative keywords.** Always include a negative keyword section. Even a basic set saves budget from unqualified clicks.
 
-6. **Keyword stuffing without relevance.** More keywords do not mean more conversions. 10 tightly matched keywords outperform 100 loosely related ones.
+6. **Duplicate keywords across match types.** Having both `[keyword]` and `"keyword"` for the same root can cause internal competition. Use exact for precise targeting and phrase for broader intent capture — but not the identical term in both.
 
-7. **Ignoring search volume signals.** For very niche keywords (under 100 monthly searches), group them into one ad group with similar low-volume keywords to accumulate sufficient data.
+7. **Keyword stuffing without relevance.** More keywords do not mean more conversions. 10 tightly matched keywords outperform 100 loosely related ones.
+
+8. **Ignoring search volume signals.** For very niche keywords (under 100 monthly searches), group them into one ad group with similar low-volume keywords to accumulate sufficient data.
 
 ## Verification Checklist
 
-- [ ] Every keyword is wrapped in `"exact"` or `[phrase]` match syntax
+- [ ] Every keyword is wrapped in `[exact]` or `"phrase"` match syntax
+- [ ] Brackets used for exact, quotes used for phrase (not reversed)
 - [ ] No broad match keywords (naked words without delimiters)
 - [ ] No bullet points, numbers, or line breaks within keyword groups
 - [ ] Keywords are comma-separated
