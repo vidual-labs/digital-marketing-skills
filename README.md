@@ -1,4 +1,3 @@
-# digital-marketing-skills
 
 ```
     ____  __  ___   _____ __ __ ______    __   _____
@@ -7,6 +6,8 @@
  / /_/ / /  / /   ___/ / /| |_/ // /___/ /______/ /
 /_____/_/  /_/   /____/_/ |_/___/_____/_____/____/
 ```
+# Digital-Marketing-Skills
+
 
 A collection of Hermes Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, and competitive intelligence.
 
