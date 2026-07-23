@@ -9,7 +9,7 @@
 # Digital-Marketing-Skills
 
 
-A collection of Hermes Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, and competitive intelligence.
+A collection of Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, and competitive intelligence.
 
 Each skill is a self-contained `SKILL.md`: a `description:` trigger, a decision framework, a fixed output format, common pitfalls, and a verification checklist. The skills are model- and platform-agnostic — no dependence on a specific tool version — so they stay useful as the underlying platforms change.
 
