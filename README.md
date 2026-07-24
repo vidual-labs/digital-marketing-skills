@@ -50,6 +50,25 @@ Each skill is a self-contained `SKILL.md`: a `description:` trigger, a decision 
 
 ## Install & Use
 
+### CLI install (recommended)
+
+These skills follow the open [Agent Skills](https://github.com/vercel-labs/skills) format, so you can install them straight from this repo with the community `skills` CLI — no cloning, no copy-pasting into your agent's config:
+
+```bash
+npx skills add vidual-labs/digital-marketing-skills
+```
+
+It detects which coding agents you have installed (Claude Code, Cursor, and 70+ others) and asks where to put the skills. A few useful flags:
+
+```bash
+npx skills add vidual-labs/digital-marketing-skills -l               # list skills without installing
+npx skills add vidual-labs/digital-marketing-skills -s tiktok-ads meta-ads-creative   # install specific skills only
+npx skills add vidual-labs/digital-marketing-skills -g               # install globally instead of per-project
+npx skills update vidual-labs/digital-marketing-skills               # pull the latest versions later
+```
+
+`skills` is a third-party open-source tool (not built or maintained by this repo or by Anthropic) — reasonable to run for a quick install, but read [its source](https://github.com/vercel-labs/skills) first if you'd rather not run an unfamiliar `npx` package. Everything below is the manual alternative for anyone who prefers that, or who's on a platform the CLI doesn't cover.
+
 ### In Hermes Agent
 
 The native home — skills auto-load by trigger:
@@ -64,7 +83,7 @@ Each skill has a `description:` frontmatter field that acts as a trigger. The ag
 
 Claude supports the same Agent Skills format these files use (`SKILL.md` with a `description:` trigger), so you can use them directly.
 
-**Claude Code (auto-loading, recommended)**
+**Claude Code (auto-loading)**
 
 Drop the skills into a skills directory Claude Code reads — a project-level `.claude/skills/` or your personal `~/.claude/skills/`:
 
