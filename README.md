@@ -9,7 +9,7 @@
 # Digital-Marketing-Skills
 
 
-A collection of Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, and competitive intelligence.
+A collection of Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, competitive intelligence, brand positioning, and brand identity.
 
 Each skill is a self-contained `SKILL.md`: a `description:` trigger, a decision framework, a fixed output format, common pitfalls, and a verification checklist. The skills are model- and platform-agnostic — no dependence on a specific tool version — so they stay useful as the underlying platforms change.
 
@@ -41,6 +41,13 @@ Each skill is a self-contained `SKILL.md`: a `description:` trigger, a decision 
 | **[geo-ai-seo](skills/marketing/geo-ai-seo/SKILL.md)** | Generative Engine Optimization — content structure and text formation for AI search (Google AI Overviews, Perplexity, ChatGPT). Answer-first architecture, data anchors, citation-signal optimization. |
 | **[landing-page-funnel](skills/marketing/landing-page-funnel/SKILL.md)** | Landing page conversion optimization — funnel structure, ad-to-page congruence, form optimization, social proof, CRO testing, and copy analysis. |
 | **[gtm-debugging](skills/marketing/gtm-debugging/SKILL.md)** | Diagnose and fix Google Tag Manager bugs — missing triggers, broken tags, data layer issues, consent mode, cross-domain tracking, and duplicate events. |
+
+### Brand & Positioning
+
+| Skill | Description |
+|-------|-------------|
+| **[branding](skills/marketing/branding/SKILL.md)** | Build a complete brand identity system — visual identity (colors, typography, imagery, layout), brand voice (attributes, tone matrix, vocabulary), copy standards by channel, and touchpoint consistency. |
+| **[market-positioning](skills/marketing/market-positioning/SKILL.md)** | Define where your brand sits vs. competitors — perceptual mapping, distance-from-competition scoring, audience alignment, positioning statement, message house, and consistency audit. |
 
 ### Competitive Intelligence
 
@@ -140,6 +147,7 @@ You are a digital marketing strategist. When I give you a marketing task, use th
 
 ```
 skills/marketing/
+├── branding/
 ├── competitor-research/
 ├── geo-ai-seo/
 ├── google-ads-diagnostics/
@@ -148,6 +156,7 @@ skills/marketing/
 ├── instagram-organic/
 ├── landing-page-funnel/
 ├── linkedin-organic/
+├── market-positioning/
 ├── meta-ads-creative/
 ├── meta-ads-diagnostics/
 ├── pinterest-organic/
