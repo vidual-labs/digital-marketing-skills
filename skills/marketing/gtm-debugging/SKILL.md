@@ -1,300 +1,273 @@
 ---
 name: gtm-debugging
-description: Use when diagnosing and fixing Google Tag Manager (GTM) bugs — missing triggers, broken tags, variable misconfiguration, event tracking failures, and data layer issues.
-version: 1.0.0
-author: Hermes Agent
+description: Use when diagnosing and fixing Google Tag Manager or tracking bugs — tags not firing, triggers misconfigured, data layer variables undefined, GA4 events missing or duplicated, Google Ads or Meta Pixel conversions not recording, Conversions API deduplication, consent mode v2 blocking tags, cross-domain tracking, single-page-app pageviews, and server-side GTM forwarding. Also use when someone says "my conversions stopped", "GA4 shows nothing", "events fire twice" or shares a Tag Assistant screenshot. Don't use for analytics reporting questions or for campaign optimization (google-ads-diagnostics, meta-ads-diagnostics).
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Needs the user to run Tag Assistant / browser DevTools and report back, or to paste container exports, data layer snippets and console output; no direct site access required.
 metadata:
-  hermes:
-    tags: [GTM, google-tag-manager, debugging, analytics, datalayer, event-tracking, GA4]
-    related_skills: [landing-page-funnel, google-ads-diagnostics, meta-ads-diagnostics]
+  category: conversion-tracking
+  updated: 2026-10-02
+  tags: [gtm, google-tag-manager, debugging, ga4, datalayer, event-tracking, consent-mode, conversions-api, server-side-tagging, cross-domain]
+  related_skills: [landing-page-funnel, google-ads-diagnostics, meta-ads-diagnostics]
 ---
 
 # Google Tag Manager Debugging
 
 ## Overview
 
-Diagnose and fix GTM bugs — from missing triggers and broken tags to data layer misconfigurations and event tracking failures. This skill gives you a systematic approach to finding, reproducing, and resolving GTM issues with concrete fix instructions.
+Find, reproduce and fix tracking bugs in Google Tag Manager setups: container loading, triggers, variables, tags (GA4, Google Ads, Meta Pixel and others), consent mode, duplicate events, cross-domain and single-page-app tracking, and server-side GTM. The output is a diagnosis with exact configuration changes, data layer code where needed, and verification steps a developer can follow.
 
 ## When to Use
 
-- Events not firing (page views, clicks, form submissions, e-commerce)
-- GA4, Meta Pixel, or conversion tags not sending data
-- Data layer variables returning wrong values or "undefined"
-- Triggers not firing at the expected moment
-- Duplicate events firing multiple times
-- Cross-domain or subdomain tracking issues
-- Server-side GTM configuration problems
+- Events or conversions not firing, firing late, or firing twice
+- GA4, Google Ads or Meta Pixel tags sending no data or wrong parameters
+- Data layer variables returning `undefined` or stale values
+- Tags working in Preview but not in production (usually consent)
+- Session breaks across domains or on SPA route changes
+- Server-side GTM not forwarding events, or Conversions API duplicates
 
-Don't use for: Analytics reporting (use platform-specific diagnostics), campaign performance analysis, or SEO technical audits.
+Don't use for: interpreting analytics reports, campaign performance (use `google-ads-diagnostics` / `meta-ads-diagnostics`), SEO audits, or landing page conversion rate (use `landing-page-funnel`).
+
+## Inputs
+
+Ask for, in this order of usefulness:
+
+1. **The symptom**, precisely: which tag, which page, which action, what is expected vs observed, since when
+2. **Tag Assistant Preview output**: for the action in question, the event list, the tag's "Fired / Not fired" status and reason, trigger conditions, variable values, and the **Consent** tab
+3. **Browser console errors** and the Network tab filtered for `collect`, `gtm.js`, `gtag/js`, `fbevents`, `tr?`
+4. **Data layer code** as implemented on the page (copy of the `dataLayer.push` calls)
+5. **Container export (JSON)** or screenshots of the tag, trigger and variable configuration
+6. **Consent setup**: which CMP, whether consent mode v2 is on, default state
+7. **Environment facts**: SPA framework, server-side GTM, CDN/WAF, Shopify/WordPress plugins that also inject tags
+
+Data rules: do not guess what the container contains — ask for the export or screenshots. If you cannot access the site, walk the user through Tag Assistant step by step and reason from what they report. Mark any fix that depends on an unverified assumption. Google renames things (the GA4 Configuration tag is now the **Google tag**, Tag Assistant replaced the legacy extension) — map old names to current ones when the user's screenshots differ.
 
 ## Diagnostic Framework
 
-### Phase 1: Is the GTM Container Loading?
+### Phase 1: Is the container loading?
 
-First and fastest check — if GTM itself isn't on the page, nothing else matters.
+1. View page source: the GTM snippet (`GTM-XXXXXXX`) should be high in `<head>`, once
+2. Network tab: `gtm.js?id=GTM-...` returns 200
+3. Console: no `dataLayer is not defined` or CSP errors
 
-**Check:**
-1. Open browser DevTools → Console tab → reload page
-2. Look for `Google Tag Manager` in console (silent load) or check for errors
-3. Inspect page source — search for `GTM-XXXXXX`
-4. Check Network tab → filter "googletagmanager.com" — should see gtm.js load
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Snippet absent or on some pages only | Template/theme omits it | Add through the site's global layout, not per page |
+| `gtm.js` blocked | CSP, ad blocker, corporate proxy, country-level block | Add `https://www.googletagmanager.com` to `script-src`/`connect-src`; consider first-party serving via server-side GTM or Google tag gateway |
+| Two containers or duplicate snippet | Plugin plus hard-coded snippet | Remove one; duplicates double-fire everything |
+| Data layer pushes before snippet lost | `dataLayer` defined after GTM | Declare `window.dataLayer = window.dataLayer || [];` **before** the snippet and push initial data there |
 
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| `GTM-XXXXXX` not in source | GTM snippet not installed or broken | Add GTM container snippet immediately after `<head>` open tag |
-| `gtm.js` in Network but errors | Script blocked by CSP, ad blocker, or DNS | Check Content-Security-Policy header; whitelist `googletagmanager.com` |
-| Snippet present, but no tags firing | Data layer not defined before snippet | Add `window.dataLayer = window.dataLayer || [];` before GTM snippet |
-
-**Critical rule:** The data layer must be declared *before* the GTM snippet:
+Reference snippet order:
 
 ```html
 <head>
   <script>
     window.dataLayer = window.dataLayer || [];
-    dataLayer.push({
-      'userId': '12345',
-      'isMember': true
-    });
+    dataLayer.push({ 'user_type': 'member', 'page_type': 'product' });
   </script>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-XXXXXX');</script>
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
   <!-- End Google Tag Manager -->
 </head>
 ```
 
-### Phase 2: Debug with GTM Preview Mode
+### Phase 2: Reproduce in Tag Assistant Preview
 
-GTM's built-in debug mode is the single most useful tool. Run it before any fix.
+Preview (tagassistant.google.com → Connect) is the primary tool. Reproduce before fixing.
 
-**Activate:** `https://tagassistant.google.com/snippet/gtm-XXXXXX` or use the GTM Chrome extension.
+Workflow:
 
-**Preview shows (3-column layout):**
-- **Page:** The live site
-- **Tags:** Which tags fired / didn't fire on this page/event
-- **Triggers:** Which triggers fired / didn't fire (this is where 80% of bugs live)
-- **Variables:** Current values of all variables at the moment of firing
+1. Connect Preview to the page, perform the action
+2. Left panel: find the event (`Consent Initialization`, `Initialization`, `Container Loaded`, `DOM Ready`, `Window Loaded`, custom events, `Click`, `Form Submit`, `History`)
+3. **Tags** tab: is the tag under "Fired" or "Not fired"? Click it to see which trigger condition failed
+4. **Variables** tab at that event: are the values what the tag needs?
+5. **Data Layer** tab: what did the push actually contain?
+6. **Consent** tab: what consent state did the tag see, and does the tag require consent?
+7. **Errors** tab: JavaScript errors inside custom HTML tags
 
-**Debug workflow:**
-1. Open preview on the relevant page
-2. Perform the action (click button, submit form, scroll 50%)
-3. Right panel → Triggers tab → check which should-have-fired triggers are marked "Not fired"
-4. For a fired trigger → click it → inspect the conditions, variable values, and event type
-5. For a tag that didn't fire → check which trigger was blocking it, and which variables it needed
+Preview does **not** bypass consent. A tag with built-in or additional consent checks stays "Not fired" when the state is denied, and the Consent tab shows why.
 
-### Phase 3: Trigger Diagnostics
+### Phase 3: Trigger problems
 
 | Problem | Diagnostic | Fix |
 |---------|-----------|-----|
-| **Custom Event trigger** — event not firing | Check if `dataLayer.push({'event': 'yourEvent'})` is actually called on the page. Add `console.log` before the push. | Ensure event name in GTM trigger matches exact string in dataLayer push (case-sensitive, including spacing) |
-| **Click All Elements** — not capturing click | Check if clicked element is removed/replaced by JS before GTM processes it. | Switch to "DOM Elements Only" or "Just Clicked Element" — or use "Event Listener" mode |
-| **Form Submission** — not firing | Google's "Form Submission" has specific element selection logic. AJAX forms often skip it. | Use "Click — All Elements" with a filter on form submit buttons, or implement custom JS listener |
-| **Scroll Depth** — not firing at expected point | Scroll threshold calculation uses document height, which may be wrong for dynamically loaded content. | Recalculate scroll depth with JS that accounts for dynamic content. Use IntersectionObserver for accuracy |
-| **Page View** — firing on wrong pages | Page URL trigger condition too loose or wrong operator | Use "Matches Regex" for complex patterns. Test against the actual URL pattern |
-| **History Change** — SPA navigation | SPA routing that doesn't fire `historyChange` | Add custom trigger: use `pushState`/`replaceState` observer or push `{'event': 'pageView'}` on route change |
-| **Timer trigger** — not reliable | Timer uses `setTimeout` which may be blocked or delayed | Switch to `setInterval`-based approach if reliability is critical |
+| Custom Event trigger never fires | Event name in Data Layer tab ≠ trigger name (case, spacing) or push happens before GTM loads | Match the exact string; for early pushes make sure `dataLayer` exists before the snippet |
+| Click trigger misses the click | Element is re-rendered on click, or click target is a child `<span>` | Use "Click – All Elements" with `matches CSS selector` and a selector ending in `, selector *`; enable "Wait for tags" only when navigation follows |
+| Form Submission trigger silent | AJAX/React form, no native `submit` event | Push a custom `form_submit` event from the form's success callback; or use the Element Visibility trigger on the thank-you message |
+| Scroll Depth fires at wrong time | Content loads after page load | Fire the trigger on a later event (e.g. `DOM Ready` or a custom "content_loaded" push) |
+| Page View on wrong pages | URL condition too loose | Use "Page Path" with `matches RegEx`; test the regex against real URLs |
+| SPA route change not tracked | No History Change trigger, or the router uses neither `pushState` nor hash | Add a History Change trigger; if the framework bypasses History API, push `{'event':'virtual_pageview', 'page_path': ...}` from the router |
+| Element Visibility never fires | Element inside an iframe or shadow DOM | Track inside the iframe/component, or push an event from the component code |
 
-### Phase 4: Variable Misconfiguration
-
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| Data layer variable returns "undefined" | Variable name in GTM doesn't match exact string in data layer | Check case and spacing. `userId` ≠ `userid`. Use GTM preview to see what data layer actually contains |
-| DOM element variable is null | Element not yet in DOM when GTM evaluates | Switch to "Wait for tags" or add a delay. Or switch to a click-specific trigger |
-| 1st-party cookie variable empty | Cookie domain / path misconfigured | Check cookie path is `/` and domain matches (or use `.` for all subdomains) |
-| URL variable returning full URL | You selected "Page URL" but need path, hostname, or query | Switch variable type to the specific part: "Hostname", "Page Path", "Query" |
-| Auto Event — Click ID always empty | Clicked element has no `id` attribute | Use Click Classes, Click Text, or Click URL instead. Or add IDs to the element. |
-
-**Data layer variable naming convention:**
-- Always use `{{DLV - variableName}}` — be explicit it's a data layer variable
-- Use dot notation for nested objects: `{{DLV - product.price}}`
-
-### Phase 5: Tag Firing Issues
-
-| Problem | Diagnostic | Fix |
-|---------|-----------|-----|
-| **GA4 config tag** not firing on all pages | Trigger set to "Some Page Views" with wrong condition, or missing entirely | Set to "All Pages" trigger |
-| **GA4 event tag** firing duplicate events | Multiple triggers attached (e.g., "All Pages" + custom event that also fires on page load) | Remove redundant triggers. Ensure mutual exclusivity |
-| **Meta Pixel** not firing | Pixel ID wrong, or trigger not matching, or consent blocker active | Verify pixel ID in tag config. Check trigger in preview. Verify consent mode status |
-| **Server-side GTM** — events not forwarded | Server container not listening, or macro variable misconfigured | Check server container tags → "Forwarding Request" tag is firing. Verify cloud logs for errors |
-| **Enhanced E-commerce** — product data missing | `ecommerce` or `event` data layer structure incorrect | Validate the data layer against the GA4 e-commerce spec (`items` array, `item_id`/`item_name`, event-scoped `ecommerce` object) |
-
-### Phase 6: Consent & Ad Blockers
-
-Consent management is the #1 silent cause of "nothing is tracking."
+### Phase 4: Variable problems
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| Tags fire in preview but not in production | Consent mode blocking tags (user hasn't consented, or Consent Manager tag fires in wrong order) | Ensure Consent Mode v2 configuration. Check tag firing order — consent must resolve before any tracking tag fires |
-| No data in GA4 during normal browsing | Ad blocker or Privacy Badger blocking `googletagmanager.com` or `google-analytics.com` | Test with ad blocker disabled. Consider consent-first deployment pattern |
-| Meta Pixel fires but GA4 doesn't (or opposite) | Third-party cookies consent granted for one, blocked for another | Check both tags fire under the same consent trigger. Verify both have consent settings configured in GTM |
-| Consent tag fires too late | Consent Manager loads after GTM container | Load consent script inline *before* GTM snippet, or use `cookieExists` check before GTM loads |
+| Data Layer Variable `undefined` | Key mismatch (`userId` vs `userid`), nested path wrong, or value pushed *after* the event | Copy the exact key from the Data Layer tab; use dot notation `ecommerce.items.0.item_id`; push data in the same object as the event or before it |
+| Variable shows the previous value | Data layer merges objects; stale `ecommerce` from the last event | Push `{ ecommerce: null }` before each new ecommerce push |
+| DOM Element variable `null` | Element not yet rendered when the tag fires | Fire on `DOM Ready`/Element Visibility, or read the value from the data layer instead |
+| Cookie variable empty | Cookie set on another path/domain or HttpOnly | Set path `/` and the apex domain; HttpOnly cookies cannot be read client-side |
+| URL variable wrong component | "Page URL" selected instead of Path/Hostname/Query | Choose the component type explicitly |
 
-**Consent Mode v2 minimum config for GTM:**
+Naming convention: prefix variables with type — `DLV - ecommerce.items`, `JS - Page Type`, `CJS - Clean URL`, `Const - GA4 ID` — so Preview is readable.
+
+### Phase 5: Tag problems
+
+| Problem | Diagnostic | Fix |
+|---------|-----------|-----|
+| GA4 events missing | No **Google tag** (`G-XXXX`) firing on `Initialization – All Pages`, or GA4 event tag fires before it | One Google tag on Initialization; GA4 Event tags reference the same Measurement ID |
+| GA4 events duplicated | Both the Google tag's enhanced measurement and a GTM event tag send the same event; or two triggers on one tag | Disable the enhanced measurement feature for that event or remove the GTM tag; one trigger per behaviour |
+| Ecommerce missing items | Data layer does not follow the GA4 schema (`ecommerce.items[]` with `item_id`/`item_name`), or "Send Ecommerce data" is off in the tag | Fix the schema; set the tag's data source to Data Layer |
+| Google Ads conversion not counting | Conversion ID/label typo, conversion linker missing, consent denied for `ad_storage`, or landing page lost `gclid` | Add a Conversion Linker tag on all pages; check consent; keep `gclid` across redirects |
+| Meta Pixel fires but Events Manager shows "no recent activity" | Wrong Pixel ID, blocked by consent/ad blocker, or test events only | Verify ID; check consent; compare browser vs server events |
+| Pixel + Conversions API double counts | No shared `event_id` | Send the same `event_id` from browser and server for each event |
+| Custom HTML tag errors | Syntax error, undefined variable, runs before dependency | Check the Errors tab; wrap in try/catch; sequence with tag sequencing |
+| Server-side GTM silent | Client not claiming requests, wrong transport URL, missing server-side tag | Confirm the GA4 client claims `/g/collect`; set `server_container_url` on the Google tag; check server container Preview and cloud logs |
+
+Reference data layer pushes (GA4 schema):
+
 ```javascript
-// Data layer push before GTM loads
-window.dataLayer = window.dataLayer || [];
+// Always clear the previous ecommerce object first
+dataLayer.push({ ecommerce: null });
 dataLayer.push({
-  'consent': {
-    'ad_storage': 'denied',      // or 'granted' based on consent
-    'analytics_storage': 'denied',
+  event: 'add_to_cart',
+  ecommerce: {
+    currency: 'EUR',
+    value: 29.99,
+    items: [{ item_id: 'SKU-123', item_name: 'Product Name', item_category: 'Category', price: 29.99, quantity: 1 }]
+  }
+});
+
+dataLayer.push({ ecommerce: null });
+dataLayer.push({
+  event: 'purchase',
+  ecommerce: {
+    transaction_id: 'TX-98765',
+    value: 59.98,
+    tax: 5.00,
+    shipping: 4.99,
+    currency: 'EUR',
+    items: [{ item_id: 'SKU-123', item_name: 'Product Name', price: 29.99, quantity: 2 }]
+  }
+});
+
+dataLayer.push({ event: 'generate_lead', lead_source: 'contact_form', form_id: 'contact' });
+```
+
+### Phase 6: Consent mode v2
+
+Consent is the most common cause of "works in Preview, not in production" and of conversion drops after a CMP change.
+
+Correct order: consent default → consent update (after user choice) → tags. The default must be set with the `gtag('consent','default', …)` command (or the CMP's GTM template) on the **Consent Initialization – All Pages** trigger. A plain `dataLayer.push({consent: …})` object does nothing.
+
+```html
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
     'ad_user_data': 'denied',
     'ad_personalization': 'denied',
-    'functionality_storage': 'granted'
-  }
-});
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+</script>
+<!-- GTM snippet follows -->
 ```
 
-### Phase 7: Common Patterns to Fix
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Tags fire in Preview with consent granted but conversions dropped in production | Most real users deny; no consent update is sent after acceptance | Verify the CMP sends `gtag('consent','update', …)`; check the Consent tab shows "On-page Update" |
+| Google Ads conversions missing entirely in the EEA | `ad_storage` / `ad_user_data` default denied and never updated | Fix the update call; enable modelling via consent mode (basic vs advanced) |
+| Default set too late | CMP loads after GTM | Put the default inline before the snippet, or use the CMP template on Consent Initialization |
+| Non-Google tags (Meta, TikTok) fire despite denial | They do not read Google consent signals | Set "Additional consent checks" on those tags to require `ad_storage` (or use a consent-aware trigger) |
 
-#### E-commerce event tracking (Google Analytics 4)
+### Phase 7: Cross-domain and duplicates
 
-```javascript
-// Add to cart
-dataLayer.push({
-  'event': 'add_to_cart',
-  'ecommerce': {
-    'items': [{
-      'item_id': 'SKU-123',
-      'item_name': 'Product Name',
-      'item_category': 'Category',
-      'price': 29.99,
-      'quantity': 1
-    }]
-  }
-});
+**Cross-domain (GA4)**: configure domains in GA4 Admin → Data streams → Configure tag settings → Configure your domains (not in a GTM linker tag). Verify the `_gl` parameter is appended to cross-domain links and that both sites load the same Google tag. Google Ads uses the Conversion Linker tag; enable "Link across domains" there.
 
-// Purchase
-dataLayer.push({
-  'event': 'purchase',
-  'ecommerce': {
-    'transaction_id': 'TX-98765',
-    'value': 59.98,
-    'currency': 'USD',
-    'tax': 5.00,
-    'shipping': 4.99,
-    'items': [{
-      'item_id': 'SKU-123',
-      'item_name': 'Product Name',
-      'item_category': 'Category',
-      'price': 29.99,
-      'quantity': 2
-    }]
-  }
-});
+**Duplicate events**: count fires per action in Preview; check for multiple triggers on one tag; check whether the data layer push itself happens twice (framework double-render, plugin plus hard-coded code); check enhanced measurement overlap; for click triggers, use the most specific selector so parent and child do not both match.
 
-// Generate lead
-dataLayer.push({
-  'event': 'generate_lead',
-  'lead': {
-    'source': 'contact_form',
-    'plan': 'enterprise'
-  }
-});
-```
+### Phase 8: Verify end to end
 
-**GTM tag config for these events:**
-- Trigger: Custom Event, event = `add_to_cart` (or `purchase`, `generate_lead`)
-- Tag type: GA4 Event, Event name = same as dataLayer event
-- Enable enhanced measurement in the GA4 config tag
-
-#### Cross-domain tracking (GA4)
-
-**Linker configuration:**
-1. In GA4 Config tag → Config Settings → Linker Domain Settings: add the second domain
-2. On cross-domain links → fire a "Linker" tag with trigger on click that goes to the other domain
-3. Verify both sites have the GA4 config tag with the linker domain configured
-
-**Debugging cross-domain:**
-- Check `__ga` parameter is appended to outbound links
-- Check `_gl` parameter for session-level tracking
-- In GA4 DebugView, verify user_id or client_id persists across domains
-
-#### Fixing duplicate events
-
-When the same event fires twice:
-
-1. In GTM preview → check how many times the tag fires per action
-2. Check all triggers attached to the tag — is there more than one?
-3. Check if the dataLayer event fires multiple times (add `console.log` on the push)
-4. If it's a click trigger — is it on "All Elements" but also on a parent element that shares classes?
-5. Fix: make triggers mutually exclusive. Use the most specific trigger level (Click ID > Click Classes > All Elements)
-
-### Phase 8: DebugView and Real-Time Verification
-
-After implementing fixes in GTM:
-
-1. **Publish** the container (or use unlisted version for testing)
-2. Open GA4 → DebugView (left sidebar)
-3. Perform the action on the site (with GTM preview mode active)
-4. Verify the event appears in DebugView within 10-30 seconds
-5. Check the event parameters are correct and complete
+1. Fix in the workspace, test in Preview, then publish (changes are invisible to users until published)
+2. GA4 → Admin → DebugView (enable with Preview or `debug_mode`): confirm the event and parameters arrive within ~30 seconds
+3. Google Ads → Goals → Conversions: status "Recording conversions" within 24 hours (use Tag Assistant to see the conversion hit immediately)
+4. Meta Events Manager → Test Events: browser and server events appear once each, deduplicated
+5. Re-test with consent **denied** and **granted** in a fresh incognito session
 
 ## Output Format
 
 ```
-GTM DIAGNOSIS: [Site URL]
-Container ID: GTM-XXXXXX
-Issue Reported: [Description]
+GTM DIAGNOSIS: [Site]
+Container: GTM-XXXXXXX | Environment: [web / server-side / both] | CMP: [name or none]
+Issue reported: [Description, since when]
 
 --- FINDINGS ---
+1. CONTAINER LOAD: [OK / problem — evidence]
+2. DATA LAYER: [Issues — key mismatches, timing, schema]
+3. TRIGGERS: [Trigger] — [Problem] — [Evidence from Preview]
+4. VARIABLES: [Variable] — [Problem] — [Evidence]
+5. TAGS: [Tag] — [Problem] — [Evidence]
+6. CONSENT: [Default/update state, which tags are blocked, evidence from Consent tab]
+7. DUPLICATES / CROSS-DOMAIN / SPA: [Findings]
 
-1. CONTAINER LOAD: [OK / BROKEN — detail]
+--- ROOT CAUSE ---
+[One or two sentences; confidence High / Medium / Low and why]
 
-2. DATA LAYER:
-   [Issues found — missing variables, wrong naming, structural problems]
+--- FIXES (in order) ---
+FIX 1: [Name]
+  Where: [Tag / Trigger / Variable / Site code / CMP]
+  Change: [Exact configuration or code]
+  Code (if needed):
+  [code block]
 
-3. TRIGGER ISSUES:
-   [Trigger name] — [Problem] → [Fix]
+FIX 2: [...]
 
-4. TAG ISSUES:
-   [Tag name] — [Problem] → [Fix]
+--- VERIFICATION ---
+1. [Preview check: event, tag fired, variable value]
+2. [DebugView / Events Manager / Ads conversion check]
+3. [Consent denied and granted test]
+4. [Publish and re-check production]
 
-5. CONSENT: [OK / Blocking — detail]
-
-6. SPECIFIC FIXES:
-
-   FIX 1: [Name]
-   Where: [Tags / Triggers / Variables / Data Layer]
-   Change: [Exact configuration change]
-   Data layer code (if needed): [code block]
-
-   FIX 2: [Name]
-   ...
-
---- VERIFICATION STEPS ---
-1. [Step to verify fix 1]
-2. [Step to verify fix 2]
+--- OPEN QUESTIONS ---
+[Anything that needs the developer's confirmation]
 ```
 
 ## Common Pitfalls
 
-1. **Not using preview mode first.** Guessing at bugs without preview mode is blind debugging. Always start there.
+1. **Fixing without reproducing.** Preview first. Guessing wastes a developer's afternoon.
 
-2. **Publishing before verifying.** Edit, test in preview, THEN publish. Never publish and hope.
+2. **Assuming Preview bypasses consent.** It does not. Read the Consent tab; most "random" non-firing is denied consent.
 
-3. **Case sensitivity.** Data layer event names, variable names, and filter matching are all case-sensitive. `FormSubmit` ≠ `formsubmit`.
+3. **Setting consent defaults with a data layer object.** Only `gtag('consent','default', …)` or a CMP template on Consent Initialization works.
 
-4. **Assuming the click is the element it looks like.** Shadow DOM, iframes, and SPA re-renders mean the actual clicked element may differ. Use "Just Clicked Element" to see the truth.
+4. **Case and whitespace.** `formSubmit` ≠ `FormSubmit`. Copy event and key names from the Data Layer tab.
 
-5. **Not checking consent mode.** Tags silently failing due to consent is the hardest to debug because preview mode *will* show them firing (consent is bypassed in preview). Production behavior differs.
+5. **Forgetting `ecommerce: null`.** Stale items from the previous event leak into the next one and inflate revenue.
 
-6. **Not checking server console for GTM errors.** `window.dataLayer is not defined` or `dataLayer.push is not a function` errors in the browser console tell you exactly what's wrong. Always check console.
+6. **Debugging the wrong container version.** Preview shows the workspace; users see the published version. Check "Versions" and publish.
 
-7. **Forgetting to publish.** Changes in GTM only exist in the working (unpublished) container until you publish. Preview shows the working container — production sees the published one.
+7. **Not checking for a second source of the same tag.** Shopify apps, WordPress plugins and hard-coded pixels fire alongside GTM and create duplicates.
+
+8. **Treating a reporting drop as a tracking bug without checking consent and attribution changes first.** A new CMP banner can halve "conversions" without breaking any tag.
 
 ## Verification Checklist
 
-- [ ] Container loads correctly (snippet in source + gtm.js in network)
-- [ ] Data layer defined before GTM snippet
-- [ ] Preview mode used to diagnose (not guessing)
-- [ ] Browser console checked for errors
-- [ ] Event names match exactly (case-sensitive) between data layer and triggers
-- [ ] Consents verified in real user context (not just preview mode)
-- [ ] Changes tested in preview before publishing
-- [ ] Published version verified against DebugView/analytics tool
-- [ ] Specific data layer code provided when JS changes are needed
-- [ ] Verification steps included for developer to confirm fix
+- [ ] Container load confirmed (snippet once, `gtm.js` 200, no console errors)
+- [ ] Data layer declared before the snippet; pushes copied as implemented
+- [ ] Issue reproduced in Tag Assistant Preview with the specific event, tag status and failing condition
+- [ ] Variable values at the moment of firing checked in Preview
+- [ ] Consent tab reviewed; default and update calls verified; non-Google tags have consent checks
+- [ ] Event/trigger names matched exactly (case-sensitive)
+- [ ] Duplicate sources ruled out (second snippet, plugin, enhanced measurement, multiple triggers)
+- [ ] Fixes list the exact place and change, with data layer or consent code where needed
+- [ ] Verification steps cover Preview, DebugView/Events Manager/Ads, consent denied and granted, and published version
+- [ ] Root cause stated with a confidence level and open questions listed

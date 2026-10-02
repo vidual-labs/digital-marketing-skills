@@ -1,0 +1,65 @@
+{
+  "skill_name": "competitor-research",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "landscape-brief-with-browsing",
+      "prompt": "Competitive landscape for DTC specialty coffee subscriptions in Germany, mid-price (€12–€18 per 250g). We're 'Morgenlicht Kaffee', launching in 3 months with a founder who can film video. Known competitors: Coffee Circle, roastmarket, Blue Farm? Find the rest, audit the top 5 and tell us where the gaps are.",
+      "files": [],
+      "expected_output": "Landscape in the skill's format with method/tools stated and dated; three-layer competitor list (8–15), top-5 deep dives with sources (ad libraries, profiles, AI assistant answers), SWOTs, quantified feasibility-checked gaps (e.g. video/YouTube, founder voice), recommendations and a watchlist; estimates labelled.",
+      "assertions": [
+        "Lists competitors across direct, indirect and adjacent layers and corrects or flags uncertain names (e.g. whether 'Blue Farm' is a direct competitor)",
+        "Deep dives state sources and dates; any traffic/follower figures are labelled as fetched or estimated",
+        "Includes paid-ad presence checks via Meta Ad Library / Google Ads Transparency Center and AI assistant recommendations for the category",
+        "Gaps are quantified and checked against the brand's capacity (founder video)",
+        "Includes a research date, limitations and a watchlist"
+      ],
+      "checks": [
+        {"type": "contains", "value": "COMPETITOR TABLE"},
+        {"type": "contains", "value": "MARKET GAPS"},
+        {"type": "regex", "pattern": "Ad Library|Transparency Center"},
+        {"type": "contains", "value": "LIMITATIONS"},
+        {"type": "regex", "pattern": "Date:"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-browsing-research-plan",
+      "prompt": "I can't give you web access right now. I need a competitor analysis plan for our HR software (mid-market, Nordics) that my junior marketer can execute this week, including exactly where to look and what to record.",
+      "files": [],
+      "expected_output": "A structured research plan following the skill's phases with exact tools (ad libraries, review sites, SERPs, AI assistants), a capture template per competitor, time estimates, and the output format to fill in; no invented competitor data.",
+      "assertions": [
+        "Provides step-by-step instructions with named tools and URLs/places (Meta Ad Library, Google Ads Transparency Center, LinkedIn Ad Library, G2/Capterra, ChatGPT/Perplexity queries)",
+        "Includes a capture template matching the deep-dive format and the SWOT block",
+        "Does not fabricate competitor metrics; may name plausible competitors only as hypotheses to verify",
+        "Gives a realistic time plan for a week"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "Ad Library"},
+        {"type": "regex", "pattern": "G2|Capterra"},
+        {"type": "regex", "pattern": "SWOT"},
+        {"type": "not_regex", "pattern": "\\d{2,3}k monthly visits"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "gap-analysis-from-user-data",
+      "prompt": "Here's what we collected on our 5 competitors (B2B webinar platforms): all run LinkedIn ads; 4 of 5 post on LinkedIn daily; none have a YouTube channel with >500 subs; all homepages say 'engage your audience'; reviews complain about 'clunky onboarding' for 3 of them; none offer monthly pricing; one targets agencies. We have a 3-person marketing team and a product person who loves being on camera. What are the gaps and what should we do?",
+      "files": [],
+      "expected_output": "Quantified gap list (YouTube/video, messaging 'engage your audience', monthly pricing, onboarding experience, agencies segment) with feasibility notes for a 3-person team, prioritized recommendations across positioning/channels/content/paid/experience, and a hand-off to market-positioning.",
+      "assertions": [
+        "Each gap is quantified using the provided counts (e.g. 'none have YouTube >500 subs', '3 of 5 onboarding complaints')",
+        "Feasibility is tied to the team (3 marketers, on-camera product person) so video is prioritized over channels they can't staff",
+        "Recommendations span positioning, channel, content, paid and experience, in priority order",
+        "Flags pricing (monthly) as a product/positioning decision rather than a marketing-only action"
+      ],
+      "checks": [
+        {"type": "contains", "value": "MARKET GAPS"},
+        {"type": "regex", "pattern": "YouTube"},
+        {"type": "regex", "pattern": "onboarding"},
+        {"type": "contains", "value": "STRATEGIC RECOMMENDATIONS"}
+      ]
+    }
+  ]
+}

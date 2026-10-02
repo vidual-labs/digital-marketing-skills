@@ -1,244 +1,251 @@
 ---
 name: youtube-organic
-description: Use when developing YouTube organic strategy — analyze a channel URL, recommend content mix, upload schedule, and subscriber growth tactics optimized for YouTube's algorithm.
-version: 1.0.0
-author: Hermes Agent
+description: Use when developing YouTube organic strategy — channel audit, traffic-source diagnosis, title and thumbnail strategy, retention and hook structure, upload cadence, Shorts-to-long-form funnel and subscriber growth. Also use when someone asks "why aren't my videos getting views", wants a content plan for a channel, or needs help choosing video length and series formats. Don't use for YouTube Ads, live-event production, or monetization and sponsorship deals.
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when the channel cannot be fetched, the skill works from YouTube Studio screenshots (traffic sources, CTR, retention) the user provides.
 metadata:
-  hermes:
-    tags: [youtube, organic, video, SEO, subscriber-growth, content-strategy, thumbnail]
-    related_skills: [instagram-organic, linkedin-organic, pinterest-organic, competitor-research, geo-ai-seo]
+  category: organic-social
+  updated: 2026-10-02
+  tags: [youtube, organic, video, shorts, thumbnails, retention, search, subscriber-growth, content-strategy]
+  related_skills: [instagram-organic, linkedin-organic, pinterest-organic, tiktok-ads, competitor-research, geo-ai-seo]
 ---
 
 # YouTube Organic Strategy
 
 ## Overview
 
-Develop a data-informed organic strategy for YouTube channels. Takes a channel URL, audits current content, audience, and growth trajectory, then produces a tailored plan for what to produce, when to publish, and how to grow the subscriber base. YouTube is unique among video platforms: it's a search engine first, social network second.
+Build a data-informed plan for a YouTube channel: audit the channel and its recent uploads, diagnose where views come from, fix the two levers that gate distribution (click-through rate from title + thumbnail, and retention), define pillars and series, set a sustainable cadence, and decide how Shorts feed long-form. YouTube is a recommendation engine and a search engine; it rewards videos that get clicked by the people shown them and then keep them watching.
 
 ## When to Use
 
-- Auditing a YouTube channel for strategy
-- Planning a content series or channel direction
-- Growing subscribers from scratch or after stagnation
-- Optimizing thumbnails, titles, and upload schedule
-- Developing a YouTube Shorts strategy
+- Auditing a channel and its last 20–30 videos
+- Diagnosing low views, low CTR or poor retention
+- Planning series, cadence and video length
+- Building a Shorts strategy that supports long-form
+- Optimising titles, thumbnails, descriptions and channel pages
 
-Don't use for: YouTube Ads (paid), YouTube Live streaming events, or monetization/brand deal strategy.
+Don't use for: YouTube Ads campaigns, live-stream production, monetisation policy, sponsorship negotiation, or editing software tutorials.
+
+## Inputs
+
+Ask for (or extract from the conversation):
+
+- **Channel URL** and goal (subscribers, watch time, leads, product sales, authority)
+- **YouTube Studio screenshots** (last 28–90 days): traffic sources, impressions and CTR, average view duration and percentage viewed, audience retention curves of 3–5 recent videos, returning vs new viewers, subscribers gained per video, Shorts vs long-form breakdown
+- **Last 20–30 uploads**: title, length, publish date, views, and whether Shorts or long-form
+- **Production capacity**: how many videos per month can realistically be made at what quality
+- **Niche and competitors** the user watches or benchmarks against
+
+Data rules: if you can fetch the channel, record the public data (subscribers, video count, titles, view counts, upload dates, thumbnails as described); if not, say so and ask for screenshots — never estimate CTR or retention. Benchmarks are starting points; Studio's own "typical performance" comparison beats them. YouTube changes limits and features (Shorts up to 3 minutes since Oct 2024, thumbnail Test & Compare, Communities, Hype); if the UI differs, follow the UI and note it.
 
 ## Audit Workflow
 
-### Step 1: Channel Analysis
+### Step 1: Channel analysis
 
-Visit the provided URL and extract:
+| Metric | Where | Why |
+|--------|-------|-----|
+| Subscribers, total views, video count | Channel home / About | Baseline |
+| Banner, trailer, About, links | Home | Clarity of promise to a new visitor |
+| Last 20–30 uploads | Videos / Shorts tabs | Cadence, formats, topics |
+| Views per video vs subscriber count | Videos tab | Health: long-form views at 10–30% of subscribers within a week is normal |
+| Top 10 videos all time | Popular sort | What already resonates |
+| Playlists and sections | Home layout | Session guidance |
 
-| Metric | Where to Find | Why |
-|--------|--------------|-----|
-| **Subscribers** | Channel homepage | Growth baseline |
-| **Total views** | Channel homepage | Overall reach |
-| **Video count** | Videos tab | Content volume and history |
-| **Channel banner + About** | Homepage | Brand clarity and CTA |
-| **Recent uploads (last 24)** | Videos tab, sorted by "Newest" | Content mix, quality, consistency |
-| **Views per video** | Individual video pages | Performance benchmarks |
-| **Watch time (if access)** | YouTube Studio analytics | Quality signal for algorithm |
-| **Upload schedule** | Date stamps on last 20 | Frequency and consistency |
-| **Top 10 videos (by views)** | Videos tab, sorted by "Most popular" | What already resonates |
+From Studio: **traffic sources**, **impressions CTR**, **average view duration (AVD)** and **average percentage viewed**, **retention curves**, **returning viewers**, **subscribers per video**.
 
-**YouTube Studio access** (ask the channel owner to share a screenshot of):
-- Realtime viewers (if live)
-- Traffic sources (Search vs. Suggested vs. Browse)
-- Average view duration (AUD) per video
-- Click-through rate (CTR) per video
-- Audience retention graph (where they drop off)
+### Step 2: Traffic source diagnosis (the most important read)
 
-### Step 2: Content Format Audit
+| Dominant source | Meaning | Action |
+|-----------------|---------|--------|
+| Browse features (home, subscriptions) > 40% | YouTube is recommending to a warm audience; CTR and retention are strong | Protect cadence and series; raise production on hooks |
+| Suggested videos > 30% | Videos sit next to related content | Make sequels and playlists; mirror topics that drive suggestions |
+| YouTube search > 40% | Found by intent | Double down on searchable titles, chapters and descriptions; evergreen library |
+| Shorts feed dominant | Reach without loyalty unless funnelled | Build the Shorts → long-form bridge (below) |
+| External > 20% | Growth depends on other platforms | Fine as a start; build internal discovery so the channel stands on its own |
 
-| Format | Algorithm Treatment | Notes |
-|--------|-------------------|-------|
-| **Long-form (8-20 min)** | Primary driver of watch time and session time | YouTube's core product. Optimized length: 8-15 min for most niches |
-| **Long-form (20-40 min)** | High watch time value but higher production | Works for in-depth tutorials, deep dives, documentaries |
-| **Shorts (< 60s)** | Massive reach potential but low subscriber conversion | Great for audience discovery, weak for building loyal watch time |
-| **Community posts** | Low but growing engagement | Polls, text posts, images to keep audience warm between uploads |
-| **Live streams** | High engagement but requires production planning | Best for community building and deep dives |
+### Step 3: CTR and retention
 
-**Diagnostic: Traffic sources (the most important metric).**
-- Search-driven (40%+): Content is being found. Double down on SEO (titles, descriptions, tags).
-- Suggested-driven (40%+): YouTube is recommending you. Thumbnails and relative retention are strong. Push more of this content.
-- Browse/Featured (40%+): YouTube is surfacing you on the homepage. This is the holy grail — requires strong CTR + high relative retention.
-- External (20%+): You're only growing outside YouTube. This is fragile — build internal discovery.
+| Metric | Weak | Typical | Strong |
+|--------|------|---------|--------|
+| Impressions CTR (long-form) | < 3% | 4–6% | > 8% |
+| Average percentage viewed (8–15 min video) | < 35% | 40–50% | > 55% |
+| Retention at 30 s | < 60% | 65–75% | > 80% |
+| Shorts: viewed vs swiped away | < 60% viewed | 65–75% | > 80% |
 
-### Step 3: Title + Thumbnail Audit
+CTR is relative to who sees the impressions: a broad push lowers CTR without meaning the thumbnail got worse. Read CTR together with impressions and AVD.
 
-These two elements determine CTR, which determines whether YouTube pushes your content.
+Retention curve reading: a cliff in the first 30 seconds = intro problem; a steady slide = pacing; spikes = re-watched moments to repeat; a dip then recovery = a segment to cut.
 
-| Check | Good | Fix If Bad |
-|-------|------|------------|
-| **Title** | Curiosity gap + specific outcome. ≤ 60 chars for full visibility | Add benefit, reduce filler words, use numbers or "how to" |
-| **Thumbnail** | High contrast, 1-3 elements max, human face reacting or arrow/arrow pointing | Remove clutter, increase contrast, make text large (3-5 words max) |
-| **Title–thumb combo** | They complement — title teases one side, thumbnail shows another | They should NOT repeat each other. Different info in each. |
-| **Consistency** | Recognizable brand style (fonts, color, layout) | Create a reusable thumbnail template |
+### Step 4: Title and thumbnail audit
 
-**CTR benchmark:** 5-10% = good, 10-15% = excellent, >15% = viral potential. Below 4% = title/thumbnail problem.
+| Element | Good | Fix |
+|---------|------|-----|
+| Title | Specific outcome or curiosity gap, ≤ 60 characters visible, no clickbait the video cannot pay off | Add the payoff, remove filler, front-load the keyword for search |
+| Thumbnail | One focal subject, high contrast, ≤ 3 words of text, readable at 120 px | Remove clutter; face with emotion or object with contrast |
+| Title + thumbnail | Complementary (title says what, thumbnail shows why or the stakes) | Never repeat the same words in both |
+| Consistency | Recognisable style per series | Template per series |
+| Testing | Use Test & Compare (up to 3 thumbnails) on new uploads | Test one variable at a time |
 
 ## Strategy Formulation
 
-### Content Pillars
+### Content pillars and series (3–5)
 
-Define 3-5 content pillars — the "series" your audience returns for.
+| Pillar type | Drives | Example formats |
+|-------------|--------|-----------------|
+| Evergreen how-to / tutorial | Search, library value | "How to X", "Complete setup" |
+| Commentary / analysis | Suggested and browse | "Why X failed", "X explained" |
+| Case study / experiment | Trust and watch time | "We tested X for 30 days" |
+| Series with a recurring hook | Returning viewers | Weekly teardown, Q&A, ranking |
+| Story / behind the scenes | Connection, community | "How I built X" |
 
-**Pillar framework:**
+Mix for most channels: ~50% searchable evergreen, 20% timely, 20% series for returning viewers, Shorts as a parallel track rather than a percentage of long-form.
 
-| Pillar Type | Description | Example Formats |
-|-------------|-------------|----------------|
-| **Evergreen How-To** | Solves permanent problems. Drives search traffic. | "How to X in 5 steps," "Complete guide to Y" |
-| **Commentary / Opinion** | Your take on trending topics in the niche. Drives suggested traffic. | "Why everyone's wrong about X," "X is dead, here's what replaced it" |
-| **Case Study / Deep Dive** | Shows expertise. Drives watch time and credibility. | "We tested X for 30 days — here's what happened" |
-| **Tutorial / Walkthrough** | Step-by-step. Highly searchable, high save rate. | "X from scratch," "Complete setup guide" |
-| **Story / Behind-the-Scenes** | Builds connection. Drives returning viewers and community. | "How I built X," "The mess-up that cost me Y" |
+### Cadence
 
-**Content mix recommendation:**
-- 50% Evergreen / searchable (long-form, SEO-optimized — sustainable growth engine)
-- 20% Trending / timely (capitalizes on current interest — reach spike)
-- 20% Series / returning viewer (recurring format — builds audience loyalty)
-- 10% Shorts (audience discovery — funnel to long-form)
+Consistency and quality beat frequency. Choose the cadence the team can hold for 6 months.
 
-### Upload Schedule
+| Stage | Long-form | Shorts | Posts (community) |
+|-------|-----------|--------|-------------------|
+| < 1K subs | 1/week | 2–4/week to test hooks and topics | Occasional |
+| 1K–10K | 1–2/week | 3–5/week | Weekly poll or teaser |
+| 10K–100K | 1–2/week plus a series slot | 3–7/week | 2–3/week |
+| > 100K | 2+/week with a team | Daily if resourced | Regular |
 
-YouTube's algorithm rewards **predictable consistency**, not frequency. Pick a schedule and defend it.
+Publish at a fixed slot; Studio's "when your viewers are on YouTube" beats generic time tables. Premieres and Posts can warm the slot.
 
-| Subscriber Tier | Recommended Frequency | Notes |
-|----------------|----------------------|-------|
-| < 1K | 1 video/week | Quality over everything. Nail the first 10 videos. |
-| 1K-10K | 2 videos/week | One evergreen + one timely (or one long-form + 3-5 Shorts) |
-| 10K-50K | 2 videos/week + community posts | Start a series. Predictable return dates = returning viewers. |
-| 50K-200K | 2-3 videos/week + Shorts | Consider team or outsourcing editing. |
-| > 200K | 3+ videos/week + Shorts + community | Multiple formats. Batch production. |
-
-**Best days to publish (US audience, adjust for your locale):**
-- Tuesday 9-11 AM EST
-- Thursday 9-11 AM EST
-- Saturday 10 AM-12 PM EST (for lifestyle/entertainment niches)
-
-Publish on a consistent day and time. YouTube Studio will tell you when your subscribers are active.
-
-### Growth Tactics
-
-| Tactic | Effort | Impact | Description |
-|--------|--------|--------|-------------|
-| **Thumbnail + title A/B test** | Medium | Very high | YouTube A/B tests thumbnails automatically in Studio. Always test 2-3 variants for new videos |
-| **Hook optimization (first 30s)** | High | Very high | First 30 seconds determine whether viewers stay. Start with the payoff, not the intro |
-| **Playlists** | Low | High | Group related content into series. Playlists increase session watch time |
-| **Cards + end screens** | Low | Medium | Link to a relevant next video. End screen should point to your best-performing related video |
-| **Shorts funnel to long** | Medium | Very high | Post a Short with a direct CTA: "Full breakdown on the channel" — Shorts reach feeds long-form |
-| **Community posts** | Low | Medium | Polls and text posts between uploads keep your audience warm. Increases returning viewers |
-| **Search optimization** | Low | High | Target specific long-tail search queries. Include keywords in title, description (first 2 lines), and tags |
-| **Collaboration** | Medium | High | Feature another creator. Tap into their audience. Pick creators 2-5× your size |
-| **Cross-promote** | Low | Medium | Embed YouTube videos in blog posts, newsletter, LinkedIn, IG |
-
-### Video Structure (Retention Optimization)
+### Video structure for retention
 
 | Section | Rule |
 |---------|------|
-| **Hook (0-15s)** | Show the final result or state the promise: "By the end of this video, you'll know exactly X." NO "Hi guys, welcome back." |
-| **Credibility (15-30s)** | 1 sentence: why you're the person to teach this. Then go into the content. |
-| **Content body** | Every 60-90 seconds, add a "pattern refresh" — visual change, new example, cutaway, or on-screen graphic |
-| **Mid-roll payoff** | Every 3-4 minutes, deliver an actionable takeaway. Don't hold value until the end. |
-| **CTA (last 30s)** | One CTA only: "Watch this video next [point to end screen]." Do not ask for subscribe + like + comment + follow. |
+| Hook (0–15 s) | Show the payoff or the stakes; no "hi guys, welcome back"; the first frame should match the thumbnail's promise |
+| Credibility (one line) | Why this video, why you — then move on |
+| Body | A visual or structural change every 60–90 seconds; chapters in the description; deliver a concrete takeaway every 3–4 minutes |
+| Open loops | Tease what is coming ("the third one is the one that broke") without stalling |
+| Ending | One CTA to the next best video (end screen); do not stack subscribe/like/comment/follow |
 
-### Optimal Video Length by Niche
+### Video length by goal
 
-| Niche / Genre | Optimal Length | Why |
+| Goal / genre | Typical length | Why |
 |--------------|---------------|-----|
-| Tutorials / How-To | 8-15 min | Long enough for depth, short enough for completion |
-| Commentary / Review | 10-20 min | Needs runway for argument |
-| News / Trends | 8-12 min | Time-sensitive, people want it fast |
-| Education / Deep Dive | 15-30 min | High watch time per viewer |
-| Vlog / Story | 10-18 min | Story arc needs space |
-| Shorts | 30-55 seconds (never full 60s — leave room for re-watching) | Algorithm favors near-60s shorts slightly, but under 55s is safer for retention |
+| Tutorials | 8–15 min | Depth without drop-off |
+| Commentary / analysis | 10–20 min | Argument needs runway |
+| Deep dives / documentary | 20–40 min | High watch time per viewer if retention holds |
+| News / timely | 6–12 min | Fast consumption |
+| Shorts (reach) | 15–45 s | Highest completion and loops |
+| Shorts (storytelling, up to 3 min) | 60–120 s | Only when the story holds; viewed-vs-swiped is the metric |
 
-## Channel Optimization
+### Shorts → long-form funnel
 
-- [ ] **Channel banner** — Clear value prop: "X new videos every week about [topic]". Include subscriber CTA.
-- [ ] **Channel trailer** — 30-45s pitch for new visitors. Not a brand film — a "why watch" argument.
-- [ ] **About section** — Keywords for channel search. First 150 chars visible before "Show more."
-- [ ] **Playlists** — 4-8 playlists matching your content pillars
-- [ ] **Custom URL** — youtube.com/@cleanhandle
-- [ ] **Channel keywords** — Set in YouTube Studio (these affect search ranking)
-- [ ] **End screen template** — Standardized CTA to next video
+- Each Short carries one idea from a long-form video and ends on a question the long video answers
+- Use the "related video" link on Shorts to point to the long-form
+- Match the Short's topic to the channel's long-form so the audience overlap is real
+- Track subscribers and long-form views from Shorts viewers in Studio; Shorts audiences convert weakly unless the bridge is explicit
 
-## Common Pitfalls
+### Growth tactics
 
-1. **Generic intros.** "Hey guys, welcome back, today we're..." wastes 15-30 seconds of retention. Start with the payoff.
+| Tactic | Effort | Impact | Why |
+|--------|--------|--------|-----|
+| Thumbnail Test & Compare on every upload | Low | Very high | Directly lifts the gatekeeper metric |
+| Rewrite the first 30 seconds | Medium | Very high | Early retention decides distribution |
+| Series with a recurring hook | Medium | Very high | Returning viewers and browse distribution |
+| Playlists and end screens to the next video | Low | High | Session time and suggested traffic |
+| Search-first titles for evergreen | Low | High | Compounding library views |
+| Shorts bridge | Medium | High | Reach that converts |
+| Collaborations with channels 2–5× your size | Medium | High | Audience transfer |
+| Posts and polls between uploads | Low | Medium | Keeps subscribers warm, informs topics |
+| Localisation (auto-dubbing, translated titles) | Low | Medium | New language markets at near-zero cost |
 
-2. **Thumbnail text repeating the title.** The thumbnail and title should give complementary information, not repeat each other. Title says "How I made $100K" — thumbnail shows "$100K" + a shocked face + the month.
+## Channel Page Checklist
 
-3. **Ignoring the first 30 seconds.** YouTube measures "average view duration" heavily. If 50% of people drop in the first minute, YouTube stops recommending the video.
-
-4. **Uploading without a plan.** Random videos = no series = no returning viewers. Build content pillars into recurring series.
-
-5. **Chasing viral Shorts but neglecting long-form.** Shorts bring views that don't convert to subscribers well. Use Shorts as a funnel, not the main content.
-
-6. **Never looking at YouTube Studio analytics.** Traffic sources, audience retention graphs, and CTR data are free and actionable. Ignoring them is like driving blindfolded.
-
-7. **Not creating playlists.** Playlists are one of the easiest ways to increase session watch time — and watch time is YouTube's #1 ranking factor.
+- [ ] Banner states who the channel is for and the upload promise
+- [ ] Trailer for new visitors (30–60 s "why watch") and a different featured video for returning subscribers
+- [ ] About with keywords, links and a contact
+- [ ] Handle set (youtube.com/@name)
+- [ ] 4–8 playlists matching pillars, arranged as home sections
+- [ ] End-screen and card templates
+- [ ] Default upload settings: description template with chapters, links, disclosure where needed
+- [ ] Altered or synthetic content disclosure set when AI-generated media is used
 
 ## Output Format
 
 ```
-YOUTUBE AUDIT: [Channel Name] (URL)
-Subscribers: X | Videos: Y | Total Views: Z | Last 24 avg views: W
+YOUTUBE AUDIT: [Channel] (URL)
+Goal: [..] | Access: [fetched / Studio screenshots]
+Subscribers: X | Videos: Y | Total views: Z | Avg views (last 20 long-form): W
 
 --- CURRENT STATE ---
-Content Mix: [Long-form %, Shorts %, Other %]
-Upload Frequency: X times/week
-Traffic Sources: [Search %, Suggested %, Browse %, External %]
-Avg CTR: X% | Avg View Duration: Y minutes
+Format mix: Long-form X% / Shorts Y% / Live Z%
+Cadence: X long-form/week, Y Shorts/week
+Traffic sources: Browse X% / Suggested Y% / Search Z% / Shorts feed … / External …
+CTR: X% | Avg view duration: Y | Avg % viewed: Z% | Returning viewers: W%
+Top performers: [3 videos — why]
 
 --- STRENGTHS ---
-- [Observation 1]
-- [Observation 2]
+- [...]
 
 --- GAPS ---
-- [Gap 1]
-- [Gap 2]
+- [...]
 
---- CONTENT PILLARS (3-5) ---
-1. [Pillar name] — [Description] — [Format] — [Frequency]
-2. [Pillar name] — [Description] — [Format] — [Frequency]
+--- CONTENT PILLARS & SERIES (3–5) ---
+1. [Pillar] — [Series name/hook] — [Length] — [Frequency]
+2. [...]
 
---- CONTENT MIX TARGET ---
-[Recommended mix: evergreen %, trending %, series %, shorts %]
+--- CADENCE ---
+Long-form: [..] | Shorts: [..] | Posts: [..] | Slot: [from Studio or stated fallback]
 
---- SCHEDULE ---
-Upload days: [Recommended]
-Optimal length: [Recommended per pillar]
-Series: [Any recurring format recommendations]
+--- TITLE & THUMBNAIL ---
+[Current pattern] → [Recommended pattern]
+Examples: [3 title rewrites with thumbnail concept]
+Testing: [Test & Compare plan]
 
---- THUMBNAIL + TITLE AUDIT ---
-[Current approach] → [Recommended approach]
-[Specific examples of improvement]
+--- RETENTION FIXES ---
+[Intro structure, pacing, chapters, open loops, ending]
+
+--- SHORTS STRATEGY ---
+[Bridge to long-form, cadence, metrics]
 
 --- GROWTH PLAN ---
-Short-term (0-30 days): [Top 3 actions]
-Mid-term (30-90 days): [Top 3 actions]
-Long-term (90+ days): [Top 3 actions]
+0–30 days: [3 actions]
+30–90 days: [3 actions]
+90+ days: [3 actions]
+KPIs: [CTR, AVD/%, returning viewers, subs per video, browse share]
 
---- YOUTUBE SHORTS STRATEGY ---
-[If applicable: how Shorts funnel to long-form]
+--- CHANNEL PAGE ---
+[Banner, trailer, About, playlists, end screens]
 
---- Channel Optimization ---
-[Specific banner, trailer, About, playlist recommendations]
+--- ASSUMPTIONS & MISSING DATA ---
+[...]
 ```
+
+## Common Pitfalls
+
+1. **Long intros.** The first 15–30 seconds lose a third of viewers on most channels. Start with the payoff.
+
+2. **Thumbnail repeating the title.** They should carry different information: what vs why/stakes.
+
+3. **Treating low CTR as a thumbnail failure in isolation.** Read CTR with impressions; a broader push lowers CTR naturally.
+
+4. **Random uploads.** No series means no returning viewers; returning viewers are the browse engine.
+
+5. **Shorts without a bridge.** Reach without conversion; make the link to long-form explicit.
+
+6. **Ignoring Studio.** Traffic sources and retention curves are free, specific and actionable.
+
+7. **Chasing frequency.** Two forgettable videos a week lose to one that keeps people watching.
+
+8. **One CTA too many.** Stacked asks dilute; point to the next video.
 
 ## Verification Checklist
 
-- [ ] Channel analyzed (last 20+ videos)
-- [ ] Traffic sources identified (Search vs Suggested vs Browse)
-- [ ] CTR assessed vs benchmark (5-10% good)
-- [ ] Average view duration assessed
-- [ ] At least 3 content pillars with format and frequency
-- [ ] Upload schedule recommended (consistent days/times)
-- [ ] Thumbnail + title improvement specific suggestions included
-- [ ] Shorts strategy addressed (funnel to long-form)
-- [ ] Channel optimization checklist provided
-- [ ] Growth plan broken into short/mid/long term
+- [ ] Last 20–30 uploads reviewed (or the limitation stated); no CTR/retention figures invented
+- [ ] Traffic sources diagnosed and tied to actions
+- [ ] CTR read together with impressions and AVD, benchmarked
+- [ ] Retention curves interpreted (intro cliff, pacing, spikes) where provided
+- [ ] 3–5 pillars with at least one recurring series
+- [ ] Cadence matched to capacity for long-form, Shorts and Posts
+- [ ] Title and thumbnail recommendations with concrete rewrites and a Test & Compare plan
+- [ ] Shorts strategy includes an explicit bridge to long-form
+- [ ] Channel page checklist applied
+- [ ] Growth plan split 0–30 / 30–90 / 90+ days with KPIs

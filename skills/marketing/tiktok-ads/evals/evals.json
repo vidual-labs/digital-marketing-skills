@@ -1,0 +1,64 @@
+{
+  "skill_name": "tiktok-ads",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "three-hook-ugc-scripts",
+      "prompt": "We sell a $39 portable blender (USB-C, 20-second blend, dishwasher safe) to 18–30 year olds in the US. Write TikTok ad creatives for a conversions campaign — we have two UGC creators who can film at home. Give me scripts I can brief them with.",
+      "files": [],
+      "expected_output": "Three creatives with different hook types, timestamped scripts with spoken line, on-screen text and visual direction, ad text ≤100 chars, display name, CTA Shop now, Spark Ads recommended for creator posts, sound licensing note, pinned comment and a testing plan.",
+      "assertions": [
+        "Three creatives use distinct hook types (e.g. demo, statement, story) with hooks in the first 2 seconds",
+        "Scripts are timestamped with spoken line, on-screen text and visual per segment",
+        "Ad text is ≤100 characters and the display name ≤20 characters",
+        "Recommends Spark Ads for the creator videos and notes commercial music licensing",
+        "Includes a pinned comment and a testing plan isolating one variable"
+      ],
+      "checks": [
+        {"type": "min_count", "pattern": "^--- CREATIVE", "count": 3},
+        {"type": "regex", "pattern": "\\[0:00[–-]0:02\\]"},
+        {"type": "regex", "pattern": "Ad text"},
+        {"type": "regex", "pattern": "Spark"},
+        {"type": "regex", "pattern": "Pinned comment"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "adapt-polished-meta-video",
+      "prompt": "Our agency made a 30s 16:9 brand film for Meta with a voiceover and logo intro. Marketing wants to run it on TikTok as-is for a B2B scheduling app ($12/user/month). Tell me what to change and give me a native version.",
+      "files": [],
+      "expected_output": "Explains why the 16:9 logo-intro film will underperform on TikTok (format, hook timing, polish), then provides a re-cut native 9:16 script with a hook in the first 2 seconds, on-screen text, captions, and B2B-appropriate CTA (Learn more / Sign up), plus alternative hooks.",
+      "assertions": [
+        "Identifies the specific problems: 16:9 aspect ratio, logo intro, voiceover polish, late hook",
+        "Provides a vertical 9:16 timestamped script with the hook in the first 2 seconds",
+        "CTA fits a B2B consideration/lead objective (Learn more, Sign up, Get quote)",
+        "Keeps essential text out of the bottom third / safe zones"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "9:16"},
+        {"type": "regex", "pattern": "logo"},
+        {"type": "regex", "pattern": "\\[0:00"},
+        {"type": "regex", "pattern": "Learn more|Sign up|Get quote"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "campaign-type-and-field-limits",
+      "prompt": "I'm new to TikTok Ads Manager. For a skincare brand doing about 70 orders a week from TikTok, should I use Smart+ or a normal in-feed campaign, and how long can the caption/headline/description be? Also draft the ad text for a retinol serum launch (€34, dermatologist tested).",
+      "files": [],
+      "expected_output": "Recommends testing Smart+ given ≥50 conversions/week while keeping a manual campaign as control; explains there is a single ad text field (≤100 chars, ~40 visible) and display name (≤20) rather than Meta-style headline/description for in-feed video; drafts compliant ad text and flags skincare claim policies.",
+      "assertions": [
+        "Explains Smart+ suitability based on conversion volume and suggests a controlled test",
+        "Correctly states ad text is up to 100 characters with ~40 visible and that there is no separate headline/description for standard in-feed video",
+        "Drafted ad text is ≤100 characters and avoids unsubstantiated medical claims",
+        "Mentions policy caution for skincare/health claims"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "Smart\\+"},
+        {"type": "regex", "pattern": "100 char"},
+        {"type": "regex", "pattern": "polic"}
+      ]
+    }
+  ]
+}

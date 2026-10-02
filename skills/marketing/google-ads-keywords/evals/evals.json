@@ -1,0 +1,63 @@
+{
+  "skill_name": "google-ads-keywords",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-account-ecommerce-keywords",
+      "prompt": "We sell ergonomic standing desks online in the UK (prices £350–£900, free delivery). I'm setting up our first Google Ads search campaign for sales. Build me the keyword lists split into ad groups, plus negatives. Landing pages: /standing-desks, /electric-standing-desks, /small-standing-desks.",
+      "files": [],
+      "expected_output": "A campaign block with 3+ ad groups mapped to the three landing pages, comma-separated exact and phrase match keywords, a campaign-level negative list including plurals, and notes on missing volume data.",
+      "assertions": [
+        "Every keyword is wrapped in [ ] or \" \" and no naked (broad match) keywords appear outside an Editor CSV block",
+        "Ad groups correspond to the three landing page themes and each names its landing page",
+        "Exact match dominates since the campaign is bottom-funnel sales",
+        "Negative keywords include job/free/DIY style terms and spell out plurals (e.g. job and jobs)",
+        "UK spelling and wording is used (e.g. 'desk' terms as a UK buyer would search); no invented search volumes"
+      ],
+      "checks": [
+        {"type": "min_count", "pattern": "^AD GROUP:", "count": 3},
+        {"type": "contains", "value": "NEGATIVE KEYWORDS"},
+        {"type": "regex", "pattern": "\\[[^\\]\\n]+\\],\\s*\\[[^\\]\\n]+\\]"},
+        {"type": "not_regex", "pattern": "^\\s*[-*•]\\s+\\S"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "restructure-existing-account-from-search-terms",
+      "prompt": "Here are search terms that spent money last month on our phrase match keyword \"accounting software\": 'free accounting software', 'accounting software jobs', 'best accounting software for small business', 'quickbooks alternative', 'accounting software for freelancers uk', 'what is accounting software'. We're a paid SaaS for freelancers (€15/month). Give me tighter keyword lists and the negatives I should add.",
+      "files": [],
+      "expected_output": "Converting search terms promoted to exact match in themed ad groups (freelancer, alternative/competitor), negatives for free/jobs/what is, and a note that competitor terms belong in a separate campaign.",
+      "assertions": [
+        "'accounting software for freelancers' style terms become exact match keywords",
+        "'free', 'jobs' and informational 'what is' are added as negatives with match types",
+        "Competitor term 'quickbooks alternative' is placed in a separate ad group or campaign with a trademark note",
+        "Output keeps the comma-separated, delimiter-wrapped format with no bullets"
+      ],
+      "checks": [
+        {"type": "contains", "value": "NEGATIVE KEYWORDS"},
+        {"type": "regex", "pattern": "\"free\"|\\[free\\]"},
+        {"type": "regex", "pattern": "^AD GROUP:"},
+        {"type": "not_regex", "pattern": "^\\s*[-*•]\\s+\\S"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "editor-csv-export",
+      "prompt": "I need keywords for a local plumber in Austin TX (emergency repairs, water heater installation, drain cleaning) formatted so I can bulk-import them with Google Ads Editor. Include negatives too.",
+      "files": [],
+      "expected_output": "Standard ad-group blocks in the skill's format plus a Google Ads Editor CSV block with Campaign, Ad Group, Keyword, Match Type columns; location modifiers like 'austin' and 'near me'; negatives for DIY/jobs/free.",
+      "assertions": [
+        "A CSV block with the header Campaign,Ad Group,Keyword,Match Type is present and match types are written in the column",
+        "Ad groups are split by service (emergency, water heater, drain cleaning)",
+        "Local modifiers (austin, near me) appear in keywords",
+        "Negatives cover DIY/how to, jobs and free"
+      ],
+      "checks": [
+        {"type": "contains", "value": "Campaign,Ad Group,Keyword,Match Type"},
+        {"type": "min_count", "pattern": "^AD GROUP:", "count": 3},
+        {"type": "contains", "value": "NEGATIVE KEYWORDS"}
+      ]
+    }
+  ]
+}

@@ -1,252 +1,259 @@
 ---
 name: linkedin-organic
-description: Use when developing LinkedIn organic strategy — analyze a profile/company page URL, recommend content mix, posting schedule, and follower growth tactics optimized for the LinkedIn platform.
-version: 1.0.0
-author: Hermes Agent
+description: Use when developing LinkedIn organic strategy for a personal profile or company page — profile/page audit, content pillars, post formats (text, document carousels, native video, newsletters), posting cadence, comment strategy and B2B thought-leadership growth. Also use when someone asks "how do I grow on LinkedIn", wants a LinkedIn content calendar, or asks whether to post from the personal profile or the company page. Don't use for LinkedIn Ads, recruiting/job posts, or cold outreach sequences.
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Browsing is optional; LinkedIn blocks most unauthenticated fetches, so expect to work from screenshots and analytics exports the user provides.
 metadata:
-  hermes:
-    tags: [linkedin, organic, B2B, content-strategy, thought-leadership, growth]
-    related_skills: [instagram-organic, youtube-organic, pinterest-organic, competitor-research]
+  category: organic-social
+  updated: 2026-10-02
+  tags: [linkedin, organic, b2b, content-strategy, thought-leadership, personal-branding, company-page, growth]
+  related_skills: [instagram-organic, youtube-organic, pinterest-organic, competitor-research, branding, market-positioning]
 ---
 
 # LinkedIn Organic Strategy
 
 ## Overview
 
-Develop a data-informed organic strategy for LinkedIn profiles and company pages. Takes a URL, audits current content, audience, and growth trajectory, then produces a tailored plan for what to post, when to post, and how to grow the follower base or page following.
+Build an organic LinkedIn plan for a person or a company page: audit the profile and recent posts, read what the audience engages with, define pillars, choose formats the current feed rewards (knowledge-dense text, document carousels, native video), set a cadence, and run the comment strategy that drives most early growth. LinkedIn's feed in 2026 favours expertise and conversation over virality: dwell time, meaningful comments and relevance to a professional audience matter more than raw reactions.
 
 ## When to Use
 
-- Auditing a personal LinkedIn profile or company page for strategy
-- Planning a content calendar for LinkedIn
-- Growing thought leadership or B2B brand awareness
-- Developing a writing-first content strategy
-- Optimizing posting times and engagement tactics
+- Auditing a personal profile or company page
+- Planning a LinkedIn content calendar
+- Growing thought leadership, inbound leads or employer brand
+- Deciding the personal-profile vs company-page split
+- Fixing a reach or engagement drop
 
-Don't use for: LinkedIn ads, job posting strategy, or recruiter/sales outreach messaging.
+Don't use for: LinkedIn Ads (campaign manager), recruiting and job posts, Sales Navigator or cold outreach sequences, or LinkedIn Learning content.
+
+## Inputs
+
+Ask for (or extract from the conversation):
+
+- **Profile or page URL** and screenshots of the header, About and Featured sections (LinkedIn blocks most automated fetching)
+- **Goal**: inbound leads, hiring, authority, speaking, sales support — and who the audience is (titles, industries)
+- **Analytics** (Creator analytics / Page analytics, last 90 days): impressions, engagement, followers gained, top posts, audience job titles
+- **Last 20–30 posts**: format, topic, impressions, reactions, comments, reposts
+- **Time available** per week for writing and commenting
+- **Voice constraints** and topics off limits (employer policies, clients)
+
+Data rules: if a URL cannot be fetched, say so and work from screenshots; do not describe posts you have not seen. Engagement rates below are starting points — the account's own analytics win. LinkedIn changes features often (Creator Mode was retired in 2024, its tools are now default; video got its own feed); if the UI differs from this document, follow the UI and note it.
 
 ## Audit Workflow
 
-### Step 1: Profile Analysis
+### Step 1: Profile / page analysis
 
-Visit the provided URL and extract:
+| Element | Personal profile | Company page | Why |
+|---------|-----------------|--------------|-----|
+| Followers / connections | Header | Followers | Baseline |
+| Headline / tagline | Under name | Under logo | The one line people see on every comment |
+| About | 2,600 chars, first ~3 lines visible | Overview | Value proposition and keywords |
+| Featured | Pinned posts, links, newsletter | Featured posts | Conversion real estate |
+| Primary button | Follow vs Connect (set in Settings → Visibility) | Visit website / Contact | Growth vs network |
+| Experience / Services | Role descriptions, Services page | Products tab | Proof and searchability |
+| Recent activity | Activity → Posts | Posts tab | Format mix and cadence |
+| Audience | Analytics → audience titles | Followers analytics | Fit with target buyers |
 
-| Metric | Personal Profile | Company Page | Notes |
-|--------|-----------------|--------------|-------|
-| **Followers / Connections** | Profile header | Followers tab | Base for growth targets |
-| **Headline** | "Name — Title" line | Company tagline | Searchable and is your ad on the feed |
-| **About / Summary** | About section | Company About | Value proposition clarity |
-| **Featured section** | Pinned posts/links | Featured content | Top conversion real estate |
-| **Recent posts (last 24)** | Activity tab | Posts tab | Content types and frequency |
-| **Engagement per post** | Likes + comments | Reactions + comments | Engagement rate benchmark |
-| **Posting frequency** | Date stamps | Date stamps | Consistency and cadence |
-| **Audience** | Viewer demographics (Premium) | Page visitors (analytics) | Who is actually seeing content |
+### Step 2: Engagement benchmarks
 
-**Calculate engagement rate (personal):** `((likes + comments) / connections) × 100`
+Engagement rate by impressions (preferred): `(reactions + comments + reposts) ÷ impressions × 100`. By followers (public fallback): `(reactions + comments) ÷ followers × 100`.
 
-**LinkedIn engagement benchmarks:**
+| Followers | Strong (by followers) | Average | Weak |
+|-----------|----------------------|---------|------|
+| < 5K | > 4% | 1.5–4% | < 1.5% |
+| 5K–20K | > 2.5% | 1–2.5% | < 1% |
+| 20K–100K | > 1.5% | 0.5–1.5% | < 0.5% |
+| > 100K | > 0.8% | 0.3–0.8% | < 0.3% |
 
-| Follow/Connections | Good ER | Average ER | Low ER |
-|-------------------|---------|------------|--------|
-| < 5K | > 5% | 2-5% | < 2% |
-| 5K-20K | > 3% | 1-3% | < 1% |
-| 20K-100K | > 2% | 0.5-2% | < 0.5% |
-| > 100K | > 1% | 0.3-1% | < 0.3% |
+Company pages typically run at a fraction of personal-profile rates; compare pages with pages.
 
-### Step 2: Content Format Audit
+### Step 3: Format audit (last 20–30 posts)
 
-LinkedIn favors certain content types. Classify the last 24 posts:
+| Format | Feed weight (2026) | Notes |
+|--------|-------------------|-------|
+| Text post (knowledge, story, framework) | High | 800–1,300 characters with a strong first line; the "see more" fold is ~2–3 lines |
+| Document / PDF carousel | High | 8–15 slides; highest dwell and saves; keep text large |
+| Native video (vertical, captions) | High and rising | LinkedIn pushed video since 2024 with a dedicated video feed; 30–90 s |
+| Image + text | Medium | Works when the image is a chart, screenshot or real photo |
+| Poll | Medium | Cheap engagement; follow with a results post |
+| Newsletter / article | Medium, compounding | Subscribers get notifications; good for depth and SEO |
+| Link post (external URL in body) | Low | Reach is suppressed; put the link in the first comment or edit it in after posting |
+| Repost without comment | Very low | Adds nothing; repost with your own take instead |
 
-| Content Type | Algorithm Weight | Notes |
-|-------------|-----------------|-------|
-| **Text-only (writing post)** | Very high | LinkedIn's #1 reach driver. Long-form writing outperforms almost everything. |
-| **Native video (short)** | High | 15-60 seconds. Must be uploaded directly to LinkedIn, never linked |
-| **Document (PDF/carousel)** | High | Multi-page carousels get high saves and engagement |
-| **Single image** | Medium | Best with a strong text post above it |
-| **Poll** | Medium-High | Low effort, decent engagement. Good for frequency filler |
-| **Link post (external URL)** | Low | Algorithm suppresses posts with external links. Use image + link in comments |
-| **Repost / shared** | Very Low | Zero reach benefit. Write original thoughts instead |
+### Step 4: Pattern analysis
 
-### Step 3: Engagement Pattern Analysis
-
-From the last 24 posts:
-1. Which format type gets the most likes AND comments (not just likes)?
-2. Which topics generate discussion (3+ comments with substantive replies, not just "great post")?
-3. Which posts had the most profile visits and post saves?
-4. Is there a consistent writing style or does it look disjointed?
+1. Which formats earn comments from the *target* audience, not just peers?
+2. Which topics generate substantive comments (3+ sentences, disagreement, questions)?
+3. Which posts led to profile views, follows and DMs?
+4. Is there a recognisable voice and recurring format, or random topics?
+5. Do reach drops line up with link posts, long gaps or engagement-bait phrasing?
 
 ## Strategy Formulation
 
-### Content Pillars (What to Post)
+### Content pillars (4–5)
 
-Define 4-5 pillars based on professional expertise, industry authority, and audience needs.
+| Pillar | What it does | Formats |
+|--------|-------------|---------|
+| Expertise / how-to | Shows you can do the work | Text frameworks, document carousels, short video |
+| Industry insight | Interprets trends and data for the audience | Text with a chart, newsletter |
+| Story / lesson | Builds trust through experience | Text storytelling |
+| Point of view | Respectful disagreement with a norm | Text, video |
+| Proof | Results, client wins, milestones (with permission) | Image + text, carousel |
 
-**B2B Pillar Framework:**
+Mix for most B2B accounts: ~40% text, 20% document carousels, 20% native video, 10% polls or quick takes, 10% proof. Adjust to what the audit shows the audience rewards.
 
-| Pillar | Description | Format |
-|--------|-------------|--------|
-| **Industry Insight** | Data-driven observations, trends, predictions | Text post, document carousel |
-| **How-To / Tactical** | Actionable advice your audience can implement today | Document (PDF carousel), video |
-| **Story / Lesson** | Personal professional experiences and what you learned | Text post (storytelling) |
-| **Hot Take / Controversial** | A respectful disagreement with an industry norm | Text post |
-| **Proof / Results** | Client wins, personal milestones, team results | Image + text, video |
+### Cadence and timing
 
-**Content Mix Recommendation:**
-- 40% Text writing posts (depth, comments, saves)
-- 20% Document carousels (high saves, dwell time)
-- 20% Short video (native, 30-60s)
-- 10% Polls / quick takes (frequency filler)
-- 10% Image + proof (social, credibility)
+| Capacity | Cadence |
+|----------|---------|
+| Minimum to grow | 2–3 posts/week plus daily commenting |
+| Standard | 1 post per weekday |
+| Maximum sensible | 1 post/day; a second post the same day splits reach |
 
-### Posting Schedule (When to Post)
+Business hours of the target audience's time zone, Tuesday to Thursday mornings as a fallback; use Analytics to confirm. Reply to comments in the first 60–90 minutes — early conversation extends distribution.
 
-LinkedIn's algorithm prioritizes posts from the first 60-90 minutes. Post when your professional audience is scrolling between tasks.
+### Writing a post that travels
 
-**Best windows (UTC of target audience):**
+- First line = the whole idea or the tension; write it last
+- One idea per post; short paragraphs; white space
+- Specifics (numbers, names, what you actually did) over generalities
+- End with a question that invites experience, not "agree?"
+- No external link in the body; no "like and share"; no tagging people who did not contribute
+- Hashtags: 0–3, topical; they are labels, not reach
 
-| Day | Best Times (audience local time) | Notes |
-|-----|----------------------------------|-------|
-| Tuesday | 8:00 AM, 12:00 PM, 5:00 PM | **Best day** for overall engagement |
-| Wednesday | 7:30 AM, 12:00 PM, 5:00 PM | **Best day** for long-form writing |
-| Thursday | 7:30 AM, 12:30 PM, 4:00 PM | Strong mid-week engagement |
-| Monday | 9:00 AM, 1:00 PM | Lower — people are catching up on email |
-| Friday | 9:00 AM, 11:00 AM | Wind-down day. Light content only. |
-| Saturday/Sunday | Avoid | B2B audience is off LinkedIn |
+### Growth tactics
 
-**Frequency:**
-- Minimum: 3 posts/week (for accounts < 5K followers)
-- Optimal: 1 post/day, Mon-Fri (5 posts/week)
-- Maximum: 2 posts/day (risk of audience fatigue)
+| Tactic | Effort | Impact | Why |
+|--------|--------|--------|-----|
+| Comment strategy (see below) | High | Very high | Your comment and headline appear to the author's audience |
+| Knowledge-dense text posts | Medium | Very high | The feed prioritises expertise shared in-platform |
+| Document carousels | Medium | High | Dwell time and saves |
+| Native vertical video | Medium | High | Dedicated video feed and rising distribution |
+| Newsletter | Medium | Medium–high | Notified subscribers compound over time |
+| Headline optimisation | Low | High | Visible on every comment; make it a promise, not a title |
+| Employee advocacy | Medium | High | Company content reposted with personal takes reaches 5–10× the page |
+| Collaborative articles, Live, Audio events | Medium | Medium | Visibility among active members |
+| Repurpose to other platforms | Low | Medium | Adapt, do not copy |
 
-### Growth Tactics (How to Grow)
+### The comment flywheel (most effective under ~10K followers)
 
-| Tactic | Effort | Impact | Description |
-|--------|--------|--------|-------------|
-| **Comment strategy** | High | Very high | Spend 20 min/day commenting thoughtfully on 10-15 posts in your niche. Comments appear to the original author's entire audience. |
-| **Writing posts** | Medium | Very high | Long-form text-only posts (300-800 words) are LinkedIn's highest-reach format. They generate comments, which generate more reach. |
-| **Engage early** | Low | High | Reply to every comment on your posts within the first hour. This doubles engagement velocity. |
-| **Document carousels** | Medium | High | Multi-page PDFs get saves. Saves signal high value to the algorithm. |
-| **Tag strategically** | Low | Medium | Mention 1-2 relevant people in comments (not the post itself) to draw them into the conversation |
-| **Collaborate** | Medium | High | Co-author posts, do LinkedIn audio events, or reshare with commentary |
-| **Headline optimization** | Low | High | Your headline is the #1 thing people see when you comment elsewhere. Make it a hook. |
-| **Consistency** | Medium | Very high | Post 5x/week for 90 days and measure. Algorithm rewards consistent posters. |
-| **Cross-post selectively** | Low | Medium | Repurpose blog/LinkedIn content for Twitter and vice versa (but adapt format) |
+1. Pick 15–25 accounts your target audience follows (not only peers)
+2. Turn on post notifications (bell icon)
+3. Comment within 30–60 minutes with a new angle, a short story, a counterpoint or a data point — 3+ sentences, no "great post"
+4. Their audience sees your comment and headline → profile visit → follow if the headline and About make the promise clear
+5. Budget 20–30 minutes a day; expect 50–200 targeted followers a month at the start
 
-**The Comment Flywheel (high-impact growth for < 5K):**
-1. Identify 20 accounts in your niche with 10K-100K followers
-2. Set notifications on their posts
-3. When they post, leave a substantive comment within 30 minutes (not "great post!" — add a new angle, counterpoint, or story)
-4. Their audience sees your comment + your headline → clicks your profile → follows if the headline and About make sense
-5. This alone can add 50-200 targeted followers/month
+### Personal profile vs company page
 
-### Growth Stages
+| Aspect | Personal profile | Company page |
+|--------|-----------------|--------------|
+| Reach for the same content | Many times higher | Structurally limited |
+| Trust | Human | Corporate |
+| Best for | Thought leadership, lead generation | Official news, hiring, product, social proof hub |
+| Playbook | Post first here | Repost personal content with a comment; run employee advocacy; keep the page complete for credibility |
 
-| Stage | Strategy Shift |
-|-------|----------------|
-| < 5K | Comment 20 min/day on other profiles. Post 3x/week. Optimize headline and About. |
-| 5K-20K | Increase to 5x/week. Start document carousels. Begin co-author posts. |
-| 20K-50K | Hire an editor or schedule tool. Test video content. Build document series (e.g., "Monday Method"). |
-| > 50K | Scale production. Focus on signature content pillars. Build newsletter and LinkedIn as acquisition channel. |
+### Growth stages
+
+| Followers | Focus |
+|-----------|-------|
+| < 5K | Headline and About rewritten, Follow as primary button, 3 posts/week, daily comment flywheel |
+| 5K–20K | Daily posting, document carousels, first video series, newsletter launch |
+| 20K–50K | Signature series, repurposing system, selective collaborations, lead magnet in Featured |
+| > 50K | Team support for editing and replies, Live/events, LinkedIn as a measured acquisition channel |
 
 ## Profile Optimization Checklist
 
-### Personal Profile
-- [ ] **Headline** — Not just a job title. Format: "What I help [audience] achieve | Credibility signal"
-- [ ] **Banner image** — Not the default. Custom with value prop or recent result
-- [ ] **About section** — 3-5 paragraphs. First 3 lines visible without "see more." Strong hook.
-- [ ] **Featured section** — 3-5 items: best-performing posts, case studies, newsletter signup
-- [ ] **Skills** — 5 relevant skills (not filler skills)
-- [ ] **Creator mode** — ON (makes "Follow" button prominent instead of "Connect")
-- [ ] **Custom URL** — linkedin.com/in/[clean-name]
+### Personal
+- [ ] Headline: who you help + outcome + proof (not just a job title)
+- [ ] Banner: custom, states the promise or shows proof
+- [ ] About: hook in the first 3 lines, then who/what/proof/CTA; keywords for search
+- [ ] Featured: 3–5 items — best posts, lead magnet, newsletter, booking link
+- [ ] Follow set as the primary button when the goal is audience growth
+- [ ] Custom URL; contact info and Services page complete
 
-### Company Page
-- [ ] **Tagline** — Clear value proposition, not mission statement
-- [ ] **Banner** — Brand on-brand, with offer/CTA
-- [ ] **About** — Specific, benefit-focused, with keywords
-- [ ] **Featured** — Best content pinned
-- [ ] **Hashtags** — 3-5 relevant hashtags set on the page
-
-### Company vs Personal
-
-| Aspect | Personal Profile | Company Page |
-|--------|-----------------|--------------|
-| Reach | 10-50× higher for same content | Structurally capped |
-| Trust | Feels authentic | Feels corporate |
-| Best for | Thought leadership, personal brand | Product launches, job posts, company news |
-| Strategy | Post here first, share to company page | Use company page sparingly — for official announcements |
-
-**Golden rule:** Post your best content on your personal profile. Share it to the company page as a repost with commentary. Personal profiles dominate reach.
-
-## Common Pitfalls
-
-1. **Link posts.** Posting an external URL kills reach by 40-60%. Instead, post the content as an image or text + put the link in the first comment.
-
-2. **"Please like and share."** Asking for engagement reads as desperate and actually reduces reach. Write content that earns engagement naturally.
-
-3. **Too corporate, too polished.** LinkedIn rewards authentic voice. "Dear LinkedIn family" is a meme — avoid all LinkedIn clichés.
-
-4. **No commenting strategy.** 80% of growth for small accounts comes from comments on others' posts, not from your own posts.
-
-5. **Posting only on company page.** Company page reach is a fraction of personal profiles. Employees should post about company content from their own profiles.
-
-6. **Inconsistent headline.** If you change your headline every week, you reset your brand recognition. Pick a format and iterate slowly.
-
-7. **Ignoring document posts.** Multi-page PDFs (carousels) are one of the highest-engagement formats. Most people still don't use them.
+### Company page
+- [ ] Tagline states the value proposition
+- [ ] Banner on-brand with a CTA; custom button set
+- [ ] About is specific and keyword-rich; all fields complete (pages with complete info get more views)
+- [ ] Featured posts pinned; Products/Services tab filled
+- [ ] Employee advocacy process: who reposts, with what commentary
 
 ## Output Format
 
 ```
-LINKEDIN AUDIT: [Profile/Page Name] (URL)
-Type: [Personal Profile / Company Page / Both]
-Followers: X | Connections: Y | Posts (30 days): Z | Engagement Rate: W%
+LINKEDIN AUDIT: [Name / Page] (URL)
+Type: [Personal / Company / Both] | Goal: [..] | Access: [screenshots / analytics export]
+Followers: X | Connections: Y | Posts (90 days): Z | Engagement rate: W% (by [impressions/followers])
 
 --- CURRENT STATE ---
-Content Mix: [Text %, Video %, Doc %, Image %, Poll %, Link %]
-Posting Frequency: X times/week
-Content Pillars: [List current ones or note "no clear pillars"]
+Format mix: Text X% / Document Y% / Video Z% / Image … / Poll … / Link …
+Cadence: X posts/week | Commenting: [yes/no, how much]
+Audience fit: [top titles vs target]
+Top performers: [3 posts — format, topic, why]
 
 --- STRENGTHS ---
-- [Observation 1]
-- [Observation 2]
+- [...]
 
 --- GAPS ---
-- [Gap 1]
-- [Gap 2]
+- [...]
 
---- RECOMMENDED PILLARS (4-5) ---
-1. [Name] — [Description] — [Best format] — [Frequency]
-2. [Name] — [Description] — [Best format] — [Frequency]
+--- CONTENT PILLARS (4–5) ---
+1. [Pillar] — [What it proves] — [Format] — [Frequency]
+2. [...]
 
---- SCHEDULE ---
-Days: Tue-Thu optimal, light Mon/Fri
-Frequency: [Recommended]
-Content Cadence: [e.g., "Tue: Writing post (insight), Wed: Doc carousel (tactical)..."]
+--- CADENCE ---
+Posts/week: [..] | Days: [..] | Reply window: first 60–90 min
+Weekly plan: [Tue: text framework (expertise) …]
 
 --- GROWTH PLAN ---
-Short-term (0-30 days): [Top 3 actions]
-Mid-term (30-90 days): [Top 3 actions]
-Long-term (90+ days): [Top 3 actions]
+0–30 days: [3 actions]
+30–90 days: [3 actions]
+90+ days: [3 actions]
+KPIs: [impressions, engagement by impressions, followers from target titles, profile views, DMs/leads]
 
 --- PROFILE OPTIMIZATION ---
-Headline rewrite: [Suggested version]
-About section: [Suggested first 3 lines]
-Featured section: [Suggested items]
-Creator mode: [On/Off recommendation]
+Headline: [rewrite] | About (first 3 lines): [rewrite] | Featured: [items] | Primary button: [Follow/Connect]
 
 --- COMMENT STRATEGY ---
-Target accounts: [Suggest 10-20 accounts to engage with]
-Comment approach: [Style, length, what adds value]
+Target accounts: [15–25, by type if names unknown]
+Comment approach: [length, angle, timing]
+
+--- PERSONAL vs PAGE ---
+[Who posts what, how the page amplifies]
+
+--- ASSUMPTIONS & MISSING DATA ---
+[...]
 ```
+
+## Common Pitfalls
+
+1. **Links in the post body.** Reach drops sharply. First comment or edit-in after posting.
+
+2. **Engagement bait.** "Like if you agree", "comment YES" and tag chains are demoted and look desperate.
+
+3. **Corporate voice on a personal profile.** The feed rewards first-person experience and clear positions.
+
+4. **No commenting.** For small accounts most growth comes from comments on others' posts, not from posting.
+
+5. **Posting only from the company page.** Page reach is a fraction of a person's. People post; the page amplifies.
+
+6. **Changing the headline weekly.** Recognition needs repetition. Iterate slowly.
+
+7. **Generic advice posts.** Content that could be written by anyone earns nothing. Specific experience, numbers and names do.
+
+8. **Ignoring video.** The dedicated video feed is extra distribution most B2B accounts have not claimed.
 
 ## Verification Checklist
 
-- [ ] Profile analyzed (last 20+ posts)
-- [ ] Engagement rate calculated and benchmarked against follower tier
-- [ ] Content mix quantified with format breakdown
-- [ ] At least 4 content pillars defined with format and frequency
-- [ ] Posting schedule specific with days/times
-- [ ] Short/mid/long growth plan included
-- [ ] Profile optimization recommendations (headline, About, Featured)
-- [ ] Comment strategy included for accounts < 20K
-- [ ] Golden rule addressed (personal vs company page)
+- [ ] Profile/page reviewed from provided screenshots or fetched data; limitations stated
+- [ ] Engagement rate calculated with the formula named and compared by tier and account type
+- [ ] Format mix quantified and compared with current feed weights (text, document, native video)
+- [ ] 4–5 pillars with format and frequency
+- [ ] Cadence matched to stated capacity; reply window specified
+- [ ] Comment flywheel included for accounts under ~20K followers
+- [ ] Headline, About, Featured and primary button recommendations given
+- [ ] Personal-profile vs company-page roles defined
+- [ ] No recommendation relies on retired features (e.g. Creator Mode toggle, page hashtags)
+- [ ] Growth plan with 0–30 / 30–90 / 90+ day actions and KPIs

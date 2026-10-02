@@ -1,0 +1,65 @@
+{
+  "skill_name": "branding",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "startup-brand-system-from-scratch",
+      "prompt": "Create a brand identity guide for 'Trellis', a bookkeeping app for independent restaurants (owner-operators, 1–3 locations, €49/month). Positioning: 'the bookkeeping app that speaks restaurant' — built by ex-restaurant owners. Personality: practical, warm, no-nonsense. No existing assets. Accessibility matters (used on phones in dim kitchens).",
+      "files": [],
+      "expected_output": "Full guide in the skill's output format: strategic foundation, proposed palette with hex codes and WCAG checks, typography with open-source fonts, imagery rules incl. AI policy, voice attributes with is/is-not, tone matrix, vocabulary pairs, copy standards, naming, touchpoint checklist, brand prompt pack, and open items (trademark/domain checks).",
+      "assertions": [
+        "Includes a complete colour palette with hex codes labelled as proposals and at least one contrast/WCAG 2.2 AA consideration suited to dim environments",
+        "Voice has 3–4 attributes each with 'means' and 'is not', plus a tone matrix with 6+ contexts",
+        "Vocabulary list has 10+ use/avoid pairs tied to restaurant owners",
+        "Includes an AI usage / brand prompt pack section and names open items like trademark and domain checks",
+        "Typography uses licensed/open-source fonts with weights, scale and fallbacks"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "#[0-9a-f]{6}"},
+        {"type": "regex", "pattern": "WCAG"},
+        {"type": "contains", "value": "TONE MATRIX"},
+        {"type": "regex", "pattern": "prompt pack|AI USAGE"},
+        {"type": "contains", "value": "OPEN ITEMS"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "voice-guide-for-ai-content",
+      "prompt": "Our content team uses AI tools and everything sounds generic. We're a cycling apparel brand — direct, dry humour, obsessed with fit. Give us a voice and tone guide plus something we can paste into our AI tools so output stays on-brand.",
+      "files": [],
+      "expected_output": "Voice attributes with is/is-not, tone matrix including social replies and customer support, vocabulary and banned words, sentence style, and a brand prompt pack (system-prompt-style text with good/bad examples and a review step).",
+      "assertions": [
+        "Defines 3–4 voice attributes with boundaries that express 'direct, dry humour, fit-obsessed'",
+        "Provides a paste-ready brand prompt pack including vocabulary, banned words and good vs bad examples",
+        "Includes a review/disclosure step for AI-generated content",
+        "Tone matrix covers support, social replies and errors, not just marketing"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "is not|isn't"},
+        {"type": "regex", "pattern": "prompt"},
+        {"type": "regex", "pattern": "avoid|banned|never say"},
+        {"type": "regex", "pattern": "support"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "touchpoint-consistency-audit",
+      "prompt": "Our brand feels inconsistent. Website uses navy and a serif, Instagram posts are neon gradients with a sans, email signatures all differ, and our sales deck is a default template. Brand guide from 2019 says navy #0B2545, orange #F26419, font 'Lato'. Audit and tell us what to fix first.",
+      "files": [],
+      "expected_output": "Touchpoint audit table with pass/fail per channel against the 2019 guide, prioritized fixes (templates, tokens, deck master, signature), a decision point on whether to update the guide (neon gradients vs navy), and a distribution plan; uses the given hex codes rather than inventing new ones.",
+      "assertions": [
+        "Audits at least 5 touchpoints with pass/fail against the stated guide",
+        "Uses the provided hex codes and font rather than proposing a new palette unasked, while flagging whether the guide itself needs refreshing",
+        "Prioritizes fixes (templates, tokens, deck, signatures) with an order and owners",
+        "Includes an accessibility check of the navy/orange pairing"
+      ],
+      "checks": [
+        {"type": "contains", "value": "TOUCHPOINT AUDIT"},
+        {"type": "regex", "pattern": "#0B2545"},
+        {"type": "regex", "pattern": "Lato"},
+        {"type": "regex", "pattern": "signature"}
+      ]
+    }
+  ]
+}

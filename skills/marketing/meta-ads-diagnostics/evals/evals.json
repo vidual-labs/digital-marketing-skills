@@ -1,0 +1,64 @@
+{
+  "skill_name": "meta-ads-diagnostics",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "rising-cpa-after-scaling",
+      "prompt": "Meta sales campaign, Advantage+ campaign budget, 4 ad sets (3 interest stacks + 1 lookalike 1%), daily budget raised from €300 to €700 on Monday. Last 7 days vs previous 7: CPA €48 → €81, CPM €9.10 → €12.40, link CTR 1.4% → 0.9%, frequency 2.1 → 3.6, two ad sets show 'Learning limited'. Attribution 7-day click/1-day view, CAPI on, EMQ 7.2. Top ad has run since March 3rd. What's going on and what do I change?",
+      "files": [],
+      "expected_output": "Audit in the skill's format: identifies the >100% budget jump as a learning reset, creative fatigue (frequency, CTR drop, old creative), over-segmentation causing learning limited; recommends consolidating ad sets, new creative, stepping budget back and scaling ≤20%/day, with implementation order.",
+      "assertions": [
+        "Attributes the CPA rise to the 133% budget increase resetting learning plus creative fatigue, citing frequency 3.6 and the CTR drop",
+        "Recommends consolidating the four ad sets (learning limited) into fewer, broader ad sets",
+        "Recommends new creative given the top ad has run since March and frequency is high",
+        "Scaling guidance is ≤20% per day and changes are batched to reset learning once",
+        "Attribution setting is named when quoting results and data trust is confirmed (CAPI on, EMQ 7.2)"
+      ],
+      "checks": [
+        {"type": "contains", "value": "HEALTH SCORE"},
+        {"type": "contains", "value": "PRIORITY CHANGES"},
+        {"type": "regex", "pattern": "20\\s?%"},
+        {"type": "regex", "pattern": "fatigue"},
+        {"type": "regex", "pattern": "learning"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "conversions-dropped-tracking-first",
+      "prompt": "Our Meta lead ads campaign showed 140 leads last month and 60 this month with the same spend. Nothing changed in the ads. Two weeks ago our agency installed a new cookie banner and switched attribution to 1-day click. Shopify shows about the same number of actual form submissions as last month. Should I pause the campaign?",
+      "files": [],
+      "expected_output": "Explains that the drop is most likely a reporting artefact (consent banner reducing browser events, attribution window change) since actual submissions are flat; recommends checking CAPI/consent and comparing with the same attribution setting before any campaign change; advises against pausing.",
+      "assertions": [
+        "Identifies the attribution change and the new consent banner as the probable causes and notes actual submissions are flat",
+        "Advises not to pause or restructure the campaign on this evidence",
+        "Recommends verifying Conversions API, consent handling and comparing periods with the same attribution setting",
+        "Points to gtm-debugging-style verification steps for the tracking layer"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "attribution"},
+        {"type": "regex", "pattern": "consent|cookie banner"},
+        {"type": "regex", "pattern": "conversions api|capi"},
+        {"type": "not_regex", "pattern": "^\\s*(pause the campaign|yes, pause)"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "advantage-plus-vs-manual-decision",
+      "prompt": "E-commerce brand, $60k/month on Meta, ~90 purchases/week, 12 live creatives refreshed every two weeks, all in a manual sales campaign with broad targeting, highest volume bidding. ROAS 2.8 against a 2.5 target. Should we move to an Advantage+ sales campaign and should we use a cost per result goal?",
+      "files": [],
+      "expected_output": "Recommends testing an Advantage+ sales campaign given volume and creative pipeline, with an existing-customer budget cap, keeping highest volume initially and only adding a cost-per-result or ROAS goal set near achieved performance after the test stabilizes; describes the test design and what to compare.",
+      "assertions": [
+        "Recommends an Advantage+ sales test and gives the reasons (volume ≥50/week, creative supply)",
+        "Mentions the existing-customer budget share/cap to protect prospecting",
+        "Advises keeping highest volume during learning and setting any cost or ROAS goal near achieved results, not aspirational",
+        "Describes how to compare manual vs Advantage+ (same creative, enough time, same attribution)"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "advantage\\+ sales"},
+        {"type": "regex", "pattern": "highest volume"},
+        {"type": "regex", "pattern": "existing customer"}
+      ]
+    }
+  ]
+}

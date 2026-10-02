@@ -1,0 +1,64 @@
+{
+  "skill_name": "market-positioning",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "positioning-report-from-research",
+      "prompt": "Position 'Kestrel', a project management tool for architecture firms (10–80 staff, UK/IE). Competitors: Monograph ('practice operations for architects'), Archdesk ('construction project management'), Asana, Monday.com, spreadsheets. Customer language from 40 reviews: 'fee tracking is a nightmare', 'we need RIBA stages built in', 'Asana doesn't understand phases', 'too expensive per seat'. Our proof: 120 UK firms, RIBA Plan of Work templates, fixed per-firm pricing, founders are ex-architects.",
+      "files": [],
+      "expected_output": "Full report in the skill's format: audience-derived axes, perceptual map with all five competitors, distance scores with compared words, alignment scores with evidence, positioning statement with one point of difference, message house with proof and signature phrases, consistency audit incl. AI/search descriptions, recommendation and assumptions.",
+      "assertions": [
+        "Axes are derived from the review language (e.g. generic vs built-for-architects, per-seat vs per-firm pricing) and justified",
+        "All five named competitors are plotted and distance is scored, with messaging overlap showing the compared words",
+        "Positioning statement has a single point of difference and uses the real proof (120 firms, RIBA templates, ex-architect founders)",
+        "Message house has 3–4 key messages with proof and 2–3 signature phrases, and a swap test is applied",
+        "Consistency audit includes how AI assistants/search describe Kestrel, and assumptions are listed"
+      ],
+      "checks": [
+        {"type": "contains", "value": "PERCEPTUAL MAP"},
+        {"type": "contains", "value": "POSITIONING STATEMENT"},
+        {"type": "contains", "value": "MESSAGE HOUSE"},
+        {"type": "regex", "pattern": "RIBA"},
+        {"type": "regex", "pattern": "Monograph"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "we-sound-like-everyone",
+      "prompt": "Our homepage says 'AI-powered customer support platform that helps teams work smarter'. So do our 4 competitors. CFO wants us to position on being 30% cheaper. Thoughts?",
+      "files": [],
+      "expected_output": "Explains the messaging overlap problem and why 'cheaper' is a fragile position, proposes a process to find a real point of difference from audience language, gives example candidate positions with reasons to believe, and a messaging overlap check.",
+      "assertions": [
+        "Shows the overlap concretely (shared words 'AI-powered', 'platform', 'work smarter') and the risk of competing on execution alone",
+        "Argues against 'cheapest' as the position and reframes toward value per outcome, while acknowledging price as proof or table stakes",
+        "Proposes gathering audience language and gives 2–3 candidate positions with reason-to-believe requirements",
+        "Requests or lists what evidence is needed rather than inventing customer quotes"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "AI-powered"},
+        {"type": "regex", "pattern": "cheap|price"},
+        {"type": "regex", "pattern": "reason to believe"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "consistency-audit-before-launch",
+      "prompt": "Our positioning statement: 'For independent gyms, Rally is the member app that keeps members coming back, because it automates check-in streaks and coach nudges.' Audit these touchpoints: Homepage H1 'Gym management made simple'; Google ad 'Affordable gym software'; Instagram bio 'Fitness tech for everyone'; sales deck slide 2 'All-in-one gym platform'; G2 reviews mention 'retention went up'. Also ChatGPT describes Rally as 'a gym management software'.",
+      "files": [],
+      "expected_output": "Consistency audit table marking each touchpoint pass/fail against the retention positioning, specific rewrites for H1, ad, bio and deck, note that reviews support the position, a plan to fix AI/search descriptions via entity facts, and prioritized actions.",
+      "assertions": [
+        "Each listed touchpoint is marked pass/fail with a rewrite that expresses 'keeps members coming back'",
+        "Notes that G2 reviews already confirm the retention position (a pass) and should be used as proof",
+        "Addresses the ChatGPT description with entity-fact fixes (About page, schema, directories)",
+        "Actions are prioritized (homepage first)"
+      ],
+      "checks": [
+        {"type": "contains", "value": "CONSISTENCY AUDIT"},
+        {"type": "regex", "pattern": "coming back|retention"},
+        {"type": "regex", "pattern": "ChatGPT|AI"},
+        {"type": "regex", "pattern": "Gym management made simple"}
+      ]
+    }
+  ]
+}

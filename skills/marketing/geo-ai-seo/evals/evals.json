@@ -1,0 +1,64 @@
+{
+  "skill_name": "geo-ai-seo",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "rewrite-pricing-guide-for-ai-citation",
+      "prompt": "Here's the intro of our blog post 'How much does a website redesign cost?': 'In today's fast-moving digital world, every business wonders about redesign costs. There are many factors to consider and in this article we will explore them all.' We're a Dutch agency; our projects range €8k–€45k, typical 12 weeks. Rewrite the opening and give me a structure that AI Overviews and ChatGPT would cite.",
+      "files": [],
+      "expected_output": "Answer-first opening with the real price range and timeline, dated, with an attribution; H2s phrased as questions; a pricing table/FAQ template; data anchors flagged as placeholders where unverified; technical access checklist; measurement plan.",
+      "assertions": [
+        "The rewritten opening states the €8k–€45k range and ~12 weeks within the first 40–80 words and removes filler",
+        "Section headings are real user questions (H2/H3) and include a cost table or list",
+        "Any additional statistics are marked as placeholders to verify, not invented",
+        "Includes an 'as of' freshness marker and author/experience signal advice",
+        "Includes a technical access check (robots.txt for search bots, indexing) and a measurement plan"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "8[,.]?000|8k"},
+        {"type": "regex", "pattern": "^##? ?.*\\?"},
+        {"type": "regex", "pattern": "robots\\.txt"},
+        {"type": "contains", "value": "MEASUREMENT"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "why-competitor-cited-not-us",
+      "prompt": "When I ask ChatGPT or Perplexity for 'best project management tools for architects' they always mention Monograph and Archdesk but never us (we're 'PlanWright', 400 architecture firms, since 2019). Our robots.txt blocks GPTBot because legal didn't want training. What do we do?",
+      "files": [],
+      "expected_output": "Separates training crawlers from search agents (allow OAI-SearchBot, PerplexityBot etc. while keeping GPTBot blocked), audits entity clarity and third-party presence (reviews, directories, Reddit), proposes comparison and 'best for architects' content with data anchors, and sets up citation checks.",
+      "assertions": [
+        "Explains the difference between blocking GPTBot (training) and allowing OAI-SearchBot/PerplexityBot (search) and gives robots.txt guidance",
+        "Recommends entity and third-party presence work (review sites, directories, Reddit/communities, Wikipedia/Wikidata where appropriate)",
+        "Proposes specific content (comparison page, 'best for architects' answer-first page) using PlanWright's real facts (400 firms, 2019)",
+        "Includes a monthly citation-check and AI referral measurement plan"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "OAI-SearchBot"},
+        {"type": "regex", "pattern": "GPTBot"},
+        {"type": "regex", "pattern": "400"},
+        {"type": "regex", "pattern": "citation"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "faq-block-for-service-page",
+      "prompt": "Write the FAQ section for our emergency dentist page in Manchester so it gets pulled into AI answers. Facts: open 7 days 8am–10pm, same-day appointments, emergency exam £65, we've treated 12,000+ emergency patients since 2015, 3 dentists.",
+      "files": [],
+      "expected_output": "An FAQ block with question H2s/H3s, one-sentence direct answers using the provided facts, price with 'as of' date, entity consistency (practice name placeholder), FAQPage schema suggestion, and no invented statistics.",
+      "assertions": [
+        "Each FAQ answer leads with the direct answer in the first sentence and uses only the provided facts",
+        "Includes the £65 price with a freshness marker and the 12,000+ patients proof",
+        "Suggests FAQPage schema or structured data",
+        "No invented statistics or claims beyond the given facts"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "£\\s?65"},
+        {"type": "regex", "pattern": "12,?000"},
+        {"type": "regex", "pattern": "FAQPage|schema"},
+        {"type": "min_count", "pattern": "^#{2,3} .*\\?", "count": 4}
+      ]
+    }
+  ]
+}

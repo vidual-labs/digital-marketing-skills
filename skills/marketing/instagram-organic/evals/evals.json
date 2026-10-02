@@ -1,0 +1,64 @@
+{
+  "skill_name": "instagram-organic",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "audit-from-insights-screenshot-data",
+      "prompt": "Instagram audit for @brewlab.coffee (specialty roaster, Lisbon). Insights last 90 days: 8,400 followers, reach 61k (34% non-followers), 42 posts: 10 Reels, 24 single images, 8 carousels. Reels avg 6,100 reach, 210 likes, 48 shares, 31 saves; images avg 1,900 reach, 140 likes, 4 shares; carousels avg 3,200 reach, 160 likes, 12 shares, 70 saves. Posting 3–4x/week, Stories rarely. Goal: more shop visits and online orders. Team: founder + one barista, phones only.",
+      "files": [],
+      "expected_output": "Audit in the skill's format with engagement rate by reach, format mix diagnosis (images over-indexed, Reels drive sends), 3–5 pillars with series, cadence realistic for two people, Stories routine, growth plan with sends/saves KPIs, profile optimization with up to 5 links, assumptions listed.",
+      "assertions": [
+        "Engagement rate is computed with the formula named and sends/saves per reach are used as primary signals",
+        "Diagnoses that single images (57% of posts) under-deliver while Reels and carousels earn shares and saves, and shifts the mix accordingly",
+        "Cadence is realistic for a two-person team (not daily posting) and includes a Stories routine for shop conversion",
+        "3–5 pillars each have a recurring series format",
+        "Profile section uses native multiple links and pinned posts; hashtags limited to ≤5"
+      ],
+      "checks": [
+        {"type": "contains", "value": "CONTENT PILLARS"},
+        {"type": "contains", "value": "GROWTH PLAN"},
+        {"type": "regex", "pattern": "sends|shares"},
+        {"type": "regex", "pattern": "saves"},
+        {"type": "not_regex", "pattern": "(10|15|20|30) hashtags"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "reach-drop-diagnosis",
+      "prompt": "Our account (120k followers, fitness coach) lost about 40% reach over the last month. We started reposting other coaches' viral clips with credit about 5 weeks ago (around 12 reposts) and switched to 30 hashtags per post. Nothing else changed. Why and how do we fix it?",
+      "files": [],
+      "expected_output": "Explains Instagram's original-content preference and that frequent reposts can remove an account from recommendations, that hashtags do not drive reach (cap 5), and gives a recovery plan focused on original Reels, sends/saves, and consistency, with KPIs and a 30-day timeline.",
+      "assertions": [
+        "Identifies the reposting of others' content (12 in ~30 days) as the likely cause given Instagram's original-content rules",
+        "Explains that 30 hashtags do not help and recommends ≤5 topical hashtags",
+        "Gives a concrete recovery plan (stop reposts, original Reels, series, sends-focused content) with a timeline and KPIs",
+        "Does not promise a specific reach number"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "repost"},
+        {"type": "regex", "pattern": "original"},
+        {"type": "regex", "pattern": "hashtag"},
+        {"type": "contains", "value": "GROWTH PLAN"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "no-access-ask-for-data",
+      "prompt": "Can you audit my Instagram? It's @northfieldclinic. I want more patient bookings.",
+      "files": [],
+      "expected_output": "If the profile cannot be fetched, the response says so and asks for specific Insights screenshots and recent-post data rather than guessing; it may provide a provisional framework (pillars, cadence) clearly labelled as assumptions, plus healthcare-appropriate content cautions.",
+      "assertions": [
+        "States whether the profile could be fetched; if not, requests specific Insights data (reach by format, non-follower share, saves/shares, top posts) instead of inventing numbers",
+        "Any provisional recommendations are labelled as assumptions pending data",
+        "Mentions healthcare content considerations (privacy, claims) given it is a clinic",
+        "Keeps the skill's output structure or a clear request list"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "screenshot|Insights|export"},
+        {"type": "not_regex", "pattern": "Followers: \\d{2,}"},
+        {"type": "regex", "pattern": "assum"}
+      ]
+    }
+  ]
+}

@@ -1,223 +1,240 @@
 ---
 name: instagram-organic
-description: Use when developing Instagram organic strategy — analyze a profile URL, recommend content mix, posting schedule, and follower growth tactics.
-version: 1.0.0
-author: Hermes Agent
+description: Use when developing Instagram organic strategy — auditing a profile, defining content pillars, choosing a Reels/carousel/story mix, setting a posting cadence, and planning follower and reach growth around Instagram's current ranking signals (watch time, likes, sends). Also use when someone asks "why did my reach drop", wants an Instagram content calendar, or asks how to grow an account from scratch. Don't use for Instagram paid ads (meta-ads-creative, meta-ads-diagnostics), influencer contracting, or Instagram Shop setup.
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when a profile cannot be fetched, the skill works from screenshots and Insights exports the user provides.
 metadata:
-  hermes:
-    tags: [instagram, organic, social-media, content-strategy, growth, reels]
-    related_skills: [tiktok-ads, linkedin-organic, youtube-organic, pinterest-organic, competitor-research]
+  category: organic-social
+  updated: 2026-10-02
+  tags: [instagram, organic, social-media, content-strategy, reels, carousels, growth, engagement]
+  related_skills: [tiktok-ads, linkedin-organic, youtube-organic, pinterest-organic, competitor-research, branding]
 ---
 
 # Instagram Organic Strategy
 
 ## Overview
 
-Develop a data-informed organic strategy for Instagram. Takes a profile URL, audits current content, audience, and growth trajectory, then produces a tailored plan for what to post, when to post, and how to grow the follower base.
+Build a data-informed organic plan for an Instagram account: audit the profile and recent posts, read the engagement pattern, define content pillars, choose a format mix and cadence the team can sustain, and set growth tactics for the account's current stage. Instagram ranks each format separately and, for reach beyond followers, weights **watch time, likes and sends (shares to DMs)** most heavily; the plan is built around those signals.
 
 ## When to Use
 
-- Auditing an Instagram profile for strategy
-- Planning a content calendar for Instagram
-- Growing an Instagram following from scratch or after stagnation
-- Developing a Reels-first content strategy
-- Optimizing posting times and content mix
+- Auditing an Instagram profile and its last 20–30 posts
+- Planning a content calendar or relaunching a stalled account
+- Deciding the Reels / carousel / single image / Stories mix
+- Diagnosing a reach or follower drop
+- Setting growth targets and tactics by follower stage
 
-Don't use for: Instagram paid ads, influencer outreach strategy, or Instagram Shop/e-commerce setup.
+Don't use for: paid Instagram ads (use `meta-ads-creative` / `meta-ads-diagnostics`), influencer sourcing and contracts, Instagram Shop and catalog setup, or crisis/community management policies.
+
+## Inputs
+
+Ask for (or extract from the conversation):
+
+- **Profile URL or handle** and whether it is a personal brand, business or creator account
+- **Goal**: followers, reach, leads, sales, community — and the timeframe
+- **Insights export or screenshots** (last 30–90 days): reach by content type, followers vs non-followers reach, watch time/plays for Reels, saves, shares, profile visits, follows, audience active times
+- **Last 20–30 posts**: format, topic, date, likes, comments, shares, saves
+- **Team capacity**: who creates, how many hours per week, can they film
+- **Brand constraints**: voice, visual identity, topics to avoid
+
+Data rules: if you can fetch the profile, record what is publicly visible (followers, following, post count, bio, formats, recent engagement counts); if you cannot, say so and ask for screenshots — do not estimate engagement for posts you have not seen. Benchmarks are starting points; the account's own Insights always win. Instagram changes features often (hashtag following removed, Reels length extended, grid ratio changed); if the UI differs from what is written here, follow the UI and note it.
 
 ## Audit Workflow
 
-### Step 1: Profile Analysis
+### Step 1: Profile and public data
 
-Visit the provided profile URL and extract:
+| Metric | Where | Why |
+|--------|-------|-----|
+| Followers / following / posts | Header | Baseline; following ≫ followers looks like follow-for-follow |
+| Bio, name field, category | Header | Searchable keywords and clear value proposition |
+| Links (up to 5 native links) | Bio | Conversion path |
+| Pinned posts (up to 3) | Grid top | Are the best converters pinned? |
+| Highlights | Below bio | Evergreen proof and offers |
+| Grid preview (3:4 crops since 2025) | Grid | Are covers legible when cropped? |
+| Last 20–30 posts | Grid / Reels tab | Format mix, cadence, themes |
+| Engagement per post | Likes, comments (shares/saves only via Insights) | Pattern of what resonates |
 
-| Metric | How to Find | Why It Matters |
-|--------|-------------|----------------|
-| **Followers** | Profile header | Base for growth targets |
-| **Following** | Profile header | Ratio matters (< 1k following vs ten-thousands suggests bot-like behavior) |
-| **Posts count** | Profile grid/tab | Content volume and consistency |
-| **Bio** | Profile header | Clarity of value proposition and CTA |
-| **Highlight Reels** | Below bio | Evergreen content and brand pillars |
-| **Recent posts (last 24)** | Scroll grid | Content mix (Reels vs Carousel vs Single-image vs Story) |
-| **Engagement per post (last 24)** | Like + comment counts | Engagement rate vs industry benchmarks |
-| **Top posts (if accessible)** | Sort by date or note viral outliers | What content resonates most |
-| **Posting frequency** | Date stamps | Consistency and cadence |
-| **Content themes** | Scan last 30 posts | Are there clear pillars or random content? |
+### Step 2: Engagement rate and benchmarks
 
-**Calculate engagement rate:** `((likes + comments) / followers) × 100`
+Engagement rate by reach (preferred when Insights are available): `(likes + comments + saves + shares) ÷ reach × 100`.
+Engagement rate by followers (public fallback): `(likes + comments) ÷ followers × 100`.
 
-**Benchmarks by follower count:**
+| Followers | Strong (by followers) | Average | Weak |
+|-----------|----------------------|---------|------|
+| < 10K | > 5% | 2–5% | < 2% |
+| 10K–100K | > 3% | 1–3% | < 1% |
+| 100K–1M | > 2% | 0.7–2% | < 0.7% |
+| > 1M | > 1% | 0.4–1% | < 0.4% |
 
-| Followers | Good ER | Average ER | Low ER |
-|-----------|---------|------------|--------|
-| < 10K | > 5% | 2-5% | < 2% |
-| 10K-100K | > 3.5% | 1.5-3.5% | < 1.5% |
-| 100K-1M | > 2.5% | 1-2.5% | < 1% |
-| > 1M | > 1.5% | 0.5-1.5% | < 0.5% |
+Also read: **non-follower share of reach** (growth accounts want > 40% on Reels), **sends per reach** and **saves per reach** (the strongest signals for distribution), **average watch time** and **replays** on Reels, and **profile visits → follows** conversion.
 
-### Step 2: Content Mix Audit
+### Step 3: Format mix (last 20–30 posts)
 
-Classify the last 24 posts:
+| Format | Role in 2026 | Notes |
+|--------|-------------|-------|
+| Reels (up to 3 min; 15–45 s sweet spot for reach) | Reach to non-followers | Ranked on watch time and sends; the first second decides |
+| Carousels (up to 20 slides) | Saves, shares, depth | Instagram re-serves carousels with the next slide if the first was skipped; strong for education |
+| Single image | Followers' feed | Lower reach; fine for announcements and visual brands |
+| Stories (24 h) | Retention and conversion | Polls, questions, links; distribution only to followers |
+| Live, Broadcast channels, Notes | Community | Low effort retention tools |
+| Collabs | Shared distribution | Post appears on up to 5 accounts with pooled engagement |
+| Trial Reels | Testing | Shown to non-followers first; use to test hooks before the followers see them |
 
-| Content Type | % of grid | Notes |
-|-------------|-----------|-------|
-| Reels | X% | Currently the highest-reach format |
-| Carousels | X% | Best for engagement and saves |
-| Single image | X% | Low reach unless it's high-impact visual |
-| Stories (approx.) | ? | Hard to audit — ask user for Story analytics |
+Diagnostic: if Reels are under ~40% of posts and the goal is growth, reach is being left on the table; if the goal is retention and sales, carousels and Stories carry more weight than their reach suggests.
 
-**Diagnostic:** If Reels < 50% of posts, that's a major growth bottleneck. Instagram's algorithm is heavily Reels-biased.
+### Step 4: Pattern analysis
 
-### Step 3: Engagement Pattern Analysis
-
-Look at the last 24 posts:
-
-1. Which format got the highest average engagement? (Reels, carousel, single)
-2. Which topics/themes got the most comments (not just likes)?
-3. Is there a pattern to top-performing posts (visual style, caption length, emoji use, CTA)?
-4. What time of day were top posts published?
+1. Which format has the highest reach per post, and which the highest saves + shares per reach?
+2. Which topics generate comments and DMs (not only likes)?
+3. What do the top 5 posts share — hook style, topic, length, caption structure, posting time?
+4. Which posts drove profile visits and follows (Insights per post)?
+5. Where do reach drops coincide with cadence gaps, reposts or format changes?
 
 ## Strategy Formulation
 
-### Content Pillars (What to Post)
+### Content pillars (3–5)
 
-Define 3-5 permanent content pillars based on the brand's expertise and audience needs. Each pillar gets its own Reel and Carousel formats.
+| Pillar type | Examples | Formats |
+|-------------|----------|---------|
+| Educational | "3 steps to X", "why Y happens", myth-busting | Reels, carousels |
+| Proof / results | Client outcomes, before/after (policy-safe), data | Carousels, Reels |
+| Behind the scenes / process | How it is made, team, founder day | Reels, Stories |
+| Point of view / opinion | Industry takes, trends decoded | Reels (talking head), text carousels |
+| Community / conversation | Questions, polls, user content, replies | Stories, Notes, comments-driven Reels |
 
-**Pillar framework:**
+Each pillar gets a recurring, recognisable format (a series) so the audience knows what to expect and the algorithm can categorise the account.
 
-| Pillar Type | Examples (adapt per niche) | Format |
-|-------------|--------------------------|--------|
-| **Educational** | "How to X in 3 steps", "Why Y happens" | Reels, carousels |
-| **Proof/Results** | Client wins, before-after, data | Reels, carousels |
-| **Behind-the-Scenes** | Team, process, workspace | Reels, stories |
-| **Trending/News** | Industry updates, hot takes | Reels, single posts |
-| **Personal/Brand Voice** | Founder story, opinions, values | Reels, carousels |
+### Format and cadence
 
-**Content Mix Recommendation:**
-- 50% Reels (growth engine)
-- 30% Carousels (engagement and saves)
-- 15% Single posts (high-impact visuals)
-- 5% Stories (community maintenance)
+Sustainable cadence beats bursts. Starting points by capacity:
 
-### Posting Schedule (When to Post)
+| Capacity | Cadence |
+|----------|---------|
+| Solo, few hours/week | 3 posts/week (2 Reels + 1 carousel) + Stories 3–5 days/week |
+| Small team | 4–5 posts/week (3 Reels + 1–2 carousels) + daily Stories |
+| Content team | 1–2 posts/day, no more; extra effort goes to quality and replies |
 
-Instagram's algorithm gives roughly 2-4 hours of "peak visibility" after posting. Optimize for when your audience is active.
+Mix for growth accounts: ~50–60% Reels, 30–40% carousels, ≤ 10% single images; Stories daily as retention layer. Mix for sales/retention accounts: 40% carousels, 40% Reels, 20% Stories-led offers.
 
-**General best windows** (verify with Instagram Insights → Audience tab → Most Active Times):
+### Timing
 
-| Day | Best Times (local audience timezone) |
-|-----|-------------------------------------|
-| Monday | 11:30 AM, 1:00 PM, 7:00 PM |
-| Tuesday | 11:00 AM, 12:00 PM, 7:00 PM |
-| Wednesday | 11:30 AM, 1:00 PM, 7:00 PM |
-| Thursday | 11:00 AM, 12:30 PM, 7:00 PM |
-| Friday | 11:00 AM, 12:00 PM (avoid evening) |
-| Saturday | 10:00 AM, 11:00 AM |
-| Sunday | 10:00 AM, 11:00 AM, 8:00 PM |
+Post when the audience is active (Insights → Audience → Most active times), roughly 15–30 minutes before the peak. Generic windows (weekday late morning and early evening local time) are a fallback, not a rule. Consistency of slot matters more than the exact hour.
 
-**Frequency:**
-- Minimum: 1 post/day (for accounts < 10K followers)
-- Optimal: 2 posts/day (1 Reel + 1 Carousel)
-- Maximum sustainable: 3 posts/day (diminishing returns, team burnout)
+### Reels craft
 
-### Growth Tactics (How to Grow)
+- Hook in the first second: movement, on-screen line that states the payoff, or a visual contrast
+- On-screen captions always; a share-worthy line near the end ("send this to…")
+- Original audio or trending audio with the small arrow icon; original content gets a distribution boost, reposts are penalised
+- Cover image with legible text for the 3:4 grid crop
+- Keyword-rich caption first line and on-screen text — Instagram search and Google indexing read them
+- Hashtags: max 5, treat as topic labels, not reach
 
-| Tactic | Effort | Impact | Description |
-|--------|--------|--------|-------------|
-| **Reels with trending audio** | Low | Very high | Use the audio arrow (↗) on songs. Post within first 3 days of trend |
-| **Hashtag strategy** | Low | Medium | Use 8-15 hashtags: 3 broad (1M+), 5 mid-range (50K-500K), 5 niche (<50K) |
-| **Post consistency** | Medium | Very high | Algorithm rewards accounts that post daily. Miss days, lose reach |
-| **Engage in comments** | Medium | High | Reply to every comment in first hour. This signals engagement to algorithm |
-| **Collaborate (collab posts)** | Medium | Very high | Co-authored posts show on both profiles. Doubles reach |
-| **Use carousel saves** | Medium | High | "Saveable" carousels (checklists, step-by-step) drive algorithmic re-shows |
-| **Engage with similar accounts** | High | Medium | Comment genuinely on top hashtags and competitor followers |
-| **Optimize bio** | Low | Medium | Clear value prop + clickable link. Bio is conversion point from profile visits |
-| **Stories daily** | Medium | Medium | Keeps existing audience engaged and visible in their story tray |
-| **Cross-promote** | Low | High | Embed IG Reels on YouTube Shorts, TikTok, LinkedIn |
+### Growth tactics
 
-### Growth Phases
+| Tactic | Effort | Impact | Why it works |
+|--------|--------|--------|--------------|
+| Send-worthy content | Medium | Very high | Sends per reach is the top non-follower signal; make content people forward to one person |
+| Consistent series | Medium | Very high | Returning viewers raise watch time and follows |
+| Collab posts with peers | Medium | High | Pooled audiences and engagement |
+| Reply to every comment early and in DMs | Medium | High | Early engagement velocity and relationship signal |
+| Trial Reels for hook testing | Low | High | Learn what non-followers respond to without burning followers |
+| Carousel with a reason to save | Medium | High | Saves and re-serving extend lifetime |
+| Profile conversion | Low | Medium | Clear name field keyword, bio promise, pinned proof, right link |
+| Stories with polls/questions daily | Low | Medium | Keeps the account in followers' trays and feeds the ranking |
+| Cross-post natively to other platforms | Low | Medium | Repurpose, but re-edit for each platform's safe zones and length |
 
-| Follower Count | Strategy Shift |
-|---------------|----------------|
-| < 1K | Every post must be a Reel. Maximum reach. Engage 30 min/day on other profiles. No selective targeting — volume is everything. |
-| 1K-10K | Introduce carousels for engagement. Start 3 content pillars. Begin collab posts. |
-| 10K-50K | Refine pillars based on data. Double down on top 2 formats. Begin community building via Stories. |
-| 50K-200K | Professionalize Reels production (better hooks, editing). Focus on saves and shares as metrics over vanity followers. |
-| > 200K | Content pillars + brand partnerships. Consider team hiring. Maintain quality-to-volume ratio. |
+### Growth stages
+
+| Followers | Focus |
+|-----------|-------|
+| < 1K | Reels only for reach, one series, reply to everything, test hooks with Trial Reels, engage genuinely with 20 accounts in the niche daily |
+| 1K–10K | Add carousels and 3 pillars, start collabs, build the Stories habit, optimise profile conversion |
+| 10K–50K | Double down on the two best formats, systematise series, test lead magnets via DM automation and links |
+| 50K–200K | Raise production quality on hooks and editing, track saves/sends over followers, add Broadcast channel |
+| > 200K | Team and templates, brand partnerships, protect quality over volume |
 
 ## Profile Optimization Checklist
 
-- [ ] **Profile picture** — clear, recognizable brand logo or founder face (not a product)
-- [ ] **Name field** — include primary keyword for searchability (e.g., "Sarah | Digital Marketing")
-- [ ] **Bio** — one-line value prop + credibility signal + CTA
-- [ ] **Link in bio** — one destination (Linktree is acceptable for multiple links)
-- [ ] **Highlights** — 4-8 covers: About, Results, Services, Testimonials, BTS
-- [ ] **Category** — set correctly (drives search ranking)
-- [ ] **Connected accounts** — Facebook, Pinterest, TikTok (for cross-posting)
-
-## Common Pitfalls
-
-1. **Posting carousels and single images only.** Without Reels, organic growth nearly stalls. The algorithm is unapologetically Reels-first.
-
-2. **Inconsistent posting.** 3 days of daily posts then a week of nothing is worse than 1 post every 3 days. Consistency beats intensity.
-
-3. **Generic captions.** "Link in bio" or "What do you think?" waste an engagement opportunity. Every caption should end with a specific CTA: "Save this for later," "Which step do you struggle with? Comment below," or "Tag someone who needs this."
-
-4. **Ignoring audio trends.** Reels with trending audio get 2-5× more reach than static or music-off Reels. Check the arrow (↗) on the audio page.
-
-5. **No content pillars.** Posting randomly means the algorithm can't categorize your account, so it stops recommending you.
-
-6. **Posting outside active hours.** If your audience is active 6-9 PM EST and you post at 10 AM EST, you miss 80% of first-hour engagement.
-
-7. **Not replying to comments.** First-hour comment velocity is a ranking signal. Reply to every comment in the first hour to multiply the engagement.
+- [ ] Profile photo recognisable at thumbnail size (face or simple logo)
+- [ ] Name field includes the main keyword (e.g. "Ana | Running Coach")
+- [ ] Bio: who it is for + outcome + proof + CTA, in under 150 characters
+- [ ] Up to 5 native links ordered by priority (no third-party link page unless needed)
+- [ ] 3 pinned posts: best proof, best explainer, current offer
+- [ ] Highlights with covers: About, Results, Offers, FAQ, BTS
+- [ ] Category set correctly; contact buttons on for business accounts
+- [ ] Professional account enabled so Insights and Google indexing are available
 
 ## Output Format
 
 ```
-INSTAGRAM AUDIT: @username (https://instagram.com/USERNAME)
+INSTAGRAM AUDIT: @handle (URL)
+Account type: [creator / business] | Goal: [..] | Access: [fetched / screenshots / Insights export]
 
 --- CURRENT STATE ---
-Followers: X | Following: Y | Posts: Z | Engagement Rate: W%
-Content Mix: Reels X%, Carousels Y%, Single Z%
-Posting Frequency: X posts/week
+Followers: X | Following: Y | Posts: Z
+Engagement rate: W% (by [reach/followers]) | Non-follower reach share: V% (if known)
+Format mix (last N posts): Reels X%, Carousels Y%, Single Z%
+Cadence: X posts/week, Stories Y days/week
+Top performers: [3 posts — format, topic, why]
 
 --- STRENGTHS ---
-- [Observation 1]
-- [Observation 2]
+- [...]
 
 --- GAPS ---
-- [Gap 1]
-- [Gap 2]
+- [...]
 
---- CONTENT PILLARS (3-5) ---
-1. [Pillar name] — [Description] — [Format]
-2. [Pillar name] — [Description] — [Format]
-3. [Pillar name] — [Description] — [Format]
+--- CONTENT PILLARS (3–5) ---
+1. [Pillar] — [Promise to audience] — [Series format] — [Frequency]
+2. [...]
 
---- SCHEDULE ---
-Days/Times: [Based on audience timezone and general best windows]
-Frequency: [Recommended]
-Content Cadence: [e.g., "Mon: Reel (Education), Tue: Carousel (Proof), Wed: Reel (BTS)..."]
+--- FORMAT MIX & CADENCE ---
+Reels X% / Carousels Y% / Single Z% | Stories: [days/week]
+Weekly plan: [Mon: Reel (pillar) …]
+Posting windows: [from Insights or stated fallback]
 
 --- GROWTH PLAN ---
-Short-term (0-30 days): [Top 3 actions]
-Mid-term (30-90 days): [Top 3 actions]
-Long-term (90+ days): [Top 3 actions]
+0–30 days: [3 actions]
+30–90 days: [3 actions]
+90+ days: [3 actions]
+KPIs to track: [reach from non-followers, sends/reach, saves/reach, profile visits→follows]
 
 --- PROFILE OPTIMIZATION ---
-[Specific bio rewrite recommendation]
-[Highlight reel suggestions]
-[Link strategy]
+Name field: [..] | Bio rewrite: [..] | Links: [..] | Pinned posts: [..] | Highlights: [..]
+
+--- ASSUMPTIONS & MISSING DATA ---
+[...]
 ```
+
+## Common Pitfalls
+
+1. **Reposting other accounts' content.** Original content gets more distribution; frequent reposting removes an account from recommendations.
+
+2. **Optimising for likes.** Sends and saves move reach; design content to be forwarded and kept.
+
+3. **Posting daily for two weeks, then nothing.** Consistency at a sustainable cadence beats intensity.
+
+4. **Hook arrives late.** Watch time starts at zero; the first second decides whether the Reel is watched at all.
+
+5. **Treating hashtags as reach.** Five topical hashtags help classification; thirty do nothing extra.
+
+6. **Ignoring the grid crop.** Covers designed for 1:1 lose their text in the 3:4 grid.
+
+7. **No reply strategy.** Comments and DMs in the first hour compound; a silent account trains people not to engage.
+
+8. **Judging a Reel after 24 hours.** Reels gain distribution over days; evaluate at 72 hours and again at 7 days.
 
 ## Verification Checklist
 
-- [ ] Profile analyzed at least last 24 posts
-- [ ] Engagement rate calculated and benchmarked
-- [ ] Content mix quantified (Reels/Carousels/Single)
-- [ ] At least 3 content pillars defined
-- [ ] Posting schedule provided with specific days/times
-- [ ] Short/mid/long-term growth plan included
-- [ ] Profile optimization recommendations given
-- [ ] Strategy tailored to current follower count stage
+- [ ] Last 20–30 posts analysed (or the limitation stated)
+- [ ] Engagement rate calculated with the formula named and benchmarked by follower tier
+- [ ] Format mix quantified and compared to the goal (growth vs retention)
+- [ ] Sends, saves and watch time discussed as the primary signals, not likes alone
+- [ ] 3–5 content pillars with a recurring series format each
+- [ ] Cadence matched to stated team capacity
+- [ ] Posting windows based on Insights, or the fallback labelled as such
+- [ ] Growth plan split into 0–30 / 30–90 / 90+ days with KPIs
+- [ ] Profile optimisation covers name field, bio, links, pinned posts, highlights
+- [ ] Hashtag guidance limited to ≤ 5 topical tags
+- [ ] Strategy tailored to the account's follower stage
