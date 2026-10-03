@@ -1,0 +1,63 @@
+{
+  "skill_name": "youtube-organic",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "channel-audit-from-studio-data",
+      "prompt": "YouTube audit for 'Garage Woodworks' (14,200 subs, 96 videos). Studio last 28 days: traffic 52% search, 21% suggested, 9% browse, 11% Shorts feed, 7% external. Long-form CTR 3.1%, avg view duration 3:40 on ~14-min videos (26%). Retention curves show a 35% drop in the first 30 seconds (intro with channel jingle and 'welcome back'). Uploads: 1 long-form every ~10 days, Shorts random. Top videos are all 'how to build X' tutorials. Goal: 50k subs in 12 months.",
+      "files": [],
+      "expected_output": "Audit in the skill's format: search-driven channel, CTR and intro retention as the two gates, title/thumbnail rewrites with Test & Compare, intro restructure, a tutorial series with fixed slot, Shorts bridge from tutorial steps, cadence suited to the creator, KPIs.",
+      "assertions": [
+        "Diagnoses search as the main source and recommends protecting searchable tutorials while improving suggested/browse via series and playlists",
+        "Flags CTR 3.1% as weak and provides concrete title rewrites and thumbnail concepts with a Test & Compare plan",
+        "Addresses the 35% first-30-second drop by removing the jingle/'welcome back' and starting with the payoff",
+        "Shorts strategy explicitly bridges to the long-form tutorials",
+        "Cadence recommendation is realistic (e.g. 1 long-form/week + 2–4 Shorts) with a fixed slot"
+      ],
+      "checks": [
+        {"type": "contains", "value": "TITLE & THUMBNAIL"},
+        {"type": "contains", "value": "RETENTION FIXES"},
+        {"type": "contains", "value": "SHORTS STRATEGY"},
+        {"type": "regex", "pattern": "Test & Compare|test and compare"},
+        {"type": "regex", "pattern": "welcome back|jingle|intro"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "shorts-not-converting",
+      "prompt": "My Shorts get 200k–900k views each (cooking channel) but my long videos get 2k views and I gain maybe 50 subs per viral Short. Should I just stop making long videos?",
+      "files": [],
+      "expected_output": "Explains the Shorts-to-long-form conversion problem and the bridge tactics (related video link, topic match, open question, series), when Shorts-only is viable vs not for the goal, and metrics to watch in Studio.",
+      "assertions": [
+        "Explains why Shorts audiences convert weakly and gives specific bridge tactics (related video link, same topic, ending question)",
+        "Discusses the trade-off honestly (Shorts-first channels exist) tied to the creator's goal rather than a blanket answer",
+        "Names the Studio metrics to track (subs from Shorts, long-form views from Shorts viewers, returning viewers)",
+        "Recommends long-form topics derived from the best-performing Shorts"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "related video|bridge|link"},
+        {"type": "regex", "pattern": "returning viewers|subscribers per"},
+        {"type": "regex", "pattern": "long-form|long form"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "title-thumbnail-rewrites",
+      "prompt": "Give me better titles and thumbnail ideas for these three videos on my personal finance channel: 1) 'My thoughts on index funds (2026 update)' 2) 'Budgeting app review' 3) 'How I paid off debt'. Current CTR is 2.4%.",
+      "files": [],
+      "expected_output": "For each video 2–3 title options ≤60 characters with specific outcomes or curiosity gaps, a thumbnail concept with ≤3 words of text that complements rather than repeats the title, and a Test & Compare plan.",
+      "assertions": [
+        "Each video gets multiple title options under ~60 characters with a specific payoff or number (placeholders where the number is unknown)",
+        "Thumbnail concepts carry different information from the title and use ≤3 words of text",
+        "Explains the CTR-impressions relationship briefly and proposes Test & Compare",
+        "Avoids clickbait the video cannot pay off"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "Test & Compare|test and compare"},
+        {"type": "regex", "pattern": "thumbnail"},
+        {"type": "min_count", "pattern": "index fund", "count": 1}
+      ]
+    }
+  ]
+}

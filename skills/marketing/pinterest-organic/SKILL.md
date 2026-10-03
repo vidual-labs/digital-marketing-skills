@@ -1,259 +1,240 @@
 ---
 name: pinterest-organic
-description: Use when developing Pinterest organic strategy — analyze a profile URL, recommend pin strategy, board structure, posting schedule, and follower growth tactics optimized for Pinterest's visual search engine.
-version: 1.0.0
-author: Hermes Agent
+description: Use when developing Pinterest organic strategy — profile audit, keyword-driven board structure, pin design and formats, fresh-pin cadence, Rich Pins and claimed-website setup, seasonal planning with Pinterest Trends, and growth measured in outbound clicks. Also use when someone asks "is Pinterest worth it for my business", wants a Pinterest content calendar, or needs pin titles and descriptions written for search. Don't use for Pinterest Ads, product catalog/shopping feeds, or Instagram-style engagement tactics.
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when a profile cannot be fetched, the skill works from screenshots and Pinterest Analytics exports the user provides.
 metadata:
-  hermes:
-    tags: [pinterest, organic, visual-search, pin-strategy, growth, content-calendar]
-    related_skills: [instagram-organic, linkedin-organic, youtube-organic, competitor-research]
+  category: organic-social
+  updated: 2026-10-02
+  tags: [pinterest, organic, visual-search, pin-strategy, boards, keywords, fresh-pins, content-calendar, traffic]
+  related_skills: [instagram-organic, youtube-organic, linkedin-organic, competitor-research, geo-ai-seo, branding]
 ---
 
 # Pinterest Organic Strategy
 
 ## Overview
 
-Develop a data-informed organic strategy for Pinterest. Unlike social networks, Pinterest is a visual search engine — pins have a shelf life of months (not hours), and the algorithm is driven by keywords, visual quality, and click-through intent. Takes a profile URL, audits current content, board structure, and growth trajectory, then produces a tailored plan for what to pin, how to organize boards, when to post, and how to grow the follower base.
+Pinterest is a visual search and planning engine, not a social feed: pins are indexed by their text and image, surface for months, and are judged on saves and outbound clicks rather than likes. This skill audits a business profile, rebuilds boards around search keywords, sets a sustainable fresh-pin cadence, defines pin design and copy that rank, and plans content around Pinterest's seasonal demand curve. The success metric is traffic and conversions, not followers.
 
 ## When to Use
 
-- Auditing a Pinterest business profile for strategy
-- Planning a pin calendar and board structure
-- Growing a Pinterest following for traffic or brand awareness
-- Developing a keyword-driven Pin strategy
-- Converting Pinterest traffic to website visitors or customers
+- Auditing a Pinterest business profile and boards
+- Deciding whether Pinterest fits a niche and goal
+- Planning boards, pin designs and a fresh-pin calendar
+- Writing keyword-rich pin titles, descriptions and board descriptions
+- Growing outbound clicks to a website, shop or lead magnet
 
-Don't use for: Pinterest Promoted Pins (paid ads), Pinterest Ads Manager strategy, or product catalog setup.
+Don't use for: Pinterest Ads (Promoted Pins, Ads Manager), product catalog ingestion and shopping feeds, or engagement-driven social tactics that assume a chronological audience.
+
+## Inputs
+
+Ask for (or extract from the conversation):
+
+- **Profile URL** and whether it is a claimed business account
+- **Goal**: traffic, email sign-ups, sales, brand awareness — and the destination URLs
+- **Pinterest Analytics** (last 30–90 days): impressions, engagements, saves, outbound clicks, top pins, top boards, audience interests
+- **Content inventory**: blog posts, products, guides, videos that pins can point to
+- **Current boards and pin cadence**, or screenshots of the profile
+- **Design capacity**: templates, brand kit, who produces pins
+- **Seasonality** of the business
+
+Data rules: if the profile cannot be fetched, say so and work from screenshots; do not estimate impressions or clicks. Keyword suggestions come from Pinterest's own search bar, Pinterest Trends and the user's analytics — if none are available, label suggested keywords as hypotheses to validate. Pinterest renames features (Idea Pins were folded into standard video/multi-image pins in 2023; scheduling is native); if the UI differs, follow the UI and note it.
 
 ## Audit Workflow
 
-### Step 1: Profile Analysis
+### Step 1: Profile and analytics
 
-Visit the provided URL and extract:
+| Metric | Where | Why |
+|--------|-------|-----|
+| Followers | Header | Weak proxy; low weight |
+| Monthly views | Header (public) | Vanity; use Analytics instead |
+| Boards, pins per board | Boards tab | Coverage and depth (< 20 pins looks thin) |
+| Impressions, saves, outbound clicks | Analytics → Overview | The metrics that matter, in that order of leading indicator |
+| Top pins / top boards | Analytics | What ranks already |
+| Audience interests and demographics | Analytics → Audience insights | Keyword and topic direction |
+| Claimed website, Rich Pins | Settings | Attribution and richer pin data |
+| Pin formats used | Recent pins | Static, video, multi-image (carousel), collages |
+| Cadence | Recent activity | Consistency |
 
-| Metric | Where to Find | Why |
-|--------|--------------|-----|
-| **Followers** | Profile header | Growth baseline |
-| **Board count** | Profile boards tab | Organization and topic coverage |
-| **Pin count per board** | Individual boards | Content density — boards with < 20 pins look empty |
-| **Monthly impressions** | Pinterest Analytics → Overview | Visibility benchmark |
-| **Monthly saves** | Pinterest Analytics → Overview | Signal of content value |
-| **Monthly outbound clicks** | Pinterest Analytics → Overview | Traffic-driving effectiveness |
-| **Top-performing pins** | Pinterest Analytics → Top Pins | What already works |
-| **Pin formats used** | Scroll recent pins | Static image vs video vs carousel (multi-image) Pins |
-| **Posting frequency** | Recent activity | Consistency and cadence |
-| **Board naming** | Board list | Keyword usage for search |
-
-### Step 2: Content Audit
+### Step 2: Content audit
 
 | Check | Good | Problem |
 |-------|------|---------|
-| **Pin aspect ratio** | 2:3 vertical (1000×1500px) | Horizontal images get buried in feed |
-| **Pin titles** | Keyword-rich, descriptive | Generic titles ("pretty image") hurt search |
-| **Pin descriptions** | 2-3 sentences with keywords, benefits, and CTA | Empty or 1-word descriptions miss search entirely |
-| **Board titles** | Keyword-rich ("Home Office Ideas", "Vegan dinner recipes") | Vague titles ("stuff I like") don't rank |
-| **Pin frequency** | 5-15 pins/day from a business account | < 1 pin/day stagnates |
-| **Fresh pin ratio** | Majority are new creatives, not re-pins | Re-pinning your own content works but fresh creatives get more reach |
+| Aspect ratio | 2:3 vertical, 1000×1500 px | Horizontal or square gets cropped and buried |
+| Pin title | ≤ 100 characters, keyword in the first 40 | Vague or missing |
+| Pin description | 2–3 sentences, natural keywords, benefit, call to action; ≤ 500 characters, first ~50–60 visible | Empty or keyword-stuffed |
+| Destination link | Every pin links to a relevant page | Dead links or homepage only |
+| Text overlay | 3–6 words, large, high contrast | Tiny or absent text; readable only on desktop |
+| Board titles and descriptions | Search phrases ("Small Bathroom Ideas") | Cute names ("Pretty things") |
+| Freshness | Mostly new images and new URLs | Mostly re-saves of old pins |
+| Cadence | Daily, steady | Bursts then silence |
 
-### Step 3: Audience & Keyword Alignment
+### Step 3: Niche fit and keywords
 
-Pinterest's algorithm works like Google — it indexes your pin titles, descriptions, and board names. Check:
+Pinterest skews toward planning intent: home, food, fashion, beauty, wellness, parenting, weddings, travel, personal finance, DIY, crafts, business and marketing education, and increasingly men's interests and Gen Z. If the audience plans or shops for the category, Pinterest can be a top traffic source; if the product is impulse or B2B enterprise, expectations should be modest.
 
-1. Are your boards organized around search queries your audience would type?
-2. Are your pin descriptions naturally keyword-rich (not stuffed)?
-3. Do your top-performing pins match the keywords you're targeting?
-
-**Top-performing niche categories on Pinterest:**
-- Home decor & DIY, Fashion, Food & recipes, Travel, Fitness/health, Personal finance, Parenting, Beauty, Business/entrepreneurship, Photography
-
-If your content fits a high-intent category, Pinterest is a top-growth channel.
+Keyword research sources: the Pinterest search bar (autocomplete and guided-search chips), Pinterest Trends (seasonality and related terms), top-performing pins of competitors, and the user's Analytics. Build a list of 15–30 keywords grouped by board.
 
 ## Strategy Formulation
 
-### Board Structure
+### Board structure
 
-Boards are how Pinterest categorizes you. Each board = a search topic.
+Boards are how Pinterest understands what an account is about. One board = one search topic.
 
 | Rule | Detail |
 |------|--------|
-| **Board count** | 8-15 boards. Enough to cover all keywords, not so many that each board has < 20 pins |
-| **Board titles** | Keyword phrases, not creative names. "Easy Dinner Recipes" > "Things I Cook" |
-| **Board descriptions** | 1-2 sentences with related keywords. Pinterest indexes these for search |
-| **Board sections** | Within each board, create 2-4 sections for sub-categories. E.g., "Easy Dinner Recipes" → "Under 30 min", "One-pot", "Meal prep" |
-| **Secret boards** | 1-2 secret boards for testing new content before publicizing |
+| Count | 8–15 active boards covering the keyword clusters; archive off-topic boards |
+| Titles | Keyword phrases people search |
+| Descriptions | 1–2 sentences with related keywords |
+| Sections | 2–4 per board for sub-topics when a board exceeds ~50 pins |
+| Order | Most important boards first; set a strong cover |
+| Secret boards | For staging and testing before making public |
 
-**Board structure example:**
+### Pin formats
 
-```
-BOARD: [Primary keyword — e.g., "Digital Marketing Tips"]
-  └── Section: Strategy
-  └── Section: Tools & Software
-  └── Section: Growth Hacks
+| Format | Use |
+|--------|-----|
+| Static pin (2:3) | Core evergreen content; most of the volume |
+| Video pin (6–15 s, vertical) | Process, before/after, quick demo; strong in home feed |
+| Multi-image / carousel pin | Step-by-step, multi-angle product; high engagement, lower click-out per image |
+| Infographic / long pin (up to 1:2.1) | Checklists and data people save |
+| Product pins (from claimed site/catalog) | Live price and availability |
+| Collages | Trend-led, younger audience; link to products |
 
-BOARD: [Secondary keyword — e.g., "Content Marketing"]
-  └── Section: Writing Tips
-  └── Section: SEO
-  └── Section: Visual Content
+Design rules: brand colours and fonts for recognition, a face or hands when the category allows, subtle logo or URL at the bottom, text that survives the mobile crop, and 3–5 distinct designs per destination URL over time.
 
-BOARD: [Tertiary keyword — e.g., "Social Media Tips"]
-  ...
-```
+### Cadence (quality over volume)
 
-### Pin Strategy (What to Pin)
+Pinterest now rewards fresh, original pins and penalises spammy volume. Starting points:
 
-| Pin Type | Description | When to Use |
-|----------|-------------|-------------|
-| **Static pin** | Vertical image 2:3 with text overlay | Core content — evergreen, searchable |
-| **Video pin** | 6-15s vertical video | When showing process, before/after, or quick demo |
-| **Carousel pin** | Multi-image swipeable pin (2-5 images) | Step-by-step guides, before/afters, multi-angle product — high engagement but lower click-out per image |
-| **Infographic pin** | Long vertical (1000×2500px) with data or steps | High save rate — people save for later |
-| **Quote pin** | Text on a branded background | Brand awareness and shares |
+| Account | Fresh pins per day |
+|---------|-------------------|
+| New (< 500 followers or < 10K impressions) | 1–3, every day |
+| Established | 3–5 |
+| Content-rich publishers | 5–10 at most, only if each pin is a new image or URL |
 
-**Pin creative rules:**
-- Always 2:3 aspect ratio (1000×1500px minimum)
-- Text overlay: 3-5 words max, large font, high contrast with background
-- Use your brand colors for consistency
-- Show faces for higher CTR (10-30% lift)
-- Add a subtle brand logo or URL at bottom for recognition
-- Never use horizontal, square, or small images
+Fresh = a new image, even for an existing URL. Re-saving your own pins to other boards is acceptable in small doses; mass re-pinning of others' content no longer drives reach. Schedule with Pinterest's native scheduler (up to 30 days ahead) or a tool like Tailwind so posting is steady.
 
-### Posting Schedule (When to Pin)
+Timing: evenings and weekends in the audience's time zone are typical peaks, but pins live for months, so consistency matters more than the hour.
 
-Pinterest's algorithm favors consistent pinning. Unlike Meta or Instagram, pins have a long half-life — a well-keyworded pin can drive traffic for 3-6 months or longer.
+### Seasonal planning
 
-**Frequency:**
-- Minimum: 3-5 pins/day
-- Optimal: 5-10 pins/day
-- Maximum: 15-25 pins/day (use a mix of new pins and repins)
+Pinners plan 45–90 days ahead. Use Pinterest Trends and the Pinterest Predicts annual report to schedule seasonal pins 2–3 months before the event (holidays, back to school, weddings, summer). Evergreen content fills the rest of the calendar.
 
-**Best times to pin:**
+### Growth tactics
 
-| Day | Best Times (audience local time) |
-|-----|----------------------------------|
-| Monday | 10 AM, 2 PM, 8 PM |
-| Tuesday | 9 AM, 1 PM, 7 PM |
-| Wednesday | 10 AM, 2 PM, 8 PM |
-| Thursday | 9 AM, 1 PM, 7 PM |
-| Friday | 10 AM, 2 PM |
-| Saturday | 10 AM, 4 PM (peak Pinterest day) |
-| Sunday | 10 AM, 5 PM, 8 PM (peak Pinterest day) |
+| Tactic | Effort | Impact | Why |
+|--------|--------|--------|-----|
+| Keyword-first titles, descriptions, boards | Low | Very high | Pinterest ranks text plus image understanding |
+| Daily fresh pins | Medium | Very high | Fresh content is prioritised |
+| Multiple designs per URL | Medium | High | Each design is a new chance to rank; test overlays and angles |
+| Claimed website + Rich Pins | Low | High | Attribution, richer metadata, trust |
+| Video and multi-image pins | Medium | High | Extra distribution in home feed |
+| Seasonal pins 60–90 days early | Low | High | Matches planning behaviour |
+| Alt text and image SEO | Low | Medium | Accessibility and visual search signals |
+| Cross-link from site and newsletter | Low | Medium | Seeds early saves |
+| Group boards | Low | Low–medium | Diminished since the fresh-pin shift; only niche, active ones |
 
-Weekends are generally the highest-traffic days on Pinterest.
+### Growth stages
 
-Use **Tailwind** or **Pinterest's native scheduler** to batch-schedule pins. Pinning manually every day is unsustainable.
-
-### Growth Tactics
-
-| Tactic | Effort | Impact | Description |
-|--------|--------|--------|-------------|
-| **Keyword-rich titles + descriptions** | Low | Very high | Pinterest is a search engine. Every pin title and description should include target keywords naturally |
-| **Consistent pinning (5-10/day)** | Medium | Very high | Volume + consistency drives impressions. One pin per day won't move the needle |
-| **Fresh content > re-pinning** | Medium | High | Pinterest prioritizes new pins. Create 5+ fresh pin designs for each piece of content |
-| **Rich pins** | Low | High | Enable Rich Pins (product, recipe, article). Pulls live data from your website and increases CTR |
-| **Board optimization** | Low | High | Keyword-rich board titles and descriptions boost all pins in that board |
-| **Cross-promote to Instagram/TikTok** | Low | Medium | Embed Pinterest boards in IG/TikTok bios. Share pin images on Reels with "Full guide on Pinterest" |
-| **Collaborative boards** | Medium | Medium | Co-own boards with complementary brands. Their pins show on your board and vice versa |
-| **Trend participation** | Low | Medium | Use Pinterest Trends tool to plan content around seasonal and trending keywords |
-
-### Growth Phases
-
-| Follower Count | Strategy Shift |
-|---------------|----------------|
-| < 500 | 5 new pins/day minimum. 8 keyword-optimized boards. Enable Rich Pins. Join 1-2 group boards if available. |
-| 500-5K | Scale to 8-10 pins/day. Add new boards every 2 weeks. Add video pins for reach. |
-| 5K-20K | Batch-create 30+ pin designs monthly. Use Pinterest Trends for seasonal content. Start a pinned blog/content calendar synced with pins. |
-| > 20K | Outsource pin design. Run Pinterest Ads on top-performing pins. Optimize for outbound clicks over follower count. |
+| Stage | Focus |
+|-------|-------|
+| < 10K monthly impressions | Claim site, Rich Pins, 8–10 keyword boards, 1–3 fresh pins daily, templates |
+| 10K–100K | 3–5 fresh pins daily, video pins, seasonal calendar, 3+ designs per top URL |
+| 100K–1M | Batch design monthly, analytics-driven pruning of weak boards, lead magnets per board |
+| > 1M | Team or outsourcing, catalog/product pins, consider ads on proven organic winners |
 
 ## Profile Optimization Checklist
 
-- [ ] **Profile photo** — Clear brand logo (square, high-contrast)
-- [ ] **Display name** — Include primary keyword: "Brand Name | [Keyword]"
-- [ ] **Bio** — 1-2 sentences with value prop + keywords + CTA (e.g., "Daily tips on [topic] → Link below")
-- [ ] **Website link** — Single destination that matches your primary pin content
-- [ ] **Claimed website** — Verified in Pinterest Business settings (enables Rich Pins)
-- [ ] **Board covers** — Custom or best-performing pin as board cover image
-- [ ] **Business account** — Required for analytics, Rich Pins, and scheduling
-
-## Common Pitfalls
-
-1. **Pinning horizontal images.** Pinterest's feed is vertical. Anything not 2:3 gets truncated in the feed and gets 5-10× fewer impressions.
-
-2. **No keywords anywhere.** Board names and pin descriptions are the ONLY way Pinterest indexes your content. "Cool stuff" doesn't rank for anything.
-
-3. **Posting once per week.** Pinterest needs volume. 1 pin/week is basically invisible. Minimum 5/day with a scheduler.
-
-4. **Re-pinning everything instead of creating fresh pins.** Re-pins still work but fresh pin creatives of the same link get dramatically more impressions.
-
-5. **Not using board sections.** Unorganized boards look messy to followers and miss the chance to target sub-keyword phrases in section names.
-
-6. **Not scheduling.** Manual pinning 5-10 times/day is unsustainable. Use the native scheduler or Tailwind — set up 30 pins at once and walk away.
-
-7. **Optimizing for follower count over outbound clicks.** Follower count on Pinterest is a vanity metric. Outbound clicks to your site are the only metric that matters for traffic and revenue.
+- [ ] Business account, website claimed, Rich Pins validated
+- [ ] Profile name includes the main keyword ("Brand | Topic")
+- [ ] Bio: value proposition + keywords + call to action (≤ 160 characters)
+- [ ] Profile photo recognisable (logo or face)
+- [ ] Board covers set; boards ordered by priority; off-topic boards archived
+- [ ] Featured boards selected for the profile header
+- [ ] Analytics connected and reviewed monthly
 
 ## Output Format
 
 ```
-PINTEREST AUDIT: [Profile Name] (URL)
-Followers: X | Boards: Y | Total Pins: Z | Monthly Impressions: W
-Monthly Saves: A | Monthly Outbound Clicks: B
+PINTEREST AUDIT: [Profile] (URL)
+Goal: [traffic / leads / sales] | Access: [fetched / screenshots / analytics export]
+Followers: X | Boards: Y | Pins: Z | Monthly impressions: A | Saves: B | Outbound clicks: C
 
 --- CURRENT STATE ---
-Pin Mix: [Static %, Video %, Carousel %]
-Posting Frequency: X pins/day
-Board Structure: [Assessment — keyword-optimized or vague?]
-Top 3 Pins: [Pin titles + impression counts]
+Pin mix: Static X% / Video Y% / Multi-image Z%
+Cadence: X fresh pins/day | Fresh vs re-save: ..
+Board quality: [keyword-optimised? coverage? thin boards?]
+Setup: [claimed site / Rich Pins / business account]
+Top performers: [3 pins — why]
 
 --- STRENGTHS ---
-- [Observation 1]
-- [Observation 2]
+- [...]
 
 --- GAPS ---
-- [Gap 1]
-- [Gap 2]
+- [...]
 
---- BOARD STRUCTURE (8-12 recommended) ---
-BOARD: [Keyword-rich title]
-  └── Section: [Sub-keyword]
-  └── Section: [Sub-keyword]
-  Description: [1-2 sentences with keywords]
+--- KEYWORD LIST (15–30, grouped by board; source noted) ---
+[Board A]: kw, kw, kw
+[Board B]: kw, kw, kw
 
-[Repeat for each board]
+--- BOARD STRUCTURE (8–15) ---
+BOARD: [Keyword title]
+  Description: [1–2 sentences]
+  Sections: [..]
+[...]
 
 --- PIN STRATEGY ---
-Formats: [Recommended mix]
-Pin Design Direction: [Text overlay style, colors, font, brand elements]
-Keyword List: [Top 10-15 target keywords for pin titles/descriptions]
+Formats: [mix] | Designs per URL: [n]
+Design direction: [ratio, overlay style, colours, fonts, branding]
+Copy templates: Title: [..] | Description: [..]
 
---- SCHEDULE ---
-Frequency: X pins/day
-Best Days/Times: [Recommended]
-Tools: [Recommend native scheduler or Tailwind]
+--- CADENCE & SEASONAL CALENDAR ---
+Fresh pins/day: X | Scheduler: [native / tool]
+Seasonal pushes: [event → start date]
 
 --- GROWTH PLAN ---
-Short-term (0-30 days): [Top 3 actions]
-Mid-term (30-90 days): [Top 3 actions]
-Long-term (90+ days): [Top 3 actions]
+0–30 days: [3 actions]
+30–90 days: [3 actions]
+90+ days: [3 actions]
+KPIs: [outbound clicks, saves, impressions on top boards, conversions from Pinterest traffic]
 
 --- PROFILE OPTIMIZATION ---
-Display name: [Suggested]
-Bio: [Suggested]
-Website link: [Suggested]
-Rich Pins: [Enable/disable recommendation]
+Name: [..] | Bio: [..] | Claimed site / Rich Pins: [..] | Featured boards: [..]
 
---- KEYWORD LIST ---
-[Target keywords for titles and descriptions, comma-separated]
+--- ASSUMPTIONS & MISSING DATA ---
+[...]
 ```
+
+## Common Pitfalls
+
+1. **Horizontal or square images.** They are cropped and under-served. 2:3 vertical, always.
+
+2. **No keywords.** Titles, descriptions and board names are how Pinterest indexes content. "Inspo" ranks for nothing.
+
+3. **Volume spam.** Twenty re-pins a day used to work; now it is flagged. Fewer, fresh, original pins.
+
+4. **Treating Pinterest like Instagram.** No engagement loops, no posting times to chase, no follower vanity. Search intent and shelf life.
+
+5. **Pinning without a destination.** Every pin should link to a page with a next step.
+
+6. **Judging results after a week.** Pins ramp over weeks and months. Review monthly, prune quarterly.
+
+7. **Ignoring seasonality.** Posting Christmas content in December is too late; pinners planned in October.
+
+8. **Measuring followers.** Outbound clicks and conversions are the metrics; followers barely affect distribution.
 
 ## Verification Checklist
 
-- [ ] Profile audited (boards, pins, follower count, analytics)
-- [ ] Pin format mix assessed (static/video/carousel)
-- [ ] Board structure evaluated for keyword optimization
-- [ ] Recommended board structure provided (8-12 boards with sections)
-- [ ] Pin design direction specified (ratio, text overlay, branding)
-- [ ] Target keyword list included (10-15 keywords)
-- [ ] Posting schedule recommended (frequency + days/times)
-- [ ] Growth phases outlined (short/mid/long term)
-- [ ] Profile optimization checklist filled
-- [ ] Strategy tailored to niche and current follower count
+- [ ] Profile and analytics reviewed from fetched data or screenshots; no invented metrics
+- [ ] Niche fit assessed honestly against Pinterest's planning-intent audience
+- [ ] Keyword list of 15–30 terms grouped by board, with the source named
+- [ ] Board structure of 8–15 keyword boards with descriptions and sections
+- [ ] Pin specs: 2:3 ratio, title ≤ 100 chars with keyword first, description ≤ 500 chars with CTA
+- [ ] Fresh-pin cadence set by account stage (1–3 / 3–5 / ≤ 10 per day), not volume spam
+- [ ] Claimed website and Rich Pins addressed
+- [ ] Seasonal calendar planned 60–90 days ahead using Pinterest Trends
+- [ ] Growth plan split 0–30 / 30–90 / 90+ days with outbound clicks as the primary KPI
+- [ ] Profile optimisation checklist applied

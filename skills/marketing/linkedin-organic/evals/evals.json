@@ -1,0 +1,63 @@
+{
+  "skill_name": "linkedin-organic",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "founder-profile-audit",
+      "prompt": "LinkedIn strategy for our CEO (B2B cybersecurity, 2,900 followers). Last 90 days: 14 posts — 9 were links to our blog (avg 1,100 impressions, 6 reactions), 3 text posts about incidents she handled (avg 7,800 impressions, 60 reactions, 14 comments), 2 company reposts. Headline: 'CEO at ShieldOps'. She has 2 hours/week. Goal: inbound demo requests from CISOs.",
+      "files": [],
+      "expected_output": "Audit in the skill's format: link posts diagnosed as the reach problem, text/story posts as the winner, headline rewrite with audience and outcome, 4–5 pillars, a 2-hours-a-week cadence (2–3 posts + commenting), comment flywheel targets by type, Featured section with a demo link, personal vs company page roles.",
+      "assertions": [
+        "Identifies link posts (9 of 14) as the main reach drag and the incident text posts as the format to scale",
+        "Rewrites the headline from a job title to who she helps + outcome + proof",
+        "Cadence fits 2 hours/week (e.g. 2–3 posts and 15–20 min commenting on 2–3 days) rather than daily posting",
+        "Includes a comment flywheel with target account types (CISOs, security communities)",
+        "Does not recommend the retired Creator Mode toggle; mentions setting Follow as primary button if relevant"
+      ],
+      "checks": [
+        {"type": "contains", "value": "CONTENT PILLARS"},
+        {"type": "contains", "value": "COMMENT STRATEGY"},
+        {"type": "regex", "pattern": "link post|external link"},
+        {"type": "regex", "pattern": "Headline"},
+        {"type": "not_regex", "pattern": "turn on creator mode"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "company-page-vs-personal",
+      "prompt": "Our marketing team posts 5x a week on our company page (4,000 followers) and gets ~300 impressions per post. The founders don't post. Leadership wants to double down on the page with a bigger budget for design. Is that the right move?",
+      "files": [],
+      "expected_output": "Explains structural reach limits of company pages, recommends a people-first approach (founders/employees post, page amplifies), gives a practical employee advocacy process, and what the page should still do.",
+      "assertions": [
+        "Explains that company pages have structurally lower reach than personal profiles and that more design budget won't fix distribution",
+        "Recommends founders/employees posting with the page amplifying, including an advocacy process",
+        "Keeps a role for the page (credibility hub, official news, complete profile)",
+        "Provides a measurable plan (what to post where, KPIs)"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "personal profile"},
+        {"type": "regex", "pattern": "advocacy|employees"},
+        {"type": "regex", "pattern": "company page"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "post-rewrite-for-reach",
+      "prompt": "Rewrite this LinkedIn post so it actually gets reach: 'Excited to share our new whitepaper on supply chain resilience! Download here: https://acme.com/whitepaper #supplychain #logistics #resilience #innovation #leadership Please like and share!'",
+      "files": [],
+      "expected_output": "A rewritten text post with a strong first line, one concrete insight from the whitepaper (or a placeholder), no link in the body (link in first comment), no engagement bait, 0–3 hashtags, and a closing question; plus a short explanation of each change.",
+      "assertions": [
+        "Removes the external link from the body and puts it in the first comment",
+        "Removes 'Please like and share' and the hashtag pile (keeps 0–3)",
+        "First line carries a specific idea or tension rather than 'Excited to share'",
+        "Explains the reasoning for each change briefly"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "first comment"},
+        {"type": "not_regex", "pattern": "please like and share"},
+        {"type": "not_regex", "pattern": "^excited to share"}
+      ]
+    }
+  ]
+}

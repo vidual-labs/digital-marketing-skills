@@ -1,238 +1,207 @@
 ---
 name: competitor-research
-description: Use when researching competitors in a given market — identify key players, analyze their digital presence, strengths, weaknesses, content strategy, ad spend, and find actionable market gaps.
-version: 1.0.0
-author: Hermes Agent
+description: Use when researching competitors in a market — identifying direct, indirect and adjacent players, auditing their websites, SEO, paid ads (Google Ads Transparency Center, Meta Ad Library, TikTok and LinkedIn ad libraries), social presence, content strategy and how AI assistants describe them, then running SWOTs and finding actionable market gaps. Also use when someone asks "who are we really competing with", wants a competitive landscape brief, or needs whitespace for a positioning or launch. Don't use for financial due diligence, patent or IP analysis, or pricing models.
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Browsing greatly improves results (ad libraries, profiles, SERPs); without it the skill structures the research plan and works from data the user collects.
 metadata:
-  hermes:
-    tags: [competitor-research, market-analysis, competitive-intelligence, gap-analysis, positioning, SEO-competition]
-    related_skills: [geo-ai-seo, instagram-organic, linkedin-organic, youtube-organic, pinterest-organic, google-ads-diagnostics]
+  category: competitive-intelligence
+  updated: 2026-10-02
+  tags: [competitor-research, competitive-intelligence, market-analysis, gap-analysis, swot, ad-library, positioning, seo-competition]
+  related_skills: [market-positioning, branding, geo-ai-seo, instagram-organic, linkedin-organic, youtube-organic, pinterest-organic, google-ads-diagnostics, meta-ads-diagnostics]
 ---
 
 # Competitor Research
 
 ## Overview
 
-Identify and analyze competitors in a specific market segment and locale. Produces a structured competitive landscape with each competitor's digital footprint, content strategy, ad presence, strengths, weaknesses, and — most importantly — **actionable gaps** your client or brand can exploit.
+Identify and analyse the competitive set for a market, segment and locale, then turn it into decisions: who the real competitors are across three layers, how they show up on web, search, paid, social and in AI answers, what they do well and badly, and — the valuable part — which gaps the brand can credibly claim. Every finding is dated and sourced because competitive data expires quickly.
 
 ## When to Use
 
-- Market entry research for a new product, service, or campaign
-- Competitive analysis to inform positioning and messaging
-- Identifying content or distribution gaps in the market
-- Preparing a competitive brief for a marketing strategy
-- Auditing ad space: what competitors are spending on and where
+- Market entry or launch research
+- Competitive input for positioning, messaging or creative
+- Finding channel, content, audience or offer gaps
+- Auditing competitors' paid activity and creative angles
+- Preparing a competitive brief for leadership or a client
 
-The input is always:
-- **Market/locale** (e.g., "SaaS marketing tools in the US")
-- **Segment** (e.g., "mid-market", "luxury", "DTC activewear")
-- **Optional:** list of known competitors if the user already has some
+Don't use for: financial due diligence, patent/IP analysis, pricing elasticity modelling, or legal competitive conduct questions. Hand positioning decisions to `market-positioning` and brand decisions to `branding`.
 
-Don't use for: due diligence / financial competitive analysis, patent IP analysis, or pricing strategy modeling.
+## Inputs
+
+Ask for (or extract from the conversation):
+
+- **Market and locale** (e.g. "B2B payroll software, DACH")
+- **Segment and price tier** (e.g. "SMB, 10–200 employees, mid-price")
+- **The brand's own offer** in one line, so gaps are judged against something the brand can execute
+- **Known competitors** and any the user suspects
+- **Channels in scope** and the brand's capacity (video team? budget for paid?)
+- **Access**: can the user export Similarweb/Semrush/Ahrefs data, or share screenshots?
+
+Data rules: if you can browse, fetch what is public (sites, ad libraries, profiles, search results, AI answers) and record the date; if you cannot, produce the research plan with exact places to look and fill in only what the user provides. Never invent traffic, follower or spend figures — label third-party estimates as estimates with the tool name. Ad libraries and platform tools change names and coverage (the EU Digital Services Act expanded ad transparency; Google's is the Ads Transparency Center; TikTok and LinkedIn have ad libraries); if a tool differs, say which one you used.
 
 ## Research Workflow
 
-### Phase 1: Competitor Discovery
+### Phase 1: Competitor discovery (three layers)
 
-Identify the competitive set in layers:
+| Layer | Definition | Where to find them |
+|-------|-----------|--------------------|
+| Direct | Same solution, same audience, same price tier | Search the core buying keywords in the locale; look at who advertises on them; "alternatives to X" lists; G2/Capterra/app-store categories |
+| Indirect | Different solution to the same problem | Reddit, niche forums, LinkedIn groups: "how do you handle X"; agencies, in-house tools, spreadsheets, doing nothing |
+| Adjacent / aspirational | Brands that share the audience and could expand into the category | Partnerships, co-marketing, who the audience also follows, platform ecosystems |
 
-#### Layer 1: Direct Competitors
-Same product/service, same target audience, same price segment.
+Target: 8–15 names across layers; deep-dive the top 5 by overlap with the brand's segment. Also ask two AI assistants "what are the best [category] for [segment] in [locale]" — their answer is now part of how buyers discover the set.
 
-**Discovery methods:**
-- Google the primary use-case keywords in the target locale
-- Check Google Ads transparent reporting for active advertisers
-- Check Meta Ad Library for brands advertising in the segment
-- Search LinkedIn, Instagram, YouTube for brands posting about the niche
-- Review industry reports and "top X alternatives" blog posts
+### Phase 2: Digital presence audit (top 5)
 
-#### Layer 2: Indirect Competitors
-Different product/service, same customer problem, same audience.
+| Channel | Capture | Where |
+|---------|---------|-------|
+| Website | Offer, pricing visibility, proof, design quality, speed, languages | Site, PageSpeed Insights |
+| SEO | Rankings for 10 core keywords, content volume, estimated traffic (labelled) | Manual SERPs, Semrush/Ahrefs/Similarweb if available |
+| AI search | Whether they are cited or recommended for category queries | Google AI Overviews/AI Mode, ChatGPT, Perplexity |
+| Google Ads | Active search/display/video ads, how long running | Google Ads Transparency Center |
+| Meta Ads | Active ads, count, formats, angles, start dates, EU reach data | Meta Ad Library |
+| TikTok | Organic presence, ad presence and top ads | TikTok profile, TikTok Creative Center, TikTok Commercial Content Library (EU) |
+| LinkedIn | Page followers, cadence, formats; active ads | Page, LinkedIn Ad Library |
+| Instagram / YouTube / Pinterest | Followers, cadence, formats, engagement pattern | Profiles |
+| Reviews | Rating, volume, recurring complaints and praise | G2, Capterra, Trustpilot, app stores, Google Business |
+| Email / lifecycle | Welcome flow, cadence, offers | Subscribe with a test address |
+| Hiring | Open roles reveal strategy (video, paid, new markets) | Careers page, LinkedIn jobs |
 
-**Discovery methods:**
-- "Alternative to [direct competitor]" searches
-- Browse Reddit, LinkedIn groups, industry forums for "what tools do you use for X"
-- Check G2, Capterra, ProductHunt for categories
-
-#### Layer 3: Adjacent / Aspirational
-Brands in different segments that could expand into yours or already cross-pollinate audiences.
-
-**Discovery methods:**
-- Check social media followers overlap between direct competitors
-- Browse brand partnerships and sponsorship mentions
-
-**Target:** Identify 8-15 competitors total, then focus deep-dive on the top 5.
-
-### Phase 2: Digital Presence Audit
-
-For each of the top 5 competitors, document:
-
-| Channel | Metric to Capture | Tool / Method |
-|---------|------------------|---------------|
-| **Website** | Traffic estimate (monthly), top pages, content volume, design quality | SEMrush / SimilarWeb (if available), manual browse |
-| **SEO** | Domain authority, top-ranking keywords, organic traffic share | Manual Google search for core keywords, check position |
-| **Google Ads** | Active ads? Search keywords? Display? Video? | Search target keywords and note ad presence |
-| **Meta Ads** | Active campaigns? Creative style? Target audience signals? | Meta Ad Library (facebook.com/ads/library) — search competitor name |
-| **TikTok** | Organic presence? Ad presence? Content style? | TikTok search + TikTok Ad Library |
-| **Instagram** | Followers, posts/month, engagement rate, content mix | Manual profile visit |
-| **LinkedIn** | Followers (page) / Connections (personal), posting frequency, content type | Manual page visit |
-| **YouTube** | Subscribers, video count, upload frequency, top videos | Manual channel visit |
-| **Pinterest** | Followers, monthly impressions, board structure, pin frequency | Manual profile visit |
-| **Social overall** | Which platforms are they investing in vs. ignoring? | Cross-reference all above |
-
-### Phase 3: Content Strategy Analysis
+### Phase 3: Content strategy
 
 | Dimension | Questions |
 |-----------|-----------|
-| **Content pillars** | What 3-5 topics/categories dominate their content? |
-| **Content format** | Heavy on video, long-form writing, image? |
-| **Tone & voice** | Corporate, casual, edgy, educational, inspirational? |
-| **Publication consistency** | Daily, 3x/week, sporadic? |
-| **Signature content** | Do they have a recognizable recurring series or format? |
-| **Content quality** | High production value or scrappy/authentic? |
-| **Distribution** | Do they cross-promote across platforms or silo by channel? |
+| Pillars | Which 3–5 topics dominate? |
+| Formats | Video-first, long-form text, carousels, podcasts? |
+| Voice | Corporate, founder-led, edgy, educational? |
+| Cadence | Daily, weekly, sporadic? |
+| Signature | A recurring series or format people recognise? |
+| Distribution | Cross-platform or siloed? Native or link-outs? |
+| Proof | Case studies, numbers, named customers? |
 
-### Phase 4: Ad Strategy Analysis
+### Phase 4: Paid strategy
 
-| Question | Where to Investigate |
-|----------|---------------------|
-| Are they running paid ads? | Meta Ad Library, Google Ads transparency, TikTok Creative Center |
-| How much creative variation do they have? | Count of unique ads in their ad library |
-| What angles do they use? | Problem→solution, social proof, direct offer, educational? |
-| Who are they targeting? | Inferred from ad copy, creative style, audience targeting language |
-| What offers do they lead with? | Free trial, demo, lead magnet, discount, direct purchase? |
-| How often do they refresh creative? | Date range of ads in libraries |
+| Question | Evidence |
+|----------|----------|
+| Are they running paid, where, since when? | Ad libraries, Transparency Center, start dates |
+| How many distinct creatives are live? | Count unique ads; many variants signal testing budget |
+| Which angles and offers? | Problem→solution, proof, discount, demo, lead magnet |
+| Who do they target? | Copy, language, EU audience data in Meta Ad Library |
+| Creative refresh rate | Start dates spread over weeks vs one old batch |
+| Landing pages | Where ads land; offer match |
 
-### Phase 5: SWOT per Competitor
-
-For each of the top 5:
+### Phase 5: SWOT per competitor
 
 ```
-COMPETITOR: [Name]
-Website: [URL]
-Market Position: [Brief — e.g., "Premium, direct-to-consumer, US/EU"]
-
-STRENGTHS:
-- [Specific strength 1 — e.g., "Highest organic traffic in niche (200K/mo)"]
-- [Specific strength 2]
-
-WEAKNESSES:
-- [Specific weakness 1 — e.g., "No Meta ad presence, 0 TikTok following"]
-- [Specific weakness 2]
-
-OPPORTUNITIES (for them / gaps):
-- [e.g., "Not targeting [locale/language]"]
-- [e.g., "Low engagement on Instagram despite 50K followers"]
-
-THREATS (to them):
-- [e.g., "Newer competitor X growing 3× faster on TikTok"]
+COMPETITOR: [Name] — [URL] — [Position in one line]
+STRENGTHS: [specific, evidenced — "ranks #1–3 for 7 of 10 core keywords"]
+WEAKNESSES: [specific — "no video; 3.6★ with recurring complaints about support"]
+OPPORTUNITIES (gaps they leave): [..]
+THREATS (to them): [..]
+Sources and dates: [..]
 ```
 
-### Phase 6: Market Gap Analysis
+### Phase 6: Market gap analysis
 
-The most valuable output. Identify what's **not** being done in the market — the whitespace your strategy can claim.
+| Gap type | Look for | Example |
+|----------|----------|---------|
+| Channel | Platforms nobody uses well | "No competitor publishes on YouTube; all are Instagram-first" |
+| Format | Formats absent from the set | "Nobody does document carousels or founder video" |
+| Audience | Segments ignored | "All target enterprise; 10–50-employee teams have no dedicated content" |
+| Locale / language | Underserved geography or language | "No German-language help content despite DACH sales" |
+| Voice | Personalities missing | "All corporate; a plain-spoken expert voice is open" |
+| Message / offer | Overused claims | "Everyone says AI-powered; nobody says done-for-you" |
+| Price / packaging | Missing tiers | "No free tier or monthly plan" |
+| Proof | Weak evidence | "No one shows named customer results" |
+| AI visibility | Not cited by assistants | "Only two of five are recommended by ChatGPT for the category" |
+| Experience | Review complaints | "Onboarding and support are the top complaints for three of five" |
 
-| Gap Category | What to Look For | Example |
-|-------------|-----------------|---------|
-| **Channel gaps** | Platforms no competitor is using or using poorly | "No competitor uses YouTube consistently. All are Instagram-focused." |
-| **Content format gaps** | Formats competitors aren't using | "All competitors do polished video. Nobody does carousel or document content on LinkedIn." |
-| **Audience gaps** | Demographics or segments being ignored | "All competitors target enterprise. Mid-market (10-50 employees) has no dedicated content." |
-| **Locale/language gaps** | Geographic or language underserved | "No competitor produces Spanish-language content despite 15% Spanish-speaking audience." |
-| **Tone/voice gaps** | Brand personalities not present | "All competitors are corporate/formal. A founder-led, personal brand angle is open." |
-| **Offer/message gaps** | Angles or messaging not being used | "Every competitor leads with 'AI-powered.' Nobody leads with 'human-first.'" |
-| **Price/positioning gaps** | Price points or tiers missing | "All offerings are $50+/month. A free-tier or freemium model could capture top-funnel." |
-| **Educational gap** | Topics nobody covers | "No competitor has comprehensive beginner content. All assume mid-level expertise." |
+Quantify gaps ("five competitors average 80 YouTube subscribers between them") and check feasibility against the brand's capacity.
 
-### Phase 7: Strategic Recommendations
+### Phase 7: Recommendations (3–5)
 
-Based on gaps, recommend 3-5 actionable strategic moves:
-
-| Recommendation Type | Output |
-|--------------------|--------|
-| **Positioning** | "Position as the [differentiator] alternative to [top competitor's positioning]" |
-| **Channel strategy** | "Go all-in on [under-served channel] where no competitor has strong presence" |
-| **Content format** | "Lead with [gap format] — every competitor uses [weak format]" |
-| **Ad strategy** | "Run [ad type] ads in [locale] where no competitor is buying" |
-| **Messaging** | "Lead with [gap message] — all competitors lead with [overused message]" |
+| Type | Form |
+|------|------|
+| Positioning | "Own [attribute] against [dominant claim]" → hand to `market-positioning` |
+| Channel | "Lead with [channel] where no competitor is credible" |
+| Content | "Build [format/series] nobody offers" |
+| Paid | "Test [angle] in [market] where ad libraries show no competitor activity" |
+| Messaging | "Lead with [gap message]; avoid [overused claim]" |
+| Experience | "Fix [common complaint] and make it a proof point" |
 
 ## Output Format
 
 ```
 COMPETITIVE LANDSCAPE: [Market / Segment / Locale]
-Date: [Research Date]
-Competitors Analyzed: [Number]
+Date: [Research date] | Competitors identified: [n] | Deep-dived: [n]
+Method: [browsed / user-provided data / mixed] | Tools: [names]
 
 --- MARKET OVERVIEW ---
-[1-2 paragraphs: size, saturation level, level of competition, dominant players]
+[1–2 paragraphs: maturity, saturation, dominant players, how buyers discover (search, AI, social, referral)]
 
 --- COMPETITOR TABLE ---
+| # | Name | Layer | Website | Position | Key strength | Key weakness | Main channels | Paid active? |
 
-| Rank | Name | Website | Key Strength | Key Weakness | Primary Channels |
-|------|------|---------|-------------|-------------|-----------------|
-| 1 | [Name] | [URL] | [Brief] | [Brief] | [Platforms] |
+--- DEEP DIVE: [Competitor 1] ---
+Website & offer: [..]
+SEO & AI visibility: [..]
+Paid: [platforms, # creatives, angles, since]
+Social: IG [..] | LinkedIn [..] | YouTube [..] | TikTok [..] | Pinterest [..]
+Content pillars & voice: [..]
+Reviews: [rating, volume, themes]
+SWOT: S [..] W [..] O [..] T [..]
+Sources & dates: [..]
 
---- DEEP DIVE: [Competitor 1 — Top player] ---
-WEBSITE: [Traffic, design, offer]
-SEO: [Top keywords, organic strength]
-ADS: [Active? Google/Meta/TikTok? Creative style?]
-SOCIAL:
-  Instagram: [Followers X | ER Y% | Content mix]
-  LinkedIn: [Followers X | Frequency | Content type]
-  YouTube: [Subs X | Uploads/month | Top content]
-  TikTok: [Followers X | Content style]
-  Pinterest: [Followers X | Pins/month]
-CONTENT PILLARS: [List 3-5]
-TONE: [Description]
+[Repeat for top 3–5]
 
-SWOT:
-  Strengths: [...]
-  Weaknesses: [...]
-  Opportunities: [...]
-  Threats: [...]
-
-[Repeat for top 3-5 competitors]
-
---- MARKET GAPS (Actionable whitespace) ---
-
-1. [Gap type] — [Description] — [Recommended action]
-2. [Gap type] — [Description] — [Recommended action]
-3. [Gap type] — [Description] — [Recommended action]
+--- MARKET GAPS (quantified, feasibility-checked) ---
+1. [Type] — [Evidence] — [Action] — [Feasibility for the brand]
+2. [..]
+3. [..]
 
 --- STRATEGIC RECOMMENDATIONS ---
+1. Positioning: [..]
+2. Channels: [..]
+3. Content: [..]
+4. Paid: [..]
+5. Messaging / experience: [..]
 
-1. POSITIONING: [Recommendation]
-2. CHANNELS: [Recommendation]
-3. CONTENT: [Recommendation]
-4. ADS: [Recommendation]
-5. MESSAGING: [Recommendation]
+--- WATCHLIST ---
+[What to re-check in 60–90 days and where]
+
+--- LIMITATIONS ---
+[Estimates, missing access, unverified items]
 ```
 
 ## Common Pitfalls
 
-1. **Only looking at direct competitors.** The biggest threat often comes from indirect competitors solving the same problem differently. Always research all three layers.
+1. **Direct competitors only.** The real threat is often the indirect substitute or the "do nothing" option.
 
-2. **Judging competitors by follower count only.** A competitor with 50K engaged followers is stronger than one with 200K ghost followers. Always check engagement rate.
+2. **Follower counts as strength.** Check engagement and reviews; large dormant audiences are weak.
 
-3. **Missing Meta/TikTok ad libraries.** Competitors may look small on organic but are spending heavily on paid. Ad libraries (Meta Ad Library, TikTok Creative Center) reveal this instantly.
+3. **Skipping ad libraries.** Organic may look quiet while paid is heavy. Libraries show it in minutes.
 
-4. **Looking at a snapshot, not trends.** Take a 30-60 day view when possible. A competitor that was ad-heavy 60 days ago and has suddenly stopped tells a story.
+4. **Snapshot thinking.** Ad start dates, hiring and cadence changes tell the trend; capture dates.
 
-5. **Not quantifying gaps.** "They don't do YouTube much" is weak. "Top 5 competitors average 80 subscribers between them" is actionable — it means YouTube is wide open.
+5. **Unquantified gaps.** "They don't do video much" is an opinion; "five competitors, 1 video in 90 days" is a decision.
 
-6. **Recommending things the client can't execute.** A gap in TikTok is only useful if the client has the team and appetite for video content. Flag feasibility.
+6. **Gaps the brand cannot execute.** Flag feasibility against team and budget.
 
-7. **Too many competitors.** Deep-diving 15+ competitors produces noise. Pick top 5 and use the rest as a landscape table.
+7. **Too many deep dives.** Fifteen SWOTs are noise; five with evidence are a strategy.
+
+8. **Invented numbers.** Traffic and spend estimates from tools are estimates. Say so, with the tool and date.
 
 ## Verification Checklist
 
-- [ ] At least 3 layers of competitors identified (direct, indirect, adjacent)
-- [ ] Top 5 competitors deep-dived with full digital presence audit
-- [ ] Ad presence checked via Meta Ad Library, Google Ads transparency, TikTok Creative Center
-- [ ] All major social channels assessed for each competitor
-- [ ] Content pillars and tone identified for each deep-dived competitor
-- [ ] SWOT completed for top 5 competitors
-- [ ] At least 4-6 actionable market gaps identified with type and recommended action
-- [ ] Strategic recommendations provided across positioning, channels, content, ads, and messaging
-- [ ] Recommendations include feasibility consideration
-- [ ] Date of research noted (competitor data is time-sensitive)
+- [ ] Competitors identified across direct, indirect and adjacent layers (8–15 total)
+- [ ] Top 3–5 deep-dived across website, SEO, AI visibility, paid, social, content, reviews
+- [ ] Paid activity checked in the relevant ad libraries with dates
+- [ ] AI assistant recommendations for the category sampled or requested
+- [ ] SWOT per deep-dived competitor with evidence and sources
+- [ ] 4–6 market gaps, each quantified and feasibility-checked
+- [ ] Recommendations across positioning, channels, content, paid and messaging/experience
+- [ ] Estimates labelled with tool and date; no invented figures
+- [ ] Research date and watchlist included
+- [ ] Limitations and missing access stated

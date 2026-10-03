@@ -9,9 +9,11 @@
 # Digital-Marketing-Skills
 
 
-A collection of Agent skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, competitive intelligence, brand positioning, and brand identity.
+A collection of Agent Skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, competitive intelligence, brand positioning, and brand identity.
 
-Each skill is a self-contained `SKILL.md`: a `description:` trigger, a decision framework, a fixed output format, common pitfalls, and a verification checklist. The skills are model- and platform-agnostic — no dependence on a specific tool version — so they stay useful as the underlying platforms change.
+Each skill is a self-contained `SKILL.md`: a `description:` trigger, an **Inputs** section that says what data to ask for (and forbids inventing metrics), a decision framework with current platform facts, a fixed output format, common pitfalls, and a verification checklist. Every skill ships with `evals/evals.json` — realistic test prompts with assertions and machine checks — and the repo validates structure in CI.
+
+The skills are agent-agnostic (Claude Code, Claude.ai, Cursor, Codex, Hermes, custom GPTs, pasted into any chat) and versioned: platform facts carry an `updated` date, and every change bumps the version (see [CHANGELOG.md](CHANGELOG.md)). **Current version: 1.1.0** (platform facts verified October 2026).
 
 ## Skills
 
@@ -76,15 +78,17 @@ npx skills update vidual-labs/digital-marketing-skills               # pull the 
 
 `skills` is a third-party open-source tool (not built or maintained by this repo or by Anthropic) — reasonable to run for a quick install, but read [its source](https://github.com/vercel-labs/skills) first if you'd rather not run an unfamiliar `npx` package. Everything below is the manual alternative for anyone who prefers that, or who's on a platform the CLI doesn't cover.
 
-### In Hermes Agent
+### In any Agent Skills runtime (Cursor, Codex, Hermes, …)
 
-The native home — skills auto-load by trigger:
+The files follow the [Agent Skills specification](https://agentskills.io/specification): only `name` and `description` are required, and runtimes ignore frontmatter they don't know. Copy the skill folders into whatever directory your agent reads skills from, for example:
 
 ```bash
-cp -r skills/marketing ~/.hermes/skills/
+cp -r skills/marketing/* ~/.hermes/skills/        # Hermes Agent
+cp -r skills/marketing/* .cursor/skills/           # Cursor (project)
+cp -r skills/marketing/* ~/.codex/skills/          # Codex
 ```
 
-Each skill has a `description:` frontmatter field that acts as a trigger. The agent loads the skill automatically when the trigger matches your prompt (e.g., "write TikTok ad copy" → loads `tiktok-ads`).
+Each skill's `description:` acts as the trigger: the agent loads the skill when your request matches (e.g., "write TikTok ad copy" → `tiktok-ads`).
 
 ### In Claude
 
@@ -143,9 +147,33 @@ You are a digital marketing strategist. When I give you a marketing task, use th
 5. Enable Web Search (for competitor research) and Code Interpreter (for data analysis)
 6. Save — you get a dedicated, permanently-skilled GPT you can share with your team
 
+## Testing
+
+Two layers, both agent-independent:
+
+```bash
+# 1. Structural tests (no model, no network, standard library only) — also runs in CI
+python3 scripts/validate_skills.py
+
+# 2. Behavioural tests — pipes each eval prompt plus the skill into any LLM command
+python3 scripts/run_evals.py --skill tiktok-ads                   # Claude Code CLI by default
+python3 scripts/run_evals.py --all --runner "ollama run llama3"  # any stdin → stdout command
+python3 scripts/run_evals.py --skill tiktok-ads --dry-run        # just print the prompts
+```
+
+The validator checks frontmatter, section order, cross-references, README links and the eval schema. The eval runner saves each model answer to `eval-results/` with its machine-check results and the human-judged assertions. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full skill contract and versioning rules.
+
 ## Structure
 
 ```
+.github/workflows/validate.yml   # CI: structural validation on every push/PR
+scripts/
+├── validate_skills.py           # frontmatter, sections, evals, README checks
+└── run_evals.py                 # run eval prompts through any LLM and grade
+skills/marketing/<skill>/
+├── SKILL.md                     # the skill
+└── evals/evals.json             # 3+ test prompts with assertions + checks
+
 skills/marketing/
 ├── branding/
 ├── competitor-research/

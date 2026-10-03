@@ -1,0 +1,21 @@
+name: Validate skills
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install optional YAML parser
+        run: pip install pyyaml
+      - name: Validate SKILL.md files, evals and README
+        run: python3 scripts/validate_skills.py
+      - name: Smoke-test the eval runner (prompts only, no model call)
+        run: python3 scripts/run_evals.py --all --dry-run > /dev/null

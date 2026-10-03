@@ -1,0 +1,64 @@
+{
+  "skill_name": "landing-page-funnel",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "audit-from-pasted-copy",
+      "prompt": "Audit this landing page (can't share the URL). Ad: 'Get your tax return done in 48 hours — fixed €149'. Page H1: 'Welcome to FinServe Solutions'. Sub: 'Your trusted partner for comprehensive financial services since 2009'. Form above the fold with 9 fields incl. date of birth and income. CTA button: 'Submit'. Testimonials: 'Great service!' – M.K. Traffic 1,800 visits/week, 1.1% conversion, 78% mobile.",
+      "files": [],
+      "expected_output": "Message match scored low with H1 rewrite echoing the ad promise, form reduced to essentials with multi-step suggestion, CTA relabel, testimonial specificity fix, mobile-first notes, prioritized test plan with sample-size reasoning, quick wins, and a note that the page was not fetched.",
+      "assertions": [
+        "Message match is scored and the H1 is rewritten to echo '48 hours' and '€149'",
+        "Form reduction is specific (which fields now, which later) and a multi-step approach is proposed",
+        "CTA 'Submit' is replaced with an outcome label and a risk reducer is added",
+        "Testimonial is flagged as too vague with the specific formula recommended; no testimonials are invented",
+        "Test plan includes sample size reasoning relative to ~20 conversions/week and says the page was not fetched"
+      ],
+      "checks": [
+        {"type": "contains", "value": "MESSAGE MATCH SCORE"},
+        {"type": "regex", "pattern": "48 hours"},
+        {"type": "regex", "pattern": "149"},
+        {"type": "contains", "value": "TEST PLAN"},
+        {"type": "regex", "pattern": "Submit"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "test-prioritization-low-traffic",
+      "prompt": "Our SaaS trial page converts at 3.2% on about 900 visitors a month. The team wants to A/B test button colour, headline, removing the phone field, and adding a demo video — all at once. What should we do first and how long will tests take?",
+      "files": [],
+      "expected_output": "Explains that at ~29 conversions/month classic A/B tests are underpowered, prioritizes offer/headline and form-field changes over colour, proposes shipping obvious friction fixes without a test, sequential bolder tests, and gives sample-size/duration reasoning.",
+      "assertions": [
+        "States that ~29 conversions/month cannot power a standard A/B test and explains the consequence",
+        "Prioritizes headline/message and the phone-field removal over button colour",
+        "Recommends shipping low-risk friction fixes (quick wins) without testing and running sequential or bolder tests",
+        "Gives duration/sample-size reasoning rather than a fixed '2 weeks'"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "sample size|underpowered|statistical"},
+        {"type": "regex", "pattern": "colou?r"},
+        {"type": "contains", "value": "QUICK WINS"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "write-page-from-ad-set",
+      "prompt": "Write the landing page copy for our Meta ad 'Stop losing 6 hours a week to invoice chasing — Collectly automates reminders. 14-day free trial, no card.' Audience: freelance designers. Proof we have: 2,300 users, average 11 days faster payment, G2 4.6 (118 reviews). Goal: trial signups (email + password only).",
+      "files": [],
+      "expected_output": "Full page copy in the recommended order: H1 matching the ad, sub-headline with proof, single CTA with risk reducer, problem, proof, solution, how it works (3 steps), social proof using real numbers, objections, FAQ, final CTA; form limited to email and password.",
+      "assertions": [
+        "H1 mirrors the ad promise ('6 hours a week', 'invoice chasing') and the CTA mentions 14-day free trial / no card",
+        "Uses only the provided proof (2,300 users, 11 days faster, G2 4.6 from 118 reviews); any testimonial quotes are placeholders",
+        "Body follows the skill's section order including how-it-works in 3 steps, objections and FAQ",
+        "Form is email + password only with a privacy line and a lower-commitment fallback"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "6 hours"},
+        {"type": "regex", "pattern": "2,?300"},
+        {"type": "regex", "pattern": "FAQ"},
+        {"type": "regex", "pattern": "no (credit )?card"}
+      ]
+    }
+  ]
+}

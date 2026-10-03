@@ -1,0 +1,5 @@
+# Outputs from scripts/run_evals.py (model answers are reviewed, not committed)
+eval-results/
+__pycache__/
+*.pyc
+.DS_Store

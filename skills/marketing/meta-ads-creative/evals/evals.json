@@ -1,0 +1,64 @@
+{
+  "skill_name": "meta-ads-creative",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "three-angle-cold-prospecting-set",
+      "prompt": "Write Meta ads for our meal-prep subscription (€6.90 per meal, chef-cooked, delivered Sundays, cancel anytime) targeting busy parents in Germany, cold audience, objective sales. We have 1,200 reviews averaging 4.7 stars and a 'first box 30% off' offer. Landing page: /first-box.",
+      "files": [],
+      "expected_output": "Three variations with distinct angles (e.g. problem→solution, social proof, direct offer), each with primary text ≤125-char hook, two headline options ≤40 chars, optional description ≤30 chars, CTA matching sales, creative direction with ratios and safe zones, and a hypothesis per variation.",
+      "assertions": [
+        "Three variations use genuinely different angles, not reworded copies",
+        "Each hook line is under 125 characters and front-loads the value",
+        "Headlines are ≤40 characters with the offer or outcome in the first ~27",
+        "Uses the real proof provided (1,200 reviews, 4.7 stars, 30% off) and nothing invented",
+        "Creative direction specifies 4:5 and 9:16 ratios or safe zones and a first-2-second action"
+      ],
+      "checks": [
+        {"type": "min_count", "pattern": "^--- Ad Variation", "count": 3},
+        {"type": "regex", "pattern": "Primary text"},
+        {"type": "regex", "pattern": "Headline"},
+        {"type": "regex", "pattern": "Hypothesis"},
+        {"type": "regex", "pattern": "4:5|9:16"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "retargeting-video-script",
+      "prompt": "We need a 20–30 second Reels ad script for people who added our running shoes (the Stride 2) to cart but didn't buy. Price $149, free returns within 60 days, 10% off with code BACK10. Tone: confident, not salesy.",
+      "files": [],
+      "expected_output": "A timestamped 20–30s vertical video script (hook 0–2s, problem, solution, proof, CTA), retargeting-stage CTA such as Shop now/Get offer, copy addressing the objection (fit/returns), 9:16 with safe zones and captions, plus at least two alternative variations or hooks.",
+      "assertions": [
+        "Script is timestamped and fits 20–30 seconds with the hook in the first 2 seconds",
+        "Addresses the abandoned-cart objection using the free 60-day returns and the BACK10 code",
+        "CTA is appropriate for retargeting (Shop now / Get offer) and captions/on-screen text are specified",
+        "Creative direction is 9:16 with safe-zone guidance"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "0[–-]2\\s?s|0:00"},
+        {"type": "regex", "pattern": "BACK10"},
+        {"type": "regex", "pattern": "9:16"},
+        {"type": "regex", "pattern": "caption"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "policy-safe-health-angle",
+      "prompt": "Write Facebook ad copy for our sleep supplement (melatonin-free, €29). My boss wants the hook to be 'Still can't sleep? Are you anxious at night?' and to show before/after photos of tired vs rested faces. Make it convert.",
+      "files": [],
+      "expected_output": "Copy that avoids personal-attribute phrasing and before/after body imagery, explains the policy risk briefly, and offers compliant alternatives (e.g. third-person or general framing, product-in-context visuals) in three variations with placeholders for any unverified claims.",
+      "assertions": [
+        "Explicitly flags that 'Are you anxious at night?' style personal-attribute phrasing and before/after face photos are policy risks on Meta",
+        "Provides compliant alternative hooks that still address sleep problems",
+        "Does not invent clinical claims or statistics; uses placeholders where proof is missing",
+        "Delivers three variations in the skill's output format"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "policy|personal attribute"},
+        {"type": "min_count", "pattern": "^--- Ad Variation", "count": 3},
+        {"type": "not_regex", "pattern": "Are you anxious at night\\?\\s*$"}
+      ]
+    }
+  ]
+}

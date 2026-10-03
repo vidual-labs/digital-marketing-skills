@@ -1,0 +1,64 @@
+{
+  "skill_name": "pinterest-organic",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "blog-traffic-strategy",
+      "prompt": "Pinterest strategy for my vegan baking blog (veganovenlove.com, 180 recipes). Business account, site not claimed. 23 boards like 'Yummy', 'Faves', 'Stuff to try'. I pin about 2x a week, mostly re-saving my old pins. Analytics: 14k monthly impressions, 210 saves, 95 outbound clicks. Goal: traffic and email signups for my cookbook.",
+      "files": [],
+      "expected_output": "Audit in the skill's format: claim site + Rich Pins first, consolidate boards into 8–15 keyword boards with descriptions and sections, keyword list grouped by board (sources named), fresh-pin cadence 1–3/day from the recipe library with 3+ designs per recipe, seasonal calendar, outbound clicks as KPI.",
+      "assertions": [
+        "Recommends claiming the website and enabling Rich Pins as a first step",
+        "Replaces vague boards with 8–15 keyword-titled boards with descriptions and sections",
+        "Provides a keyword list grouped by board and names the keyword sources (Pinterest search, Trends)",
+        "Sets a fresh-pin cadence of roughly 1–3 new pins/day rather than volume re-saving, with multiple designs per recipe",
+        "Uses outbound clicks and email signups as KPIs, not followers"
+      ],
+      "checks": [
+        {"type": "contains", "value": "KEYWORD LIST"},
+        {"type": "contains", "value": "BOARD STRUCTURE"},
+        {"type": "regex", "pattern": "Rich Pins"},
+        {"type": "regex", "pattern": "outbound click"},
+        {"type": "regex", "pattern": "fresh pin"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "is-pinterest-worth-it",
+      "prompt": "We're a B2B payroll software company. Our agency says we should post 20 pins a day on Pinterest to grow. Does that make sense?",
+      "files": [],
+      "expected_output": "Honest niche-fit assessment (B2B payroll is a weak fit; some HR/small-business educational content can work modestly), rejects 20 pins/day as outdated volume spam, proposes a small test with realistic KPIs or recommends focusing elsewhere.",
+      "assertions": [
+        "Assesses niche fit honestly — planning-intent audience vs B2B payroll — and sets modest expectations",
+        "Explains that 20 pins/day is outdated and penalised; fresh quality pins at 1–5/day are the current norm",
+        "Offers a bounded test plan with KPIs (outbound clicks, signups) or a clear recommendation to deprioritise",
+        "Does not invent impression or traffic forecasts"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "20 pins"},
+        {"type": "regex", "pattern": "fresh"},
+        {"type": "regex", "pattern": "B2B"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "pin-copy-for-product",
+      "prompt": "Write Pinterest pin titles and descriptions for our linen bedding (3 colours, €189 queen set, OEKO-TEX certified, free EU shipping). Also tell me which boards they should go on and the pin design specs.",
+      "files": [],
+      "expected_output": "Several pin title options ≤100 characters with the keyword first, descriptions ≤500 characters with keywords, benefit and CTA, suggested keyword boards, 2:3 1000×1500 design specs with text overlay guidance, and a note on multiple designs per product URL.",
+      "assertions": [
+        "Titles are ≤100 characters with the main keyword near the start; descriptions are 2–3 sentences with a call to action",
+        "Specifies 2:3 ratio / 1000×1500 px, text overlay 3–6 words, brand consistency",
+        "Suggests keyword-named boards (e.g. 'Linen Bedding Ideas', 'Bedroom Decor') rather than brand-named boards",
+        "Uses the given facts (OEKO-TEX, free EU shipping, €189) without inventing reviews"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "2:3"},
+        {"type": "regex", "pattern": "1000\\s?[x×]\\s?1500"},
+        {"type": "regex", "pattern": "OEKO-TEX"},
+        {"type": "regex", "pattern": "board"}
+      ]
+    }
+  ]
+}

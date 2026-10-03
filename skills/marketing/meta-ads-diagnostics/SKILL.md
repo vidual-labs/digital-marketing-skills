@@ -1,206 +1,218 @@
 ---
 name: meta-ads-diagnostics
-description: Use when analyzing Meta Ads performance data and proposing concrete campaign changes — budget allocation, targeting, schedule, learning phase, lookalikes, segments, and structural fixes.
-version: 1.0.0
-author: Hermes Agent
+description: Use when analyzing Meta Ads (Facebook/Instagram) performance data and proposing concrete campaign changes — structure, budget allocation, Advantage+ vs manual setup, audiences, learning phase, creative fatigue, bid strategy, placements and attribution. Also use when the user pastes an Ads Manager export or screenshot and asks why CPA rose, ROAS fell, or how to scale without breaking delivery. Don't use for writing ad copy (meta-ads-creative), pixel/CAPI/consent bugs (gtm-debugging) or landing page fixes (landing-page-funnel).
+version: 1.1.0
+author: vidual-labs
 license: MIT
+compatibility: Works in any agent that reads SKILL.md. Needs performance data from the user (export, screenshot or pasted table); no Marketing API access required.
 metadata:
-  hermes:
-    tags: [meta-ads, facebook-ads, diagnostics, campaign-optimization, learning-phase, lookalike-audiences, budget, targeting, scheduling]
-    related_skills: [meta-ads-creative, landing-page-funnel, google-ads-diagnostics]
+  category: paid-social
+  updated: 2026-10-02
+  tags: [meta-ads, facebook-ads, instagram-ads, diagnostics, campaign-optimization, learning-phase, advantage-plus, budget, bid-strategy, placements]
+  related_skills: [meta-ads-creative, landing-page-funnel, gtm-debugging, google-ads-diagnostics]
 ---
 
 # Meta Ads Performance Diagnostics
 
 ## Overview
 
-Analyze Meta Ads campaign data and produce actionable change recommendations across budget, targeting, scheduling, learning phase, segment allocation, and campaign structure. This skill takes raw performance metrics and translates them into specific configuration changes with expected impact.
+Translate Meta Ads performance data into specific configuration changes with expected impact and a safe implementation order. Covers campaign structure, Advantage+ versus manual setups, budget allocation and scaling, audience strategy, learning phase, creative fatigue, bid strategies, placements and attribution settings. The output is a prioritized change list, not a description of the dashboard.
 
 ## When to Use
 
-- Reviewing Meta Ads campaign performance data
-- Diagnosing why a campaign is underperforming
-- Optimizing budget allocation across ad sets and campaigns
-- Adjusting targeting, audiences, or placement
-- Fixing learning phase issues (getting an ad set out of "Learning" or "Learning Limited")
-- Proposing bid strategy changes (lowest cost vs. cost cap)
-- Scheduling optimization (dayparting, ad rotation)
+- Reviewing campaign, ad set or ad level performance
+- Diagnosing rising CPA/CPM, falling ROAS or stalled delivery
+- Deciding how to scale winners or when to kill losers
+- Fixing "Learning limited" ad sets
+- Choosing between Advantage+ sales/leads/app campaigns and manual campaigns
+- Choosing a bid strategy or attribution setting
 
-Don't use for: writing ad creative (use `meta-ads-creative`), tracking/pixel setup (use `gtm-debugging`), or competitive research.
+Don't use for: ad copy and creative concepts (use `meta-ads-creative`), pixel, Conversions API or consent problems (use `gtm-debugging`), landing page conversion rate (use `landing-page-funnel`), or competitor analysis.
 
-## Input Data Requirements
+## Inputs
 
-Request or receive these metrics at minimum:
+Request at least 7 days of data (14–28 preferred) at these levels, with the attribution setting shown:
 
-| Level | Metric | Why |
+| Level | Metrics | Why |
 |-------|--------|-----|
-| Campaign | Budget, amount spent, conversions, CPA, frequency | Budget efficiency, saturation |
-| Ad Set | CPC, CTR, frequency, audience size, placements, CPA | Targeting health, fatigue, placement value |
-| Ad | Spend, impressions, CTR, CPC, engagement rate, CPA, thumbnail/creative | Creative performance, fatigue |
-| Funnel | Link CTR (vs. CTR overall), landing page view rate, add-to-cart / purchase / lead rate | Post-click drop-off diagnosis |
+| Account | Spend, results, cost per result, ROAS, attribution setting (e.g. 7-day click / 1-day view), CAPI status, Event Match Quality | Baseline and data trust |
+| Campaign | Type (Advantage+ sales / leads / app, manual sales, traffic, engagement), budget type (campaign vs ad set), spend, results, CPA/ROAS, frequency | Structure and budget |
+| Ad set | Audience type (broad, Advantage+ audience, interests, lookalike, custom), audience size, placements, optimization event, bid strategy, learning status, spend, CPM, CTR (link), CPC, results, CPA, frequency | Targeting and learning health |
+| Ad | Creative type, spend, impressions, CPM, link CTR, hook rate (3-second plays ÷ impressions), hold rate (ThruPlays ÷ 3-second plays), results, CPA, first run date | Creative fatigue |
+| Funnel | Link clicks → landing page views → add to cart / lead → purchase; rates between steps | Where drop-off happens |
 
-### Funnel Drop-off Benchmarks
+Data rules: work only from the user's numbers and name the attribution window when quoting results. Benchmarks are starting points — the account's own history wins. Use the account's currency. Meta renames things often (Advantage+ shopping became Advantage+ sales; "lowest cost" is now "highest volume"); map labels to the nearest concept and say so.
+
+### Funnel benchmarks (starting points)
 
 | Metric | Good | Warning | Critical |
 |--------|------|---------|----------|
-| CTR (all) | > 1.5% | 0.8-1.5% | < 0.8% |
-| CTR (link) | > 1.0% | 0.5-1.0% | < 0.5% |
-| Landing page view rate (vs. link click) | > 75% | 55-75% | < 55% |
-| Frequency (7-day) | < 3 | 3-6 | > 6 |
-| CPA vs. target | ≤ target | 1.0x-1.5x target | > 1.5x target |
+| Link CTR | > 1.0% | 0.5–1.0% | < 0.5% |
+| Hook rate (video) | > 30% | 20–30% | < 20% |
+| Hold rate (video) | > 15% | 8–15% | < 8% |
+| Landing page views ÷ link clicks | > 75% | 55–75% | < 55% (slow page or bot clicks) |
+| Frequency (7-day, prospecting) | < 2.5 | 2.5–4 | > 4 |
+| Frequency (7-day, retargeting) | < 6 | 6–10 | > 10 |
+| CPA vs target | ≤ 1.0× | 1.0–1.5× | > 1.5× |
 
 ## Diagnostic Framework
 
-### Phase 1: Campaign Structure Health
+### Phase 0: Can the data be trusted?
 
-Check these first — structural problems make optimization pointless.
+- Is the **Conversions API** sending the same events as the pixel with matching `event_id` for deduplication? Double counting inflates results; missing CAPI under-reports after consent denial.
+- Is **Event Match Quality** ≥ 6 on the optimization event? Low quality means weaker optimization and attribution.
+- Did the **attribution setting** change? 7-day click/1-day view vs 1-day click changes reported CPA by 20–50%.
+- Compare Ads Manager purchases against the shop's actual orders for the same window. A gap over ~20% needs `gtm-debugging` before optimization.
+
+### Phase 1: Campaign structure
 
 | Issue | Symptom | Fix |
 |-------|---------|-----|
-| **Too many ad sets** | < 20 conversions/campaign/week spread thin | Consolidate to 3-5 ad sets max. Kill underperformers. |
-| **Budget too low for learning** | Campaign stuck in "Learning Limited" or CPA wildly fluctuating | Increase daily budget to ≥ 5× target CPA |
-| **Budget too high** | CPA creeping up, overspending on unprofitable clicks | Cap with cost-per-result cap or lower budget to target CPA × 2 |
-| **Shared audiences overlap** | Frequency > 6, rising CPA over time | Use Advantage+ audience or exclude overlapping audiences. Check audience overlap tool. |
-| **Ad set too narrow** | Audience < 50k, "Learning Limited" | Broaden targeting or switch to Advantage+ Placements + broad |
-| **Ad set too broad for niche offer** | High spend, low conversion quality | Add interest/behavior layers or use lookalikes |
+| Too many ad sets | Results spread thin, several "Learning limited" | Consolidate to 1–3 ad sets per campaign; let the algorithm allocate |
+| Audience overlap | Rising frequency and CPM across ad sets | Use the Audience Overlap tool; merge or exclude; prefer one broad ad set |
+| Manual campaign where Advantage+ would win | Mature account, ≥ 50 purchases/week, stable creative pipeline | Test an Advantage+ sales campaign with the same creative; cap the existing-customer budget share |
+| Advantage+ where control is needed | New brand, strict geo/age rules, B2B lead quality problems | Manual campaign with broad or Advantage+ audience and lead-quality filters |
+| Prospecting and retargeting mixed | Retargeting share drives CPA down while prospecting starves | Separate by intent or use the existing-customer budget cap in Advantage+ |
+| Budget too low per ad set | Daily budget < 5× target CPA | Fewer ad sets, higher budget each, or a cheaper optimization event |
+| Wrong optimization event | Optimizing for add to cart because purchases are few | Only step down the funnel while purchases < ~30/week; step back up as volume grows |
 
-### Phase 2: Creative Fatigue Detection
+### Phase 2: Creative fatigue
 
 | Signal | Meaning | Action |
 |--------|---------|--------|
-| Frequency > 3 (7 days) | Same people seeing the ad too often | Refresh creative within 7-10 days |
-| CTR declining week-over-week > 20% | Creative losing attention | Test new hook, angle, or format |
-| CPC rising > 30% while CTR stable | Bid war or auction competition increase | Consider cost caps or shift budget to lower-competition audiences |
-| Impressions up, engagement flat | Audience is saturated | Pause or broaden targeting |
+| Frequency > 3 (7 days) on prospecting | Same people seeing the ad repeatedly | New creative within 7 days |
+| Link CTR down > 20% week over week with stable CPM | Attention is fading | New hook or angle |
+| CPM up > 30% with stable CTR | Auction pressure, seasonality or audience saturation | Broaden, add creative diversity, check the calendar |
+| Hook rate down, hold rate stable | Thumbnail/first second is tired | Re-cut the first 2 seconds only |
+| First run date > 4–6 weeks and CPA creeping | Natural decay | Rotate in 2–4 new concepts; keep the winner running until it is beaten |
 
-**Creative refresh cycle:** Plan new creative every 7-14 days. Do not wait for fatigue to set in — front-load refresh planning.
+Plan creative refresh on a schedule (new concepts every 1–2 weeks for accounts spending meaningful budgets). Diversity across formats (static, video, UGC, carousel) extends the life of a campaign more than more variants of one format.
 
-### Phase 3: Learning Phase Management
+### Phase 3: Learning phase
 
-Meta's algorithm enters "learning" whenever a significant edit is made. An ad set needs ~50 optimization events in a 7-day window to exit learning and optimize efficiently. (Lookalike audiences are a separate lever — see targeting in Phase 1.)
+An ad set needs about **50 optimization events within 7 days** to exit learning. Below that it shows "Learning limited" and delivery is less stable.
 
-| Status | Conversion count (7d) | Action |
-|--------|----------------------|--------|
-| **Learning** | < 50 | Do NOT edit. Wait. If budget allows, increase to get events faster. |
-| **Learning Limited** | < 20 | Either increase budget, broaden targeting, or switch to a higher-funnel objective |
-| **Active** | ≥ 50 | Safe to test, but minimize edits. Keep winning ads flying. |
+| Status | Read | Action |
+|--------|------|--------|
+| Learning | Normal for new or recently edited ad sets | Do not edit; wait for 50 events or 7 days |
+| Learning limited | Budget, audience or event too small | Raise budget, broaden audience, consolidate ad sets, or optimize for a higher-volume event |
+| Active | Stable | Edit sparingly; scale ≤ 20% per day |
 
-**Rules:**
-- Never edit a campaign below 20 weekly conversions unless fixing a blocker
-- "Significant edits" that reset learning: budget changes > 20%, off/on, changing objective, changing optimization event, editing targeting
-- "Non-learning-reset edits" (safe): disabling underperforming ads, adding new ads, minor budget tweaks < 20%
-- When duplicating a campaign for testing, both enter learning — budget for reduced efficiency during the test
+Edits that **reset learning**: changing targeting, placements, optimization event, bid strategy or amount; budget changes above ~20%; pausing for 7+ days then resuming; adding a new ad to the ad set (resets that ad set). Edits that **do not**: pausing an individual ad, budget nudges under ~20%. Editing an existing ad's creative or copy effectively creates a new ad (and drops its accumulated social proof), so treat creative changes as new ads rather than edits.
 
-### Phase 4: Budget Allocation
+### Phase 4: Budget allocation and scaling
 
-Use these rules for budget distribution:
+- Campaign budget (Advantage+ campaign budget) lets Meta shift spend between ad sets; use ad set budgets only when you must guarantee spend per audience.
+- Tiering: top ad sets by CPA/ROAS get 50–60% of budget, middle 30–40%, test budget 10–15%.
+- Scale winners by **≤ 20% per day** or duplicate at a higher budget and let the duplicate learn.
+- Kill rule: an ad set that has spent 2× target CPA with zero results, or 3× with results far above target, is paused.
+- Minimum viable daily budget per ad set ≈ 5× target CPA, otherwise it cannot exit learning.
 
-**By performance tier:**
-- Top 20% of ad sets by ROAS/CPA → 50-60% of budget
-- Mid 50% by ROAS/CPA → 30-40% of budget
-- Bottom 30% → 10-15% of budget (test budget)
+### Phase 5: Bid strategy (current names)
 
-**Scaling rules:**
-- Scale winners by +20% per 24h — never more (avoids resetting learning)
-- Kill losers after they spend 2× target CPA with zero conversions
-- For accounts under $10k/mo: 1-2 campaigns max. Under $50k/mo: 3-5 campaigns.
+| Strategy | Formerly | Use when |
+|----------|----------|----------|
+| **Highest volume** | Lowest cost | Default. Learning, prospecting, most accounts |
+| **Cost per result goal** | Cost cap | Known acceptable CPA; set at 1.1–1.3× target; expect lower volume |
+| **Highest value** | Value optimization | Purchase values vary and ≥ 30 value events/week |
+| **ROAS goal** | Minimum ROAS | Stable e-commerce with value data; set slightly below the true target |
+| **Bid cap** | Bid cap | Rare: experienced buyers controlling auction bids directly |
 
-### Phase 5: Bid Strategy
+A goal set below what the account has achieved makes the ad set under-deliver. Start at reality and tighten by ≤ 10–20% per change.
 
-| Situation | Strategy | Rationale |
-|-----------|----------|-----------|
-| Standard / learning | Lowest cost, no cap | Maximum delivery, data collection |
-| Stable winner, known CPA | Cost cap at 1.2× target CPA | Protects efficiency, caps waste |
-| Bid cap | Only for extreme niches or very high-value leads | Requires deep bid data; rarely better than cost cap |
-| Value optimization | When conversion value > amount varies significantly | Requires CAPI + value pixel |
-| ROAS target | E-commerce with stable historical data | Requires minimum $50/day per ad set |
+### Phase 6: Schedule and attribution
 
-### Phase 6: Schedule and Ad Rotation
+- **Ad scheduling (dayparting)** is available only with a **lifetime budget**. Use it when the data shows CPA 2–3× worse in specific hours (e.g. a call-based business overnight) — not on a hunch.
+- **Attribution settings** can be set per ad set: 7-day click / 1-day view (default), 1-day click, or engaged-view for video. Report what the setting is; compare periods only with the same setting.
+- **Incrementality**: for large accounts, run a conversion lift or geo holdout before trusting platform-reported ROAS for budget decisions.
 
-**Scheduling (dayparting):**
-- Not available for lowest-cost in all contexts — only manual bidding supports ad scheduling
-- Use only when you have data showing clear off-hours waste (CPA 3× worse on certain days/hours)
-- Test before implementing: run 2 weeks of data by day/hour before cutting time slots
+### Phase 7: Placements
 
-**Ad rotation:**
-- Default: Rotate without repeating for 7 days. For campaigns where creative refresh is frequent, this wastes impressions.
-- Recommended for most accounts: Rotate for 1 day so new ads get fair delivery testing
-- When 1 ad clearly wins: leave it running, add new ads to test against it
+| Placement | Typical behaviour | Keep when |
+|-----------|-------------------|-----------|
+| Facebook & Instagram feeds | Core volume and conversions | Always |
+| Instagram & Facebook Reels | Cheap reach, strong for vertical video | You have 9:16 creative |
+| Stories | Mobile-native, time-limited | You have 9:16 creative with safe zones |
+| Threads | New inventory, limited data | Testing with Advantage+ placements |
+| Audience Network | Low CPM, weak quality, accidental clicks | Only if CPA on it is at or below campaign CPA |
+| Marketplace, right column, search | Small volume | Leave on under Advantage+ unless the breakdown shows waste |
+| Messenger inbox / sponsored messages | Messaging objectives | Conversation goals only |
 
-### Phase 7: Placement Optimization
-
-| Placement | Typical Performance | When to Keep |
-|-----------|-------------------|-------------|
-| Feed (FB + IG) | Strongest for most | Always keep |
-| Reels | Growing fast, cheap CPMs | Keep for awareness, video formats |
-| Stories | Good for mobile-first brands | Keep for mobile-native visuals |
-| Audience Network | Lowest quality, high bounce | Kill unless CPA justifies it |
-| Search | High intent, limited scale | Keep for branded searches |
-| Marketplace | Low intent | Typically kill |
-
-**Recommendation:** Start with Advantage+ Placements for learning. After 20+ conversions, look at placement-level CPA. Kill placements where CPA exceeds campaign CPA by > 50%.
+Start with Advantage+ placements; after ~30 results, break down by placement and remove any placement whose CPA is more than 50% above the campaign average.
 
 ## Output Format
 
-When analyzing Meta Ads data, always output in this format:
-
 ```
-CAMPAIGN AUDIT: [Campaign Name]
-Date Range: [Start] to [End]
-Budget: $X/day | Spent: $Y | Conversions: Z
+META ADS AUDIT: [Account / Campaign]
+Date range: [Start] – [End] | Attribution: [setting] | Currency: [XXX]
+Spend: [X] | Results: [Y] ([event]) | CPA: [Z] (target [T]) | ROAS: [R]
+Data confidence: [High / Medium / Low — CAPI, EMQ, attribution, gaps]
 
 --- HEALTH SCORE: X/10 ---
+[One-line rationale]
+
+0. TRACKING & ATTRIBUTION
+   [CAPI / EMQ / attribution issues] → [Fix]
 
 1. STRUCTURE
-   [Issue found] → [Specific change] → [Expected impact]
+   [Issue] → [Change] → [Expected effect]
 
 2. BUDGET & SCALING
-   [Current state] → [Recommended change] → [Expected impact]
+   [Current allocation] → [Change, in ≤ 20%/day steps] → [Expected effect]
 
-3. TARGETING & AUDIENCES
-   [Issue found] → [Specific change] → [Expected impact]
+3. AUDIENCES
+   [Overlap, size, broad vs targeted, exclusions] → [Change]
 
 4. CREATIVE FATIGUE
-   [Status] → [Recommendation] → [Timeline]
+   [Ad] — [signal: frequency / CTR / hook rate] → [Refresh plan and date]
 
 5. LEARNING PHASE
-   [Status] → [Action or hold] → [Reasoning]
+   [Ad sets in learning / limited] → [Action or hold] → [Reasoning]
 
 6. BID STRATEGY
-   [Current] → [Recommended] → [Expected impact]
+   [Current] → [Recommended] → [Expected effect]
 
 7. PLACEMENTS
-   [Which to keep/kill] → [Why]
+   [Keep / remove, with CPA evidence]
 
-PRIORITY CHANGES:
-1. [Highest impact change first]
-2. [Second highest]
-3. [Third]
+PRIORITY CHANGES (implementation order, grouped so learning resets happen once)
+1. [...]
+2. [...]
+3. [...]
 
-IMPLEMENTATION ORDER: [Specific sequence to avoid resetting learning]
+ESTIMATED IMPACT: [Range with assumptions]
+RE-CHECK DATE: [Usually 7 days]
 ```
 
 ## Common Pitfalls
 
-1. **Editing too aggressively.** Every significant edit resets learning. If you're tweaking budget daily, you're keeping the system in "learning" mode and burning money.
+1. **Editing daily.** Every structural edit restarts learning. Batch changes and let 7 days pass.
 
-2. **Reading 1-day data.** Meta's delivery fluctuates day-to-day. Never make decisions based on less than 3 full days of data (7 full days ideal).
+2. **Judging on 1–2 days.** Delivery is noisy and attribution lags. Decide on 7 days minimum, 14 for small budgets.
 
-3. **Scaling too fast.** Increasing budget by 100% in one day resets learning and typically doubles CPA. Never scale more than +20% per day.
+3. **Scaling by 100% overnight.** The ad set re-enters learning and CPA usually jumps. Scale ≤ 20% per day or duplicate.
 
-4. **Keeping dead ad sets alive.** "It might pick up..." is a budget leak. After 2× target CPA with zero conversions, kill it.
+4. **Treating "Learning limited" as a bug.** It is a volume problem. Consolidate, raise budget or move up the funnel event.
 
-5. **Ignoring placement-level data.** Audience Network and sometimes Placements cost 2-3× more per conversion than Feed/Reels without the engagement quality.
+5. **Comparing periods with different attribution settings.** A switch from 7-day click to 1-day click "drops" results without anything changing.
 
-6. **Changing creative and targeting at the same time.** You can never tell which change caused the result. Test one variable at a time.
+6. **Reading platform ROAS as truth.** Check against actual orders; run lift tests at scale.
+
+7. **Ignoring creative as the cause.** Most "targeting" problems in broad or Advantage+ campaigns are creative fatigue. Check Phase 2 before touching audiences.
+
+8. **Over-segmenting audiences.** Ten interest ad sets split budget and compete. One broad ad set with strong creative usually wins.
 
 ## Verification Checklist
 
-- [ ] Diagnostic based on ≥ 3 days of data (7 days preferred)
-- [ ] All 7 phases evaluated (structure, budget, targeting, fatigue, learning phase, bid, placements)
-- [ ] Priority changes listed in implementation order
-- [ ] Changes that reset learning flagged and sequenced carefully
-- [ ] Budget scaling respects 20%/day rule
-- [ ] Creative fatigue identified before proposing structural changes
-- [ ] Drop-off point diagnosed (ad → click → LP → conversion)
-- [ ] Specific numbers cited, not vague "improve CTR"
+- [ ] Tracking trust checked first (CAPI dedup, Event Match Quality, attribution window, order reconciliation)
+- [ ] Analysis uses ≥ 7 days of data or states the caveat
+- [ ] Attribution setting named whenever results are quoted
+- [ ] All seven phases evaluated; missing data called out
+- [ ] Funnel drop-off point identified (impression → click → landing page → event)
+- [ ] Creative fatigue assessed with frequency, CTR trend and hook/hold rates before structural changes
+- [ ] Learning-phase status of each ad set considered and resets batched
+- [ ] Budget changes stay within ~20%/day; kill rules applied with numbers
+- [ ] Bid strategy named with current (not legacy) terminology and a realistic goal
+- [ ] Placement recommendations backed by placement-level CPA
+- [ ] Priority changes in implementation order with expected impact range
+- [ ] Specific numbers cited from the user's data, not generic advice

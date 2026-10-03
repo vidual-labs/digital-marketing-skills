@@ -1,0 +1,62 @@
+{
+  "skill_name": "google-ads-diagnostics",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "high-cpa-search-campaign-audit",
+      "prompt": "Last 30 days, Search campaign 'Leads - Generic', Maximize conversions with tCPA €40, budget €150/day, limited by budget. Spend €4,380, 61 conversions, CPA €71.8, CTR 4.1%, avg CPC €2.95, Search IS 38%, lost IS (rank) 44%. Top search terms by cost: 'crm software free' €310 (0 conv), 'crm jobs' €95 (0), 'best crm for small business' €620 (9 conv), 'crm for real estate agents' €410 (12 conv). Quality Score 4 on 'crm software' (ad relevance below average). Ad strength 'Average'. What should I change?",
+      "files": [],
+      "expected_output": "An audit in the skill's format with health score, negatives for free/jobs, promotion of converting terms to exact, QS fix on ad relevance, RSA asset improvements, a realistic tCPA adjustment (not below actual CPA), and ordered priority changes with a re-check date.",
+      "assertions": [
+        "Recommends 'free' and 'jobs' as negatives and promoting 'crm for real estate agents' and 'best crm for small business' to exact match",
+        "Explains that tCPA €40 is far below the achieved €71.8 and proposes raising it toward reality before scaling budget",
+        "Addresses the ad relevance component for the QS 4 keyword with a concrete fix",
+        "Priority changes are ordered and an estimated impact range is given with assumptions",
+        "Does not invent metrics that were not provided"
+      ],
+      "checks": [
+        {"type": "contains", "value": "HEALTH SCORE"},
+        {"type": "contains", "value": "PRIORITY CHANGES"},
+        {"type": "regex", "pattern": "negative"},
+        {"type": "regex", "pattern": "(target cpa|tcpa)"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "pmax-cannibalizing-brand",
+      "prompt": "Our Performance Max campaign shows a €9 CPA while our Brand Search campaign CPA jumped from €6 to €19 last month and its impression share fell from 92% to 61%. Total conversions are flat. Is PMax stealing our brand traffic and what do we do about it?",
+      "files": [],
+      "expected_output": "Diagnosis that PMax is likely capturing brand queries; recommends brand exclusions in PMax, campaign-level negatives, checking search themes insights and channel reporting, and evaluating blended CPA rather than campaign CPA.",
+      "assertions": [
+        "Identifies brand cannibalization by PMax as the likely cause and explains the evidence (brand IS drop, flat total conversions)",
+        "Recommends brand exclusions and/or negative keywords in Performance Max",
+        "Advises judging on blended account CPA rather than PMax's standalone CPA",
+        "Includes verification steps (search themes/insights, channel report) and a re-check date"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "brand exclusion"},
+        {"type": "regex", "pattern": "blended|account[- ]level"},
+        {"type": "contains", "value": "PRIORITY CHANGES"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ready-for-smart-bidding",
+      "prompt": "I run a small B2B lead gen Search campaign on Manual CPC. In the last 30 days: 12 conversions, CPA $95, spend $1,140, conversion tracking via a GA4 'form_submit' event imported as the primary conversion (it also fires on newsletter signups). Should I switch to Target CPA?",
+      "files": [],
+      "expected_output": "Flags the conversion definition problem first (newsletter signups counted as leads), recommends fixing primary conversions before any bid strategy change, then explains that 12 conversions is below the threshold for a target and suggests Maximize conversions without target or staying manual until ~15–30 conversions.",
+      "assertions": [
+        "Phase 0 tracking issue is raised: the primary conversion mixes leads and newsletter signups",
+        "States that 12 conversions/30 days is too few for a Target CPA and gives the threshold used",
+        "Recommends a staged path (fix tracking → Maximize conversions without target → add tCPA at or above achieved CPA)",
+        "Includes a wait period before the next change"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "primary conversion|conversion tracking|newsletter"},
+        {"type": "regex", "pattern": "maximize conversions"},
+        {"type": "contains", "value": "BID STRATEGY"}
+      ]
+    }
+  ]
+}

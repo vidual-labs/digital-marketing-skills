@@ -1,0 +1,64 @@
+{
+  "skill_name": "gtm-debugging",
+  "version": "1.1.0",
+  "evals": [
+    {
+      "id": 1,
+      "name": "purchase-event-missing-items",
+      "prompt": "GA4 purchase events arrive but revenue is 0 and items are empty. Our dev pushes this on the thank-you page: dataLayer.push({event:'purchase', transaction_id: order.id, value: order.total, items: order.lines}). In GTM the GA4 event tag has 'Send Ecommerce data' enabled with data source Data Layer. Preview shows the event firing. What's wrong?",
+      "files": [],
+      "expected_output": "Diagnosis that the push lacks the ecommerce wrapper object required by the GA4 schema (ecommerce: {transaction_id, value, currency, items}), recommends clearing with ecommerce: null first, provides corrected code, and verification steps in Preview Data Layer tab and DebugView.",
+      "assertions": [
+        "Identifies that transaction_id, value and items must sit inside an 'ecommerce' object for the GA4 tag to read them",
+        "Provides corrected dataLayer code including currency and the ecommerce: null reset",
+        "Verification steps include checking the Data Layer tab in Preview and GA4 DebugView",
+        "States a root cause with a confidence level"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "ecommerce"},
+        {"type": "regex", "pattern": "ecommerce:\\s*null"},
+        {"type": "contains", "value": "VERIFICATION"},
+        {"type": "contains", "value": "ROOT CAUSE"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "works-in-preview-not-production-consent",
+      "prompt": "Google Ads conversions dropped 70% two weeks ago in Germany. In Tag Assistant Preview everything fires fine. We added a Cookiebot banner around that time. Tags look unchanged. Help.",
+      "files": [],
+      "expected_output": "Points to consent mode as the cause: default denied in EEA, most users decline or the update call is missing; explains how to verify in Tag Assistant's Consent tab (On-page Default / Update), checks the CMP sends gtag consent update, mentions Consent Initialization trigger and modelling; notes Preview does not bypass consent.",
+      "assertions": [
+        "Names consent mode v2 / the new CMP as the probable cause and explains the mechanism",
+        "Describes checking the Consent tab in Tag Assistant for default and update states",
+        "Recommends verifying the gtag('consent','update') call and the Consent Initialization trigger",
+        "Corrects the assumption that Preview shows production behaviour by explaining consent state is visible there",
+        "Includes a test with consent denied and granted in incognito"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "consent"},
+        {"type": "regex", "pattern": "Consent Initialization"},
+        {"type": "regex", "pattern": "gtag\\('consent'"},
+        {"type": "contains", "value": "VERIFICATION"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "spa-duplicate-pageviews",
+      "prompt": "Our React site (client-side routing) shows roughly double page_view counts in GA4 after we added a History Change trigger to a GA4 page_view event tag. The Google tag is on Initialization - All Pages. Why double, and how do we fix it without losing SPA pageviews?",
+      "files": [],
+      "expected_output": "Explains that the Google tag already sends page_view on load (and enhanced measurement may send history-based page views), so the extra tag duplicates; recommends either disabling the Google tag's automatic page_view / enhanced measurement page changes or removing the custom tag, and verifying counts in Preview and DebugView.",
+      "assertions": [
+        "Identifies the duplicate source: Google tag's automatic page_view plus the History Change tag (and/or enhanced measurement page changes)",
+        "Offers a concrete fix that keeps SPA pageviews (one mechanism only)",
+        "Includes verification: count page_view fires per route change in Preview and DebugView",
+        "Mentions that the first load should not fire the History-based tag"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "History Change|history"},
+        {"type": "regex", "pattern": "enhanced measurement|automatic page_view|send a page view"},
+        {"type": "contains", "value": "FIX 1"},
+        {"type": "regex", "pattern": "DebugView"}
+      ]
+    }
+  ]
+}
