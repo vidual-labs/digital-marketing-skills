@@ -6,12 +6,20 @@
 .panel{fill:#f8fafc;stroke:#e2e8f0}
 .fg{fill:#0f172a}.sub{fill:#64748b}.muted{fill:#94a3b8}
 .pill{fill:#ffffff;stroke:#cbd5e1}
+.acc{fill:#6d28d9}
+.btn{stroke:#64748b}
+.btnclose{fill:#64748b}
+.titlebar{fill:#f1f5f9}
 .bubble{fill:#0f172a}.bubbletxt{fill:#f8fafc}
 @media (prefers-color-scheme: dark){
  .bg{fill:#0d1117;stroke:#30363d}
  .panel{fill:#161b22;stroke:#30363d}
  .fg{fill:#e6edf3}.sub{fill:#8b949e}.muted{fill:#6e7681}
  .pill{fill:#0d1117;stroke:#30363d}
+ .acc{fill:#a78bfa}
+ .btn{stroke:#8b949e}
+ .btnclose{fill:#8b949e}
+ .titlebar{fill:#161b22}
  .bubble{fill:#e6edf3}.bubbletxt{fill:#0d1117}
 }
 
@@ -26,12 +34,12 @@
 .h3{animation-name:h3}@keyframes h3{0%,62.0%{opacity:0}68.0%,94.0%{opacity:1}100.0%,100%{opacity:0}}
 .h4{animation-name:h4}@keyframes h4{0%,84.0%{opacity:0}90.0%,100.0%{opacity:1}100.0%,100%{opacity:0}}
 </style>
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
-<radialGradient id="rg"><stop offset="0" stop-color="#fb7185"/><stop offset="1" stop-color="#e11d48" stop-opacity="0"/></radialGradient></defs>
-<g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#5b21b6"/></linearGradient>
+<radialGradient id="rg"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></radialGradient></defs>
+<g font-family="'Noto Sans', 'Segoe UI', Ubuntu, Roboto, Helvetica, Arial, sans-serif">
 <rect class="bg" x="1" y="1" width="958" height="418" rx="18"/>
-<line class="flow" x1="120.0" y1="108" x2="840.0" y2="108" stroke="#f97316" stroke-width="2.5"/>
-<rect class="h0 anim" x="36.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#e11d48" stroke-opacity=".5"/>
+<line class="flow" x1="120.0" y1="108" x2="840.0" y2="108" stroke="#8b5cf6" stroke-width="2.5"/>
+<rect class="h0 anim" x="36.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#7c3aed" stroke-opacity=".5"/>
 <text class="muted" x="120.0" y="44" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">STAGE 1</text>
 <text class="fg" x="120.0" y="80" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="1">RESEARCH</text>
 <circle cx="120.0" cy="108" r="7" class="pill" stroke-width="2"/>
@@ -39,7 +47,7 @@
 <rect class="pill" x="42.0" y="158" width="156.0" height="34" rx="17"/>
 <text class="fg" x="120.0" y="180" font-size="12.5" font-weight="600" text-anchor="middle">competitor-research</text>
 <g class="h0 anim" opacity="0"><rect x="42.0" y="158" width="156.0" height="34" rx="17" fill="url(#g)"/><text x="120.0" y="180" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">competitor-research</text></g>
-<rect class="h1 anim" x="216.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#e11d48" stroke-opacity=".5"/>
+<rect class="h1 anim" x="216.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#7c3aed" stroke-opacity=".5"/>
 <text class="muted" x="300.0" y="44" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">STAGE 2</text>
 <text class="fg" x="300.0" y="80" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="1">POSITION</text>
 <circle cx="300.0" cy="108" r="7" class="pill" stroke-width="2"/>
@@ -50,7 +58,7 @@
 <rect class="pill" x="222.0" y="202" width="156.0" height="34" rx="17"/>
 <text class="fg" x="300.0" y="224" font-size="12.5" font-weight="600" text-anchor="middle">branding</text>
 <g class="h1 anim" opacity="0"><rect x="222.0" y="202" width="156.0" height="34" rx="17" fill="url(#g)"/><text x="300.0" y="224" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">branding</text></g>
-<rect class="h2 anim" x="396.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#e11d48" stroke-opacity=".5"/>
+<rect class="h2 anim" x="396.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#7c3aed" stroke-opacity=".5"/>
 <text class="muted" x="480.0" y="44" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">STAGE 3</text>
 <text class="fg" x="480.0" y="80" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="1">ACQUIRE</text>
 <circle cx="480.0" cy="108" r="7" class="pill" stroke-width="2"/>
@@ -70,7 +78,7 @@
 <rect class="pill" x="402.0" y="334" width="156.0" height="34" rx="17"/>
 <text class="fg" x="480.0" y="356" font-size="12.5" font-weight="600" text-anchor="middle">google-ads-diagnostics</text>
 <g class="h2 anim" opacity="0"><rect x="402.0" y="334" width="156.0" height="34" rx="17" fill="url(#g)"/><text x="480.0" y="356" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">google-ads-diagnostics</text></g>
-<rect class="h3 anim" x="576.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#e11d48" stroke-opacity=".5"/>
+<rect class="h3 anim" x="576.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#7c3aed" stroke-opacity=".5"/>
 <text class="muted" x="660.0" y="44" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">STAGE 4</text>
 <text class="fg" x="660.0" y="80" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="1">GROW</text>
 <circle cx="660.0" cy="108" r="7" class="pill" stroke-width="2"/>
@@ -90,7 +98,7 @@
 <rect class="pill" x="582.0" y="334" width="156.0" height="34" rx="17"/>
 <text class="fg" x="660.0" y="356" font-size="12.5" font-weight="600" text-anchor="middle">geo-ai-seo</text>
 <g class="h3 anim" opacity="0"><rect x="582.0" y="334" width="156.0" height="34" rx="17" fill="url(#g)"/><text x="660.0" y="356" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">geo-ai-seo</text></g>
-<rect class="h4 anim" x="756.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#e11d48" stroke-opacity=".5"/>
+<rect class="h4 anim" x="756.0" y="56" width="168.0" height="328" rx="14" fill="url(#g)" opacity="0" fill-opacity=".09" stroke="#7c3aed" stroke-opacity=".5"/>
 <text class="muted" x="840.0" y="44" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">STAGE 5</text>
 <text class="fg" x="840.0" y="80" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="1">CONVERT</text>
 <circle cx="840.0" cy="108" r="7" class="pill" stroke-width="2"/>
@@ -101,6 +109,6 @@
 <rect class="pill" x="762.0" y="202" width="156.0" height="34" rx="17"/>
 <text class="fg" x="840.0" y="224" font-size="12.5" font-weight="600" text-anchor="middle">gtm-debugging</text>
 <g class="h4 anim" opacity="0"><rect x="762.0" y="202" width="156.0" height="34" rx="17" fill="url(#g)"/><text x="840.0" y="224" font-size="12.5" font-weight="700" fill="#fff" text-anchor="middle">gtm-debugging</text></g>
-<g class="dot anim"><circle cx="120.0" cy="108" r="16" fill="url(#rg)"/><circle cx="120.0" cy="108" r="7" fill="#e11d48"/></g>
+<g class="dot anim"><circle cx="120.0" cy="108" r="16" fill="url(#rg)"/><circle cx="120.0" cy="108" r="7" fill="#7c3aed"/></g>
 <text class="muted" x="480.0" y="406" font-size="12" text-anchor="middle">Each skill: Inputs → decision framework → fixed output format → verification checklist → evals</text>
 </g></svg>

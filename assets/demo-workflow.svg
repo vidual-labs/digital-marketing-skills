@@ -6,12 +6,20 @@
 .panel{fill:#f8fafc;stroke:#e2e8f0}
 .fg{fill:#0f172a}.sub{fill:#64748b}.muted{fill:#94a3b8}
 .pill{fill:#ffffff;stroke:#cbd5e1}
+.acc{fill:#6d28d9}
+.btn{stroke:#64748b}
+.btnclose{fill:#64748b}
+.titlebar{fill:#f1f5f9}
 .bubble{fill:#0f172a}.bubbletxt{fill:#f8fafc}
 @media (prefers-color-scheme: dark){
  .bg{fill:#0d1117;stroke:#30363d}
  .panel{fill:#161b22;stroke:#30363d}
  .fg{fill:#e6edf3}.sub{fill:#8b949e}.muted{fill:#6e7681}
  .pill{fill:#0d1117;stroke:#30363d}
+ .acc{fill:#a78bfa}
+ .btn{stroke:#8b949e}
+ .btnclose{fill:#8b949e}
+ .titlebar{fill:#161b22}
  .bubble{fill:#e6edf3}.bubbletxt{fill:#0d1117}
 }
 
@@ -36,33 +44,36 @@
 .l5{animation-name:l5}@keyframes l5{0%,70%{opacity:0;transform:translateX(-8px)}73%,100%{opacity:1;transform:translateX(0)}}
 .l6{animation-name:l6}@keyframes l6{0%,78%{opacity:0;transform:translateX(-8px)}81%,100%{opacity:1;transform:translateX(0)}}
 </style>
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#5b21b6"/></linearGradient>
 <clipPath id="tc"><rect class="type anim" x="58" y="96" width="330" height="60"/></clipPath></defs>
-<g class="whole anim" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<g class="whole anim" font-family="'Noto Sans', 'Segoe UI', Ubuntu, Roboto, Helvetica, Arial, sans-serif">
 <rect class="bg" x="1" y="1" width="898" height="438" rx="18"/>
-<circle cx="28" cy="26" r="6" fill="#f87171"/><circle cx="48" cy="26" r="6" fill="#fbbf24"/><circle cx="68" cy="26" r="6" fill="#34d399"/>
+<path class="titlebar" d="M19 1 H881 A18 18 0 0 1 899 19 V48 H1 V19 A18 18 0 0 1 19 1 Z"/>
+<rect x="20" y="16" width="18" height="18" rx="4" fill="url(#g)"/><rect x="24" y="21" width="10" height="2.4" rx="1.2" fill="#fff"/><rect x="26" y="25" width="6" height="2.4" rx="1.2" fill="#fff" opacity=".85"/><rect x="28" y="29" width="2" height="2.4" rx="1" fill="#fff" opacity=".7"/>
+<g fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="btn" d="M790 23 l5 5 l5 -5"/><path class="btn" d="M820 28 l5 -5 l5 5"/></g>
+<circle class="btnclose" cx="865" cy="25.5" r="9"/><path d="M861.5 22 l7 7 m0 -7 l-7 7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
 <text class="sub" x="450.0" y="31" font-size="13" text-anchor="middle">any agent · Claude Code · Cursor · Codex · ChatGPT</text>
 <text class="muted" x="40" y="78" font-size="12" font-weight="700" letter-spacing="1.5">YOU ASK</text>
 <rect class="bubble" x="40" y="92" width="340" height="68" rx="16"/>
 <g clip-path="url(#tc)"><text class="bubbletxt" x="58" y="120" font-size="16" font-weight="600">Our Meta CPA doubled last week.</text>
 <text class="bubbletxt" x="58" y="144" font-size="16" font-weight="600">What changed?</text></g>
 <rect class="pill" x="40" y="172" width="196" height="28" rx="14"/>
-<text class="sub" x="56" y="191" font-size="12.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">📎 ads_export_28d.csv</text>
-<path class="flow" d="M296 300 H404" stroke="#e11d48" stroke-width="2.5" fill="none"/>
+<text class="sub" x="78" y="191" font-size="12.5" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">ads_export_28d.csv</text><path class="btn" d="M60 181 h7 l3 3 v9 h-10 z M67 181 v3 h3" fill="none" stroke-width="1.4" stroke-linejoin="round"/>
+<path class="flow" d="M296 300 H404" stroke="#8b5cf6" stroke-width="2.5" fill="none"/>
 <text class="muted" x="40" y="262" font-size="12" font-weight="700" letter-spacing="1.5">THE SKILL KICKS IN</text>
-<rect class="ring anim" x="40" y="276" width="250" height="48" rx="24" fill="none" stroke="#e11d48" stroke-width="3"/>
+<rect class="ring anim" x="40" y="276" width="250" height="48" rx="24" fill="none" stroke="#7c3aed" stroke-width="3"/>
 <g class="chip anim"><rect x="40" y="276" width="250" height="48" rx="24" fill="url(#g)"/>
-<text x="165" y="306" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">⚡ meta-ads-diagnostics</text></g>
+<text x="165" y="306" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">meta-ads-diagnostics</text></g>
 <text class="sub" x="40" y="356" font-size="12.5">Inputs → framework → fixed output format</text>
 <text class="sub" x="40" y="376" font-size="12.5">→ verification checklist. Every time.</text>
 <rect class="panel" x="410" y="62" width="460" height="346" rx="14"/>
 <text class="muted" x="432" y="90" font-size="12" font-weight="700" letter-spacing="1.5">YOU GET</text>
-<g class="l0 anim"><text x="432" y="126" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">SKILL</text><text fill="#e11d48" x="432" y="145" font-size="14.5" font-weight="600">meta-ads-diagnostics  v1.2.0</text></g>
-<g class="l1 anim"><text x="432" y="166" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">DATA CONFIDENCE</text><text class="fg" x="432" y="185" font-size="14.5" font-weight="600">High: 28-day export, 3 campaigns</text></g>
-<g class="l2 anim"><text x="432" y="206" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">DIAGNOSIS</text><text class="fg" x="432" y="225" font-size="14.5" font-weight="600">Frequency 2.1 → 4.6: top ads are fatigued</text></g>
-<g class="l3 anim"><text x="432" y="246" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">ACTION 1</text><text class="fg" x="432" y="265" font-size="14.5" font-weight="600">Rotate in 3 new hooks (→ meta-ads-creative)</text></g>
-<g class="l4 anim"><text x="432" y="286" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">ACTION 2</text><text class="fg" x="432" y="305" font-size="14.5" font-weight="600">Merge 2 ad sets stuck in learning phase</text></g>
-<g class="l5 anim"><text x="432" y="326" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">ACTION 3</text><text class="fg" x="432" y="345" font-size="14.5" font-weight="600">Cap retargeting at 20% of budget</text></g>
-<g class="l6 anim"><text x="432" y="366" font-size="11" font-weight="700" letter-spacing="1" fill="#e11d48" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">VERIFY</text><text fill="#16a34a" x="432" y="385" font-size="14.5" font-weight="600">✓ no invented metrics  ✓ currency: EUR</text></g>
+<g class="l0 anim"><text x="432" y="126" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">SKILL</text><text class="acc" x="432" y="145" font-size="14.5" font-weight="600">meta-ads-diagnostics  v1.2.0</text></g>
+<g class="l1 anim"><text x="432" y="166" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">DATA CONFIDENCE</text><text class="fg" x="432" y="185" font-size="14.5" font-weight="600">High: 28-day export, 3 campaigns</text></g>
+<g class="l2 anim"><text x="432" y="206" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">DIAGNOSIS</text><text class="fg" x="432" y="225" font-size="14.5" font-weight="600">Frequency 2.1 → 4.6: top ads are fatigued</text></g>
+<g class="l3 anim"><text x="432" y="246" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">ACTION 1</text><text class="fg" x="432" y="265" font-size="14.5" font-weight="600">Rotate in 3 new hooks (→ meta-ads-creative)</text></g>
+<g class="l4 anim"><text x="432" y="286" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">ACTION 2</text><text class="fg" x="432" y="305" font-size="14.5" font-weight="600">Merge 2 ad sets stuck in learning phase</text></g>
+<g class="l5 anim"><text x="432" y="326" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">ACTION 3</text><text class="fg" x="432" y="345" font-size="14.5" font-weight="600">Cap retargeting at 20% of budget</text></g>
+<g class="l6 anim"><text x="432" y="366" font-size="11" font-weight="700" letter-spacing="1" class="acc" font-family="Hack, 'Noto Sans Mono', 'DejaVu Sans Mono', Consolas, monospace">VERIFY</text><text fill="#16a34a" x="432" y="385" font-size="14.5" font-weight="600">✓ no invented metrics  ✓ currency: EUR</text></g>
 <text class="muted" x="864" y="426" font-size="11" text-anchor="end">Illustrative example, not real account data</text>
 </g></svg>

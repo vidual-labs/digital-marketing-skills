@@ -13,15 +13,15 @@
 
 <p align="center">
   <a href="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml"><img src="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml/badge.svg" alt="Validate skills"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.2.0-f97316" alt="Version 1.2.0"></a>
-  <a href="#skills"><img src="https://img.shields.io/badge/skills-15-e11d48" alt="15 skills"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.2.0-7c3aed" alt="Version 1.2.0"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-15-6d28d9" alt="15 skills"></a>
   <a href="#testing"><img src="https://img.shields.io/badge/evals-tested-16a34a" alt="Evals"></a>
   <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/format-Agent%20Skills-0f172a" alt="Agent Skills format"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude%20Code-✓-f97316?style=flat-square" alt="Claude Code">
+  <img src="https://img.shields.io/badge/Claude%20Code-✓-7c3aed?style=flat-square" alt="Claude Code">
   <img src="https://img.shields.io/badge/Cursor-✓-0f172a?style=flat-square" alt="Cursor">
   <img src="https://img.shields.io/badge/Codex-✓-0f172a?style=flat-square" alt="Codex">
   <img src="https://img.shields.io/badge/ChatGPT-✓-0f172a?style=flat-square" alt="ChatGPT">
