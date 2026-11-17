@@ -1,13 +1,13 @@
 ---
 name: landing-page-funnel
 description: Use when auditing, writing or testing landing pages for conversion — above-the-fold structure, ad-to-page message match, body section order, form optimization, social proof, objection handling, mobile and page speed (Core Web Vitals), and A/B test design with proper sample sizes. Also use when someone says "traffic is fine but nobody converts", asks for a landing page teardown, or needs CRO test ideas. Don't use for full website copywriting, e-commerce product detail pages, blog/SEO content (geo-ai-seo) or tracking bugs (gtm-debugging).
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when the page cannot be fetched, the skill works from a pasted copy, screenshots or a description.
 metadata:
   category: conversion-tracking
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [landing-page, cro, conversion-rate-optimization, funnel, ab-testing, forms, social-proof, message-match, core-web-vitals]
   related_skills: [meta-ads-creative, google-ads-keywords, gtm-debugging, branding, geo-ai-seo]
 ---
@@ -43,6 +43,21 @@ Ask for (or extract from the conversation):
 - **Analytics**: scroll depth, form abandonment, heatmaps if available
 
 Data rules: if you cannot fetch the page, say so and work from what the user provides; do not describe elements you have not seen. Never invent testimonials or numbers — use `[insert proof]`. Benchmarks are starting points; the page's own history and the business's unit economics decide what "good" is. Use the account's currency.
+
+## Diagnose Where the Page Leaks
+
+Before rewriting anything, find the stage where visitors drop. Use the user's analytics (scroll depth, form-start and form-submit events, heatmaps, session recordings); compare segments (mobile vs desktop, each traffic source, each ad) against each other and against the page's own history rather than an industry average.
+
+| Symptom | Likely cause | First fix | Evidence to request if missing |
+|---------|--------------|-----------|-------------------------------|
+| Most visitors leave without scrolling, worst on paid traffic | Message mismatch or weak above the fold | Message match and H1/offer rewrite | Ad creative, scroll depth by source |
+| One device converts far below the other | Mobile layout, speed or form usability | Mobile hero, Core Web Vitals, tap targets, keyboards | Device split of CVR, field data from PageSpeed Insights |
+| Visitors scroll, few start the form | Belief or offer: weak proof, unanswered objections, commitment too high | Specific proof near CTA, objection section, lower-commitment option | Heatmap, click map, on-page poll answers |
+| Many start the form, few finish | Form friction: too many or sensitive fields, validation errors | Cut or defer fields, multi-step, inline validation | Field-level abandonment, error logs |
+| Form CVR fine, leads do not close | Qualification, or the offer attracts the wrong people | Add one qualifying field or price signal; check the ad targeting | CRM outcome per lead source |
+| CVR changed suddenly with no page change | Tracking or traffic mix, not the page | Verify the conversion event (`gtm-debugging`); compare sources | Tag change log, source mix by week |
+
+Fix the earliest leaking stage first: improving the form does little for visitors who never reach it.
 
 ## Landing Page Anatomy
 
@@ -99,7 +114,16 @@ Testimonial formula: `"[Specific result in numbers or concrete change]" — [Nam
 
 ## Ad-to-Page Message Match
 
-The largest single lever for paid traffic. Score 1–5 on each; anything under 4 is leaking.
+The largest single lever for paid traffic. Score each element 1–5; the overall score is the **lowest** element score, because one broken promise (for example a missing price) loses the visitor however well the rest matches. Any element under 4 is leaking.
+
+| Score | Meaning |
+|-------|---------|
+| 5 | Same words and same offer, visible above the fold on mobile |
+| 4 | Same promise in different words; offer visible above the fold |
+| 3 | Related topic, but the specific promise or offer appears only below the fold |
+| 2 | Generic page (brand or category) that does not repeat the promise |
+| 1 | Contradicts the ad (different price, offer or audience) or is missing it entirely |
+
 
 | Ad element | Page must match |
 |------------|-----------------|
@@ -150,11 +174,21 @@ Usual fixes: compress and size the hero image, lazy-load below-the-fold media, r
 ### Test design rules
 
 - **One hypothesis per test**: "Adding a specific testimonial next to the form will raise form completion because trust is the blocker."
-- **Sample size**: calculate it before launching (baseline rate, minimum detectable effect, 95% confidence, 80% power). Rule of thumb: a few hundred conversions per variant for a 10–15% lift; below ~100 conversions per variant results are mostly noise.
+- **Sample size**: calculate it before launching (baseline rate, minimum detectable effect, 95% confidence, 80% power). A quick approximation for two variants: visitors per variant ≈ 16 × p × (1 − p) ÷ (p × MDE)², where p is the baseline conversion rate and MDE the relative lift to detect. Example: p = 3%, MDE = 20% → 16 × 0.03 × 0.97 ÷ 0.006² ≈ 12,900 visitors per variant. Use a proper calculator for the final number; below ~100 conversions per variant results are mostly noise.
+- **Feasibility**: weeks needed = (visitors per variant × number of variants) ÷ weekly visitors to the page. Starting point: if that exceeds ~8 weeks, do not run a classic A/B test — raise the MDE with a bolder change, test on a higher-traffic page or step (e.g. form start), or ship and monitor.
 - **Duration**: full weeks (2+), never stop early on a peak, run through at least one business cycle.
 - **Hold constant**: traffic sources, campaigns and offers between variants; split traffic randomly at the page level.
 - **Guardrails**: watch lead quality and down-funnel conversion, not only the form rate.
 - **Tooling**: Google Optimize is gone; use the testing tool the team has (VWO, Optimizely, AB Tasty, Convert, Unbounce/Instapage built-ins, or a server-side split). Low-traffic pages: run sequential, bolder changes and judge on direction plus qualitative feedback rather than p-values.
+
+### Ship, test or research?
+
+| Change | Decision | Why |
+|--------|----------|-----|
+| Fixes a defect: broken element, "Submit" label, missing offer from the ad, slow hero, no mobile CTA, wrong keyboard type | **Ship** (quick win) and monitor | No plausible downside; testing wastes traffic |
+| A trade-off: form length vs lead quality, price framing, trial length, gating content | **Test** if feasible, with a down-funnel guardrail | Could help or hurt; the answer depends on the audience |
+| Unknown cause (data shows a leak but not why) | **Research** first: polls, recordings, customer interviews | Testing guesses burns weeks |
+| Cosmetic: colours, button shape, minor layout | **Ship or skip**; test only on very high traffic | Effects are too small to detect on most pages |
 
 ### Reporting a test
 
@@ -169,14 +203,21 @@ DECISION: [Ship / iterate / discard] — [why]
 
 ## Output Format
 
+Use every heading below in this order. When a number is not provided, write "not provided" instead of estimating it. For a copywriting request, replace `LEAK DIAGNOSIS` with the full page copy in body order and keep `MESSAGE MATCH`, `FORM` and `QUICK WINS`.
+
 ```
 LANDING PAGE AUDIT: [Page / URL]
-Traffic source: [Ad / email / organic] | Goal: [conversion] | Current CVR: [x% or unknown]
-Devices: [mobile % / desktop %] | Access: [fetched / from screenshots / from copy]
+Traffic source: [Ad / email / organic] | Goal: [conversion] | Current CVR: [x% or not provided]
+Traffic: [visitors/week] | Conversions/week: [n] | Devices: [mobile % / desktop %]
+Access: [fetched / from screenshots / from copy — page not fetched]
 
---- MESSAGE MATCH SCORE: X/5 ---
-[Ad headline] ↔ [Page H1] — [gap and fix]
-[Offer] ↔ [Page offer] — [gap and fix]
+--- LEAK DIAGNOSIS ---
+Leaking stage: [above the fold / belief & offer / form / qualification / tracking] — [evidence or "assumed: data needed"]
+
+--- MESSAGE MATCH SCORE: X/5 (lowest element) ---
+Headline: [ad] ↔ [page H1] — [score] — [fix]
+Offer: [ad] ↔ [page] — [score] — [fix]
+Audience / visual / keyword: [score each] — [fix]
 
 --- ABOVE THE FOLD ---
 What / why / next: [pass or fail each, with the fix]
@@ -192,7 +233,7 @@ Proof gaps: [`[insert proof]` placeholders and what to collect]
 Objections unanswered: [...]
 
 --- FORM ---
-Fields: [current n] → [recommended n and which]
+Fields: [current n] → [recommended n] | Keep: [..] | Defer: [..] | Remove: [..]
 Steps / validation / label / privacy line / fallback: [changes]
 
 --- SPEED & MOBILE ---
@@ -200,42 +241,52 @@ LCP / INP / CLS: [values or "not provided"] → [fixes]
 Mobile issues: [...]
 
 --- TEST PLAN (priority order) ---
-1. [Hypothesis] — [metric] — [sample needed] — [duration]
+1. Hypothesis: [change → effect because reason] | Metric: [..] | Guardrail: [..] | Baseline: [x%] | MDE: [x%] | Visitors per variant: [n] | Weeks at current traffic: [n] | Decision: [A/B test / sequential / research first]
 2. [...]
 3. [...]
 
 --- QUICK WINS (ship without testing) ---
 - [...]
+
+--- ASSUMPTIONS & MISSING DATA ---
+[...]
 ```
 
 ## Common Pitfalls
 
-1. **Several competing CTAs.** Each extra action is a "no" to the main one. One primary action; repeat it; offer one lower-commitment fallback.
+1. **Several competing CTAs.** Each extra action is a "no" to the main one. Fix: one primary action, repeated, plus one lower-commitment fallback.
 
-2. **Product-first copy.** "Our AI-powered platform…" says nothing about the visitor. Lead with their outcome.
+2. **Product-first copy.** "Our AI-powered platform…" says nothing about the visitor. Fix: lead with their outcome in their words.
 
-3. **Ignoring message match.** A page that does not repeat the ad's promise makes visitors feel they clicked wrong. Match words, offer and visuals.
+3. **Ignoring message match.** A page that does not repeat the ad's promise makes visitors feel they clicked wrong. Fix: match words, offer and visuals; score the weakest element.
 
-4. **Form before value.** Show the benefit, then ask for details.
+4. **Form before value.** Asking for details before the benefit is clear raises abandonment. Fix: benefit and proof first, or a multi-step form that starts with an easy question.
 
-5. **Desktop-first design.** Most paid traffic is mobile; a hero that needs two scrolls on a phone has no above-the-fold.
+5. **Desktop-first design.** Most paid traffic is mobile; a hero that needs two scrolls on a phone has no above-the-fold. Fix: design and review the mobile first screen first, on a real device.
 
-6. **Underpowered tests.** Declaring a winner at 30 conversions per variant is a coin flip. Calculate sample size first.
+6. **Fixing the wrong stage.** Rewriting the form when visitors leave in the hero wastes the effort. Fix: run the leak diagnosis and start at the earliest leaking stage.
 
-7. **Optimizing vanity metrics.** Time on page and bounce rate are not conversion. Judge on conversion rate, lead quality and revenue per visitor.
+7. **Underpowered tests.** Declaring a winner at 30 conversions per variant is a coin flip. Fix: calculate visitors per variant and weeks first; if infeasible, ship, go bolder or research.
 
-8. **Invented proof.** Placeholder testimonials shipped to production are a legal and trust problem. Mark them and collect real ones.
+8. **Peeking and stopping early.** Checking daily and stopping at the first significant reading inflates false positives. Fix: fix the sample and duration in advance, in full weeks.
+
+9. **Testing on unverified tracking.** A conversion event that double-fires or misses mobile makes every result wrong. Fix: verify the event before the test (`gtm-debugging`).
+
+10. **Optimizing vanity metrics.** Time on page and bounce rate are not conversion. Fix: judge on conversion rate, lead quality and revenue per visitor.
+
+11. **Invented proof.** Placeholder testimonials shipped to production are a legal and trust problem. Fix: mark them `[insert proof]` and collect real ones.
 
 ## Verification Checklist
 
-- [ ] Message match scored against the actual ad/email that sends traffic
+- [ ] Leak diagnosis names the earliest leaking stage, with evidence or a list of data needed
+- [ ] Message match scored per element against the actual ad/email; overall score = lowest element
 - [ ] Above the fold answers what / why me / what next on mobile without scrolling
 - [ ] H1 and sub-headline rewritten with the visitor's words and a specific benefit
 - [ ] One primary CTA, verb-first label, risk reducer beside it
 - [ ] Body follows Problem → Proof → Solution → Steps → Social proof → Objections → CTA → FAQ
-- [ ] Form fields reduced to what is needed now; validation, label, privacy line and fallback specified
+- [ ] Form fields split into keep / defer / remove; validation, label, privacy line and fallback specified
 - [ ] Social proof is specific (name, role, result) or marked `[insert proof]`
 - [ ] Core Web Vitals targets stated with fixes where data exists
-- [ ] Test plan has hypotheses, metrics, sample size and duration, in priority order
-- [ ] Quick wins separated from things that need a test
+- [ ] Each test has hypothesis, metric, guardrail, visitors per variant and weeks at current traffic; infeasible tests redirected
+- [ ] Quick wins (defect fixes) separated from trade-offs that need a test
 - [ ] Page not described beyond what was actually fetched or provided

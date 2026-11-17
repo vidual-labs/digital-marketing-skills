@@ -1,6 +1,6 @@
 {
   "skill_name": "market-positioning",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,18 @@
         "All five named competitors are plotted and distance is scored, with messaging overlap showing the compared words",
         "Positioning statement has a single point of difference and uses the real proof (120 firms, RIBA templates, ex-architect founders)",
         "Message house has 3–4 key messages with proof and 2–3 signature phrases, and a swap test is applied",
-        "Consistency audit includes how AI assistants/search describe Kestrel, and assumptions are listed"
+        "Consistency audit includes how AI assistants/search describe Kestrel, and assumptions are listed",
+        "Scores 2–4 candidate points of difference (e.g. RIBA-stage workflows, per-firm pricing, ex-architect founders) on Desired/Deliverable/Distinctive/Durable, rejects per-firm pricing as the lead unless framed as structural value, and states a strategy diagnosis"
       ],
       "checks": [
         {"type": "contains", "value": "PERCEPTUAL MAP"},
         {"type": "contains", "value": "POSITIONING STATEMENT"},
         {"type": "contains", "value": "MESSAGE HOUSE"},
         {"type": "regex", "pattern": "RIBA"},
-        {"type": "regex", "pattern": "Monograph"}
+        {"type": "regex", "pattern": "Monograph"},
+        {"type": "contains", "value": "CANDIDATE POINTS OF DIFFERENCE"},
+        {"type": "regex", "pattern": "PROCEED|DIFFERENTIATE|RE-SEGMENT|PIVOT"},
+        {"type": "regex", "pattern": "Decision:\\s*\\[?\\s*(PROCEED|REFINE|PIVOT)"}
       ]
     },
     {
@@ -51,13 +55,43 @@
         "Each listed touchpoint is marked pass/fail with a rewrite that expresses 'keeps members coming back'",
         "Notes that G2 reviews already confirm the retention position (a pass) and should be used as proof",
         "Addresses the ChatGPT description with entity-fact fixes (About page, schema, directories)",
-        "Actions are prioritized (homepage first)"
+        "Actions are prioritized (homepage first)",
+        "Uses PASS/PARTIAL/FAIL per touchpoint and reports a consistency score (G2 reviews PASS; H1, ad, bio and deck FAIL or PARTIAL)"
       ],
       "checks": [
         {"type": "contains", "value": "CONSISTENCY AUDIT"},
         {"type": "regex", "pattern": "coming back|retention"},
         {"type": "regex", "pattern": "ChatGPT|AI"},
-        {"type": "regex", "pattern": "Gym management made simple"}
+        {"type": "regex", "pattern": "Gym management made simple"},
+        {"type": "regex", "pattern": "Consistency score:\\s*\\d"},
+        {"type": "min_count", "pattern": "\\bFAIL\\b", "count": 3}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "choose-point-of-difference-with-overlap-math",
+      "prompt": "Help us pick our position. We're Fernway, a meal-kit for families with kids under 10 (UK). Our homepage: 'Fresh, easy family dinners delivered'. Competitors: HelloFresh 'Fresh ingredients, easy recipes, delivered', Gousto 'Easy, tasty recipe boxes delivered', Mindful Chef 'Healthy recipe boxes delivered'. Three ideas from the team: (1) 'cheapest family meal-kit' (we're 8% cheaper today, no cost advantage), (2) 'meals kids actually eat' — we test every recipe with a panel of 60 kids and our reviews say 'my fussy eater finished it' 23 times out of 150, (3) 'zero-waste packaging', which Mindful Chef also claims. Score them and give us the positioning.",
+      "files": [],
+      "expected_output": "Messaging overlap computed per competitor with the shared terms listed (fresh, easy, delivered, family/recipe) and a reading of Blurred/Interchangeable; strategy diagnosis of DIFFERENTIATE; candidate table scoring the three ideas on Desired/Deliverable/Distinctive/Durable with 'meals kids actually eat' chosen and 'cheapest' and 'zero-waste' rejected with reasons; subcategory frame of reference; positioning statement using the 60-kid panel and review evidence; message house with signature language; Decision: REFINE (or PROCEED after rewrite) with ordered actions; assumptions listed.",
+      "assertions": [
+        "Computes messaging overlap for each competitor with the shared terms shown, identifies HelloFresh as nearest/most interchangeable, and explains that rewording alone will not fix it",
+        "Scores all three candidates on Desired, Deliverable, Distinctive and Durable with totals; rejects 'cheapest' (no structural cost advantage, low durability) and 'zero-waste' (fails Distinctive because Mindful Chef claims it)",
+        "Chooses 'meals kids actually eat' using the kid panel and the 23-of-150 review evidence as reason to believe, without inventing additional quotes or statistics",
+        "States a strategy diagnosis (DIFFERENTIATE) and a subcategory frame of reference such as 'meal-kit for families with young kids'",
+        "Produces a complete positioning statement and a message house whose key messages fail the swap test against HelloFresh and Gousto"
+      ],
+      "checks": [
+        {"type": "contains", "value": "CANDIDATE POINTS OF DIFFERENCE"},
+        {"type": "contains", "value": "STRATEGY DIAGNOSIS"},
+        {"type": "regex", "pattern": "Aligned:.*DIFFERENTIATE"},
+        {
+          "type": "regex",
+          "pattern": "\\d{1,3}\\s*%.*(fresh|easy|delivered)"
+        },
+        {"type": "regex", "pattern": "kids actually eat"},
+        {"type": "regex", "pattern": "Total\\s*/?\\s*12|/12"},
+        {"type": "contains", "value": "POSITIONING STATEMENT"},
+        {"type": "regex", "pattern": "Decision:\\s*\\[?\\s*(PROCEED|REFINE|PIVOT)"}
       ]
     }
   ]

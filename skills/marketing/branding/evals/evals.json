@@ -1,6 +1,6 @@
 {
   "skill_name": "branding",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,24 @@
         "Voice has 3–4 attributes each with 'means' and 'is not', plus a tone matrix with 6+ contexts",
         "Vocabulary list has 10+ use/avoid pairs tied to restaurant owners",
         "Includes an AI usage / brand prompt pack section and names open items like trademark and domain checks",
-        "Typography uses licensed/open-source fonts with weights, scale and fallbacks"
+        "Typography uses licensed/open-source fonts with weights, scale and fallbacks",
+        "Gives a contrast matrix with one row per allowed pairing (foreground on background, ratio or 'to verify', use, PASS/FAIL) and applies a stricter (AAA 7:1) body-text target for dim kitchens or explains why not"
       ],
       "checks": [
-        {"type": "regex", "pattern": "#[0-9a-f]{6}"},
+        {
+          "type": "regex",
+          "pattern": "#[0-9a-f]{6}"
+        },
         {"type": "regex", "pattern": "WCAG"},
         {"type": "contains", "value": "TONE MATRIX"},
         {"type": "regex", "pattern": "prompt pack|AI USAGE"},
-        {"type": "contains", "value": "OPEN ITEMS"}
+        {"type": "contains", "value": "OPEN ITEMS"},
+        {"type": "regex", "pattern": "Scope:\\s*\\[?\\s*NEW"},
+        {
+          "type": "min_count",
+          "pattern": "#[0-9a-f]{6}\\s+on\\s+#[0-9a-f]{6}",
+          "count": 3
+        }
       ]
     },
     {
@@ -47,18 +57,46 @@
       "name": "touchpoint-consistency-audit",
       "prompt": "Our brand feels inconsistent. Website uses navy and a serif, Instagram posts are neon gradients with a sans, email signatures all differ, and our sales deck is a default template. Brand guide from 2019 says navy #0B2545, orange #F26419, font 'Lato'. Audit and tell us what to fix first.",
       "files": [],
-      "expected_output": "Touchpoint audit table with pass/fail per channel against the 2019 guide, prioritized fixes (templates, tokens, deck master, signature), a decision point on whether to update the guide (neon gradients vs navy), and a distribution plan; uses the given hex codes rather than inventing new ones.",
+      "expected_output": "Touchpoint audit table with pass/fail per channel against the 2019 guide, prioritized fixes (templates, tokens, deck master, signature), a decision point on whether to update the guide (neon gradients vs navy), and a distribution plan; uses the given hex codes rather than inventing new ones. Each touchpoint is marked PASS/PARTIAL/FAIL, a consistency score is computed, and the scope decision (enforce vs evolve) is stated.",
       "assertions": [
         "Audits at least 5 touchpoints with pass/fail against the stated guide",
         "Uses the provided hex codes and font rather than proposing a new palette unasked, while flagging whether the guide itself needs refreshing",
         "Prioritizes fixes (templates, tokens, deck, signatures) with an order and owners",
-        "Includes an accessibility check of the navy/orange pairing"
+        "Includes an accessibility check of the navy/orange pairing",
+        "Computes a consistency score from PASS/PARTIAL/FAIL marks and uses it (and the 'every channel breaks the same way' signal on Instagram) to decide between enforcing the 2019 guide and evolving it",
+        "Orders fixes multipliers first (signature template, deck master, social templates, tokens) before one-off touchpoints"
       ],
       "checks": [
         {"type": "contains", "value": "TOUCHPOINT AUDIT"},
         {"type": "regex", "pattern": "#0B2545"},
         {"type": "regex", "pattern": "Lato"},
-        {"type": "regex", "pattern": "signature"}
+        {"type": "regex", "pattern": "signature"},
+        {"type": "regex", "pattern": "Consistency score:\\s*\\d"},
+        {"type": "regex", "pattern": "\\bPARTIAL\\b|\\bFAIL\\b"},
+        {"type": "regex", "pattern": "Scope:.*(ENFORCE|EVOLVE)"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "rebrand-request-with-recognised-assets",
+      "prompt": "We're Hollis & Pane, a regional bakery chain (22 shops, 14 years old). Our new CEO wants a full rebrand: drop the red script logo and cream/red packaging for a minimal black sans-serif look 'like the coffee chains'. Our positioning and customers haven't changed. Last spring's customer survey (n=410): 63% recognised our red script logo unprompted, people call us 'the red bakery'. Red is #C8102E on cream #F5EBDC. Problems: packaging varies by shop, the app icon is illegible, and the red text on cream on our menu boards is hard to read. Should we rebrand, and what's the plan?",
+      "files": [],
+      "expected_output": "Scope decision of EVOLVE (not REBRAND) justified by unchanged positioning and the 63% unprompted recognition; keeps red and the script mark but redraws/simplifies it for small sizes (app icon); contrast matrix for #C8102E on #F5EBDC with ratio and use restrictions plus a darker text-safe shade; touchpoint audit with PASS/PARTIAL/FAIL and a consistency score; fixes ordered multipliers first (packaging templates, menu board template, app icon); states what evidence would justify a full rebrand.",
+      "assertions": [
+        "Recommends evolving/refreshing rather than a full rebrand, citing the unchanged positioning and the 63% unprompted recognition as recognised equity",
+        "Keeps the red and a simplified version of the script mark, and addresses the illegible app icon with a small-size logo variant",
+        "Checks the #C8102E on #F5EBDC pairing with a stated ratio (or marks it to verify), restricts it to large text/UI if it fails body text, and proposes a darker text-safe shade",
+        "Includes a touchpoint audit with PASS/PARTIAL/FAIL and a consistency score, with fixes ordered multipliers first and owners",
+        "States what change (positioning, audience, offer, reputation) would justify a full rebrand, and handles the CEO's preference diplomatically"
+      ],
+      "checks": [
+        {"type": "regex", "pattern": "Scope:\\s*\\[?\\s*EVOLVE"},
+        {"type": "not_regex", "pattern": "Scope:\\s*\\[?\\s*REBRAND"},
+        {"type": "regex", "pattern": "#C8102E"},
+        {"type": "regex", "pattern": "\\d+(\\.\\d+)?\\s*:\\s*1"},
+        {"type": "contains", "value": "TOUCHPOINT AUDIT"},
+        {"type": "regex", "pattern": "Consistency score:\\s*\\d"},
+        {"type": "regex", "pattern": "63\\s*%"}
       ]
     }
   ]

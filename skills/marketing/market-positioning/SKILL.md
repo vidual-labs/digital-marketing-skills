@@ -1,13 +1,13 @@
 ---
 name: market-positioning
 description: Use when defining or sharpening market positioning — perceptual mapping against competitors, distance-from-competition scoring, whitespace validation, audience alignment scoring, positioning statement, message house and a cross-channel consistency audit, including how AI assistants currently describe the brand. Also use when someone says "we sound like everyone else", "what should we stand for", needs a positioning statement, or must align messaging before a launch or rebrand. Don't use for visual identity and voice (branding), for gathering competitor data (competitor-research) or for pricing strategy.
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. No tools required; browsing helps for sampling customer language and AI-assistant descriptions but is optional.
 metadata:
   category: brand
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [market-positioning, positioning-statement, perceptual-mapping, differentiation, whitespace, message-house, target-audience, competitive-distance]
   related_skills: [competitor-research, branding, landing-page-funnel, geo-ai-seo, meta-ads-creative]
 ---
@@ -82,6 +82,14 @@ Whitespace validation: if a quadrant is empty, ask why. Absent competitors usual
 
 Messaging overlap above 50% with any competitor means competing on execution alone; a point of difference is required, not a better adjective.
 
+**How to compute messaging overlap** (so scores are reproducible): take the headline, sub-headline, tagline and top three claims of each brand; reduce each to its key terms (nouns, outcome verbs and promise words — drop stop-words and the bare category noun if every brand uses it, and say so); overlap = shared key terms ÷ all distinct key terms across the two brands. Always list the shared terms next to the percentage. Treat the thresholds in the table as starting points; if the user has their own benchmark (e.g. from a previous audit), use it.
+
+| Overlap with nearest competitor | Reading | Do |
+|---------------------------------|---------|----|
+| < 30% | Distinct wording | Check the difference is one the audience values (Phase 3) |
+| 30–50% | Blurred | Replace shared promise words with signature language; keep shared category words |
+| > 50% | Interchangeable | Find a new point of difference (Phase 4a); rewording alone will not fix it |
+
 ### Phase 3: Audience alignment (score 1–5 each)
 
 | Dimension | Question | Evidence |
@@ -99,7 +107,43 @@ Messaging overlap above 50% with any competitor means competing on execution alo
 | 10–14 | Rework before investing |
 | < 10 | Misaligned — revisit segment or promise |
 
-### Phase 4: Positioning statement
+Blocker rule: any single dimension at 1–2 caps the reading at "Refine", whatever the total — a position the brand cannot prove (Credibility 2) or that strangers cannot place (Category clarity 2) fails in market even when the other scores are high. Score from evidence; where a score is inferred, write "(inferred)" next to it.
+
+### Strategy diagnosis (distance × alignment)
+
+Combine Phase 2 and Phase 3 before writing anything. "Distinct" = messaging overlap < 30% with the nearest competitor and a distinct AI/search description; "aligned" = alignment ≥ 15/25 with no blocker.
+
+| | Aligned | Not aligned |
+|---|---------|-------------|
+| **Distinct** | **PROCEED** — the position works; fix consistency (Phase 6) | **RE-SEGMENT** — distinct but unwanted: whitespace nobody values, or the wrong audience. Revisit Phase 1 whitespace validation |
+| **Not distinct** | **DIFFERENTIATE** — the audience wants this, but so do competitors' customers. Keep the segment, find a new point of difference (Phase 4a) | **PIVOT** — neither different nor wanted. Restart from audience language |
+
+In the Recommendation, DIFFERENTIATE and RE-SEGMENT map to REFINE. With fewer than ~30 audience snippets or no competitor copy, mark the diagnosis "provisional" and name the research that would confirm it.
+
+### Phase 4a: Choosing the point of difference
+
+Generate 2–4 candidate points of difference from the map, the gaps and the proof. Score each 1–3 on four tests:
+
+| Test | Question | 3 | 1 |
+|------|----------|---|---|
+| Desired | Does the audience name this when choosing? | Appears repeatedly in their own language | Only the company says it |
+| Deliverable | Can the brand prove it today? | Hard proof: data, customers, process | Roadmap or aspiration |
+| Distinctive | Do competitors already claim it? | None of the set claims it | Two or more claim it |
+| Durable | How hard is it to copy within ~12 months? | Structural (data, network, regulation, expertise, cost base) | A feature or a price cut |
+
+Pick the highest total (max 12). Reject any candidate scoring 1 on Deliverable or Distinctive regardless of total; a 1 on Durable is acceptable only with a plan to deepen the moat. Price is a valid point of difference only when it rests on a structural cost advantage *and* is framed as value per outcome; otherwise it belongs in proof or packaging.
+
+### Frame of reference
+
+| Situation | Frame | Example |
+|-----------|-------|---------|
+| Buyers already search and budget for the category | Existing category | "the project management tool…" |
+| The category exists but the segment is underserved | Subcategory: category + for [segment] | "the project management tool built for architecture practices" |
+| No existing frame describes the job, and there is budget and time to educate the market | New category, with a one-line explainer that names the old alternative | "decision memos, not dashboards" |
+
+Default to an existing category or subcategory; a new category costs years of education and loses buyers who search for the old one.
+
+### Phase 4b: Positioning statement
 
 ```
 For [target segment]
@@ -110,7 +154,7 @@ because [reason to believe].
 Unlike [primary alternative], [brand] [key contrast].
 ```
 
-Rules: one point of difference; a frame of reference the audience already understands (or a deliberately new category with a plan to explain it); a reason to believe that is evidence, not adjectives; the "unlike" line is internal unless legal clears comparative claims. Anti-pattern: "the best [X] for everyone".
+Rules: one point of difference (the winner from Phase 4a); a frame of reference the audience already understands (or a deliberately new category with a plan to explain it); a reason to believe that is evidence, not adjectives; the "unlike" line is internal unless legal clears comparative claims. Anti-pattern: "the best [X] for everyone".
 
 Example:
 
@@ -136,6 +180,8 @@ Unlike general BI suites, Acme ships answers, not dashboards.
 Test: swap each key message into a competitor's site. If it still fits, it is not differentiated enough.
 
 ### Phase 6: Consistency stress test
+
+Mark each touchpoint **PASS** (expresses the position), **PARTIAL** (right category, missing the point of difference) or **FAIL** (generic or contradicting). Consistency score = (PASS + 0.5 × PARTIAL) ÷ touchpoints audited. Fix order: homepage, then the highest-spend paid ads, then sales materials, then everything else; AI/search descriptions follow the source fixes because they lag them.
 
 | Touchpoint | Check | Fix |
 |------------|-------|-----|
@@ -166,8 +212,8 @@ Target position: [..] | Whitespace validation: [why it is empty, why we can hold
 
 --- DISTANCE FROM COMPETITION ---
 | Competitor | Messaging | Keywords | Visual | Audience | Channel | AI/search description |
-| [..] | [x% — shared words] | [x%] | [close/far] | [x%] | [same/different] | [same/distinct] |
-Nearest competitor: [..] | Risk: [..]
+| [..] | [x% — shared: term, term] | [x% or "no data"] | [close/far] | [x% or "no data"] | [same/different] | [same/distinct] |
+Nearest competitor: [..] | Overlap reading: [Distinct / Blurred / Interchangeable] | Risk: [..]
 
 --- AUDIENCE ALIGNMENT ---
 Problem recognition [x/5] — [evidence]
@@ -175,7 +221,15 @@ Outcome desirability [x/5] — [evidence]
 Credibility [x/5] — [evidence]
 Emotional resonance [x/5] — [evidence]
 Category clarity [x/5] — [evidence]
-Total: [x/25] → [reading]
+Total: [x/25] → [reading] | Blockers: [dimensions scored 1–2, or none]
+
+--- STRATEGY DIAGNOSIS ---
+Distinct: [yes/no] × Aligned: [yes/no] → [PROCEED / DIFFERENTIATE / RE-SEGMENT / PIVOT]
+
+--- CANDIDATE POINTS OF DIFFERENCE ---
+| Candidate | Desired | Deliverable | Distinctive | Durable | Total /12 | Verdict |
+| [..] | [1–3] | [1–3] | [1–3] | [1–3] | [x] | [chosen / rejected — reason] |
+Frame of reference: [existing category / subcategory / new category] — [why]
 
 --- POSITIONING STATEMENT ---
 For … who … [brand] is the … that … because … Unlike … 
@@ -189,10 +243,11 @@ Signature language: [phrase], [phrase], [phrase]
 Never say: [..]
 
 --- CONSISTENCY AUDIT ---
-| Touchpoint | Status | Fix | Owner/when |
+| Touchpoint | Current copy | Status (PASS/PARTIAL/FAIL) | Rewrite / fix | Owner/when |
+Consistency score: [x%]
 
 --- RECOMMENDATION ---
-[Proceed / refine / pivot] — [1–3 actions, in order]
+Decision: [PROCEED / REFINE / PIVOT] — [1–3 actions, in order]
 
 --- ASSUMPTIONS & GAPS ---
 [What was inferred, what research would confirm it]
@@ -216,16 +271,27 @@ Never say: [..]
 
 8. **One-time exercise.** Markets move; schedule the re-audit.
 
+9. **Averaging away a blocker.** A 19/25 with Credibility at 2 is not "nearly strong"; it is a claim the brand cannot prove. Apply the blocker rule and fix proof first.
+
+10. **Overlap scores without the words.** "45% overlap" cannot be checked or argued with. List the shared terms, and say which category words were excluded.
+
+11. **Inventing a category by default.** New categories need education budget and time; most brands win faster as "[category] for [segment]".
+
+12. **Choosing the point of difference by vote.** The founder's favourite claim often fails Deliverable or Distinctive. Score every candidate on the four tests and show the losing candidates and why.
+
 ## Verification Checklist
 
 - [ ] Axes derived from documented audience language, with the sources named
 - [ ] At least 5 competitors plotted, plus current and target positions
 - [ ] Whitespace validated (why empty, why defensible)
-- [ ] Distance scored on all six dimensions for each major competitor, with the compared words shown for messaging overlap
-- [ ] Audience alignment scored 1–5 on five dimensions with evidence and a total reading
+- [ ] Distance scored on all six dimensions for each major competitor, with the shared terms listed next to each messaging overlap % ("no data" where a dimension could not be measured)
+- [ ] Audience alignment scored 1–5 on five dimensions with evidence, a total reading and any blockers (dimensions at 1–2) named
+- [ ] Strategy diagnosis stated (PROCEED / DIFFERENTIATE / RE-SEGMENT / PIVOT) from distance × alignment
+- [ ] 2–4 candidate points of difference scored on Desired, Deliverable, Distinctive, Durable; the chosen one has no 1 on Deliverable or Distinctive
+- [ ] Frame of reference chosen (existing / subcategory / new) with the reason
 - [ ] Positioning statement complete, with a single point of difference and an evidence-based reason to believe
 - [ ] Message house: promise, 3–4 key messages with proof, 2–3 signature phrases, never-say list
 - [ ] Swap test applied to key messages
-- [ ] Consistency audit covers at least 6 touchpoints including AI/search descriptions
-- [ ] Recommendation (proceed / refine / pivot) with ordered actions
+- [ ] Consistency audit covers at least 6 touchpoints including AI/search descriptions, each PASS/PARTIAL/FAIL with a rewrite, plus a consistency score
+- [ ] Recommendation (PROCEED / REFINE / PIVOT) with ordered actions
 - [ ] Assumptions and research gaps stated; no invented customer quotes

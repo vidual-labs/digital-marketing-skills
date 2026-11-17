@@ -1,13 +1,13 @@
 ---
 name: google-ads-keywords
 description: Use when the user needs keyword lists for Google Ads Search campaigns — building, expanding or restructuring keywords, grouping them into ad groups, or writing negative keyword lists. Always outputs exact match ([keyword]) and phrase match ("keyword") in comma-separated lines, never broad match, never bullet points. Also use when someone asks for "PPC keywords", "search terms to bid on" or "Google Ads Editor import". Don't use for SEO/organic keyword research (geo-ai-seo) or for diagnosing a running account (google-ads-diagnostics).
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. No tools, browsing or API access required; keyword volume data is optional and must be labelled as estimates when unavailable.
 metadata:
   category: paid-search
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [google-ads, keywords, exact-match, phrase-match, search-ads, ppc, negative-keywords, ad-groups]
   related_skills: [google-ads-diagnostics, landing-page-funnel, geo-ai-seo, meta-ads-creative]
 ---
@@ -40,7 +40,7 @@ Ask for (or extract from the conversation):
 - **Existing keywords or search terms report**, if the account is live
 - **Monthly search volume data**, if the user has Keyword Planner access
 
-Data rules: do not invent search volumes or CPCs. If the user has no volume data, say so and rank keywords by intent instead. Use the account's language; do not translate brand names. Google renames features regularly — if a match-type or UI name differs from what is written here, use the closest current equivalent and say so.
+Data rules: do not invent search volumes or CPCs. If the user has no volume data, say so and rank keywords by intent instead. When the user shares a search terms report or Keyword Planner export, their numbers override every rule of thumb below — the thresholds in this skill are starting points for accounts with no history. Use the account's language; do not translate brand names. Google renames features regularly — if a match-type or UI name differs from what is written here, use the closest current equivalent and say so.
 
 ## Match Types
 
@@ -56,6 +56,72 @@ Why exact and phrase only: this skill exists for advertisers who want predictabl
 
 **Technical limits:** a keyword is at most 80 characters and 10 words. Keywords are not case-sensitive. The same keyword cannot exist twice in one ad group with the same match type.
 
+## Intent Classification
+
+Classify every candidate before it becomes a keyword. Intent decides whether it is a positive, a negative or a different campaign.
+
+| Intent class | Signals in the query | Default action (bottom-funnel campaign) | Default action (mid-funnel campaign) |
+|-------------|----------------------|------------------------------------------|--------------------------------------|
+| Transactional | buy, order, price, cost, quote, hire, book, near me, [product] + spec | Positive, exact first | Positive, exact |
+| Commercial investigation | best, top, review, compare, vs, alternative | Positive, phrase, own ad group | Positive, phrase |
+| Navigational — own brand | brand name, brand + product, brand + login | Separate brand campaign; `login`, `support` as negatives | Same |
+| Navigational — competitor | competitor name, competitor + alternative | Separate competitor campaign only if the user wants it | Same |
+| Informational | what is, how to, guide, ideas, examples, template, DIY | Negative | Positive only if a content landing page exists |
+| Job / education | jobs, career, salary, course, training, certification | Negative (unless the advertiser sells that) | Negative |
+| Mismatched offer | free, used, second hand, rental, wholesale — when the business does not offer it | Negative | Negative |
+| Unserved geography / product | city, country or product line the business does not serve | Negative | Negative |
+
+If a query fits two classes, the more restrictive one wins: `best free crm` is "mismatched offer" for a paid CRM, not "commercial investigation".
+
+## Decision Rules
+
+### When to split an ad group
+
+Split a theme into its own ad group when **any** of these is true; otherwise keep it together so data is not fragmented.
+
+| Condition | Why it forces a split |
+|-----------|-----------------------|
+| It needs a different landing page | One ad group = one final URL theme; a mismatched page hurts landing page experience |
+| The headline that best answers it is different | One RSA cannot mirror two promises |
+| Its expected CPA or order value differs clearly from the rest (the user's data decides; with no data, a different price tier or service line is the proxy) | Bids and targets need to differ |
+| It is brand or competitor | Brand and competitor always get their own campaign, not just an ad group |
+
+Do not split only for plurals, word order or misspellings — close variants already match those.
+
+### Exact or phrase?
+
+| Question | If yes | If no |
+|----------|--------|-------|
+| Does one phrasing clearly carry the buying intent? | Exact | Ask the next question |
+| Do valuable variations add words around the core (e.g. "… for small business", "… near me")? | Phrase, and plan to promote winners to exact | Exact |
+| Is the core term ambiguous (could mean a job, a DIY project or a free tool)? | Exact only, plus negatives for the other meanings | Phrase is acceptable |
+| Does the user report a small budget relative to CPC (roughly fewer than ~10 clicks/day affordable)? | Exact-heavy; skip phrase on generic heads | Use the goal mix below |
+
+### Search-term to keyword (when a report is provided)
+
+| Search term evidence (user's own data) | Action |
+|----------------------------------------|--------|
+| Converts and is not yet a keyword | Add as exact match in the matching ad group |
+| Converts but belongs to another ad group's theme | Add as exact there; add a cross-ad-group negative in the group that caught it |
+| Spend with no conversions, relevant intent, few clicks | Keep watching — too little data to judge; note it |
+| Spend with no conversions, irrelevant intent | Negative at the level from the table below |
+| Competitor or brand query in a non-brand campaign | Move to the brand/competitor campaign, negative in the original |
+
+"Few clicks" is relative: with a conversion rate of ~5%, fewer than ~40–60 clicks is not enough to call a term a loser. Use the account's own conversion rate when given.
+
+### Negative level
+
+| Negative is… | Put it on | Match type |
+|--------------|-----------|------------|
+| Irrelevant for the whole business (jobs, DIY, free for a paid product) | Account-level shared negative keyword list | Phrase for single words, exact for specific queries |
+| Irrelevant only for this campaign's topic or geography | Campaign | Phrase |
+| Relevant, but belongs to a sibling ad group | Ad group (cross-ad-group negative) | Exact for the sibling's keyword, phrase for its distinguishing word |
+| A brand term in non-brand campaigns | Campaign (each non-brand campaign) | Phrase |
+
+### Negative conflict check
+
+A negative that matches one of your own positive keywords silently blocks it. Before output, test every phrase negative against every positive keyword: if all of the negative's words appear in the positive in the same order, it is a conflict. Classic cases: `"free"` blocks `[gluten free bread]` and `"free delivery …"`; `"cheap"` blocks a discount ad group; `"repair"` blocks a repair service. Resolve by replacing the phrase negative with exact negatives (`[free bread]`) or narrower phrases (`"free recipe"`), and list what you changed under NEGATIVE CONFLICTS.
+
 ## Output Format
 
 All keywords are comma-separated. Each keyword is wrapped in its match-type delimiters. No bullets, no numbering, no line breaks inside a group.
@@ -68,27 +134,37 @@ All keywords are comma-separated. Each keyword is wrapped in its match-type deli
 
 ```
 CAMPAIGN: [Campaign Name]
-OBJECTIVE: [Sales / Leads / Traffic]
+OBJECTIVE: [Sales / Leads / Traffic] | FUNNEL: [Bottom / Mid / Top]
 LOCATION & LANGUAGE: [e.g. Germany, German]
 TARGET AUDIENCE: [One line]
+SUMMARY: [N] ad groups | [X] exact | [Y] phrase | [Z] negatives
 
-AD GROUP: [Ad Group 1 Name] → Landing page: [URL or page theme]
+AD GROUP: [Ad Group 1 Name] → Landing page: [URL or page theme] | Intent: [Transactional / Commercial investigation / ...]
 [exact keyword 1], [exact keyword 2], [exact keyword 3], "phrase keyword 1", "phrase keyword 2"
 
-AD GROUP: [Ad Group 2 Name] → Landing page: [URL or page theme]
+AD GROUP: [Ad Group 2 Name] → Landing page: [URL or page theme] | Intent: [...]
 [exact keyword 1], [exact keyword 2], "phrase keyword 1", "phrase keyword 2", "phrase keyword 3"
 
+NEGATIVE KEYWORDS (account shared list):
+"jobs", "job", "career", "salary", "diy", "how to"
+
 NEGATIVE KEYWORDS (campaign level):
-"free", "cheap", "jobs", "login", "career", "salary", [free trial], [how to make], [what is]
+"free", "cheap", "login", [free trial], [what is]
 
 NEGATIVE KEYWORDS (cross-ad-group, to stop cannibalization):
 AD GROUP [Name A] excludes: "term that belongs to group B"
 AD GROUP [Name B] excludes: "term that belongs to group A"
 
+NEGATIVE CONFLICTS: [None found / negative → blocked positive → resolution]
+
+SEPARATE CAMPAIGNS: [Brand / Competitor keywords moved out, or "None"]
+
 NOTES: [Assumptions, missing data, keywords to validate in Keyword Planner]
 ```
 
 ### Google Ads Editor CSV (on request)
+
+Counting rules for SUMMARY: count each delimited keyword once; negatives include all three negative blocks. Write "None" in a block rather than deleting it, so every answer has the same sections.
 
 When the user wants a bulk upload, add this block. Match type is written in the column, so the keyword column has no delimiters here — this is the one place naked keywords are correct.
 
@@ -140,7 +216,7 @@ Remove keywords that:
 
 Each ad group = one search intent = one responsive search ad = one landing page. Google rewards relevance between query, ad and page with better Quality Score and lower CPC, so a tight theme is cheaper than a big one.
 
-- 5–20 keywords per ad group; fewer is fine when volume is concentrated
+- 5–20 keywords per ad group as a starting range; fewer is fine when volume is concentrated, and the user's search terms data overrides it
 - Name ad groups `[product]-[modifier]-[location if relevant]`
 - Low-volume long-tails (under ~100 searches/month) are grouped together so they accumulate enough data
 
@@ -187,6 +263,14 @@ These are starting ratios. Phrase match earns its place by discovering new exact
 
 8. **Invented volumes.** If you have no Keyword Planner data, rank by intent and say the numbers need validation. Fabricated volumes lead to bad budget decisions.
 
+9. **A negative blocks your own keyword.** `"free"` as a phrase negative kills `[gluten free cake]`. Run the negative conflict check and swap the conflicting phrase negative for exact or narrower negatives.
+
+10. **Judging a search term on a handful of clicks.** Zero conversions after 8 clicks is noise for most accounts. Negate only on irrelevant intent; for relevant-but-unproven terms, note them and wait for enough clicks at the account's conversion rate.
+
+11. **Brand or competitor terms in a generic ad group.** They inflate the generic group's CTR and hide its true CPA. Move them to their own campaign and add the brand as a phrase negative to non-brand campaigns.
+
+12. **Dropping a section when it is empty.** Graders and colleagues compare answers block by block. Keep every template block and write "None".
+
 ## Verification Checklist
 
 - [ ] Every keyword is wrapped in `[exact]` or `"phrase"` syntax; no naked keywords outside the Editor CSV block
@@ -194,10 +278,13 @@ These are starting ratios. Phrase match earns its place by discovering new exact
 - [ ] Keywords are comma-separated with no bullets, numbers or line breaks inside a group
 - [ ] Each ad group has one clear intent and names its landing page theme
 - [ ] Each ad group has 5–20 keywords (or a documented reason for fewer)
-- [ ] No keyword is ≥ 80 characters or more than 10 words
+- [ ] No keyword is longer than 80 characters or more than 10 words
 - [ ] No identical string appears in both match types within one campaign
 - [ ] Campaign-level negative list included, with plurals and synonyms spelled out
 - [ ] Cross-ad-group negatives listed where themes overlap
+- [ ] Every phrase negative tested against every positive keyword; conflicts resolved and listed under NEGATIVE CONFLICTS
+- [ ] Every candidate classified by intent; informational, job and mismatched-offer queries are negatives unless the brief says otherwise
+- [ ] SUMMARY counts match the keywords actually listed, and every template block is present (empty blocks say "None")
 - [ ] Exact match dominates bottom-funnel groups; phrase is used to capture variation
 - [ ] Brand and competitor keywords are in separate campaigns (or flagged to be)
 - [ ] Assumptions and missing data (volumes, locale) stated in NOTES
