@@ -1,6 +1,6 @@
 {
   "skill_name": "google-ads-diagnostics",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,13 +13,39 @@
         "Explains that tCPA €40 is far below the achieved €71.8 and proposes raising it toward reality before scaling budget",
         "Addresses the ad relevance component for the QS 4 keyword with a concrete fix",
         "Priority changes are ordered and an estimated impact range is given with assumptions",
-        "Does not invent metrics that were not provided"
+        "Does not invent metrics that were not provided",
+        "Each priority change is tagged with a learning risk, and the tCPA change is not bundled in the same week as another high-risk change"
       ],
       "checks": [
-        {"type": "contains", "value": "HEALTH SCORE"},
-        {"type": "contains", "value": "PRIORITY CHANGES"},
-        {"type": "regex", "pattern": "negative"},
-        {"type": "regex", "pattern": "(target cpa|tcpa)"}
+        {
+          "type": "contains",
+          "value": "HEALTH SCORE"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY CHANGES"
+        },
+        {
+          "type": "regex",
+          "pattern": "negative"
+        },
+        {
+          "type": "regex",
+          "pattern": "(target cpa|tcpa)"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Learning risk:",
+          "count": 3
+        },
+        {
+          "type": "contains",
+          "value": "PRIMARY DRIVER"
+        },
+        {
+          "type": "regex",
+          "pattern": "RE-CHECK DATE"
+        }
       ]
     },
     {
@@ -35,9 +61,18 @@
         "Includes verification steps (search themes/insights, channel report) and a re-check date"
       ],
       "checks": [
-        {"type": "regex", "pattern": "brand exclusion"},
-        {"type": "regex", "pattern": "blended|account[- ]level"},
-        {"type": "contains", "value": "PRIORITY CHANGES"}
+        {
+          "type": "regex",
+          "pattern": "brand exclusion"
+        },
+        {
+          "type": "regex",
+          "pattern": "blended|account[- ]level"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY CHANGES"
+        }
       ]
     },
     {
@@ -53,9 +88,59 @@
         "Includes a wait period before the next change"
       ],
       "checks": [
-        {"type": "regex", "pattern": "primary conversion|conversion tracking|newsletter"},
-        {"type": "regex", "pattern": "maximize conversions"},
-        {"type": "contains", "value": "BID STRATEGY"}
+        {
+          "type": "regex",
+          "pattern": "primary conversion|conversion tracking|newsletter"
+        },
+        {
+          "type": "regex",
+          "pattern": "maximize conversions"
+        },
+        {
+          "type": "contains",
+          "value": "BID STRATEGY"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "conversion-drop-cvr-driver-triage",
+      "prompt": "Our Search account (Maximize conversions, tCPA $60) went from 212 conversions to 131 conversions comparing Oct 1–21 vs Sep 10–30. Clicks were 5,890 vs 5,710, avg CPC $3.10 vs $3.18, CTR 6.2% vs 6.0%, impression share flat at 71%. Change history shows only a budget increase of 15% on Oct 3. The web team relaunched the checkout page on Oct 2. My boss wants to switch to Target ROAS and cut the budget. What's going on and what should we do?",
+      "files": [],
+      "expected_output": "Decomposes the drop: clicks roughly flat and CPC roughly flat, so conversion rate fell from ~3.7% to ~2.2% — CVR (or tracking) is the primary driver, coinciding with the Oct 2 checkout relaunch rather than the 15% budget change. Recommends verifying the conversion tag on the new checkout (route to gtm-debugging) and checking the checkout for errors (landing-page-funnel) before any bid change; advises against switching to Target ROAS or cutting budget now; orders changes by learning risk with a re-check date.",
+      "assertions": [
+        "Computes or clearly states that conversion rate fell (about 3.7% to about 2.2%) while clicks and CPC were roughly stable, so CPC/traffic are not the driver",
+        "Links the drop to the Oct 2 checkout relaunch and treats a broken conversion tag or checkout as the first suspect, routing to tracking/landing-page checks",
+        "Advises against switching to Target ROAS and cutting budget until the tracking/CVR issue is resolved, explaining the learning-period risk",
+        "Notes the 15% budget increase is within the range that should not reset learning and is unlikely to explain the drop",
+        "Priority changes carry learning-risk tags and do not invent metrics that were not provided"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "PRIMARY DRIVER"
+        },
+        {
+          "type": "regex",
+          "pattern": "conversion rate|CVR"
+        },
+        {
+          "type": "regex",
+          "pattern": "gtm-debugging|conversion tag|tracking"
+        },
+        {
+          "type": "regex",
+          "pattern": "checkout"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Learning risk:",
+          "count": 2
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY CHANGES"
+        }
       ]
     }
   ]

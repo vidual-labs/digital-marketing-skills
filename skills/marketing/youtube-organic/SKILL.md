@@ -1,13 +1,13 @@
 ---
 name: youtube-organic
 description: Use when developing YouTube organic strategy — channel audit, traffic-source diagnosis, title and thumbnail strategy, retention and hook structure, upload cadence, Shorts-to-long-form funnel and subscriber growth. Also use when someone asks "why aren't my videos getting views", wants a content plan for a channel, or needs help choosing video length and series formats. Don't use for YouTube Ads, live-event production, or monetization and sponsorship deals.
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when the channel cannot be fetched, the skill works from YouTube Studio screenshots (traffic sources, CTR, retention) the user provides.
 metadata:
   category: organic-social
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [youtube, organic, video, shorts, thumbnails, retention, search, subscriber-growth, content-strategy]
   related_skills: [instagram-organic, linkedin-organic, pinterest-organic, tiktok-ads, competitor-research, geo-ai-seo]
 ---
@@ -78,6 +78,38 @@ CTR is relative to who sees the impressions: a broad push lowers CTR without mea
 
 Retention curve reading: a cliff in the first 30 seconds = intro problem; a steady slide = pacing; spikes = re-watched moments to repeat; a dip then recovery = a segment to cut.
 
+Average percentage viewed falls as length grows, so compare videos of similar length, or compare absolute average view duration across lengths. Never compare Shorts and long-form CTR or retention with each other.
+
+### Step 3b: Find the primary constraint
+
+Read CTR and retention together for the last 10 long-form videos (each against the channel's own median, or the table above if there is no history):
+
+| CTR | Retention (30 s and avg % viewed) | Primary constraint | First fix |
+|-----|-----------------------------------|--------------------|-----------|
+| Low | High | **Packaging** — the video is good, the title/thumbnail undersells it | Retitle and Test & Compare thumbnails on existing videos |
+| High | Low | **Promise mismatch / retention** — packaging overpromises or the intro stalls | Match the first frame to the thumbnail; cut the intro; deliver the payoff earlier |
+| Low | Low | **Topic** — the idea itself does not pull this audience | Re-select topics from top performers, search demand and comments before polishing |
+| High | High, but impressions flat | **Discovery / volume** — too few uploads or too narrow a topic | Raise cadence within capacity; series and playlists; adjacent topics |
+| High | High, impressions rising | **None** — scale | Protect slot and series; more of the same format |
+
+Supporting ratios (starting points; prefer the channel's own medians):
+
+| Ratio | Formula | Read |
+|-------|---------|------|
+| Subscribers per 1,000 views | subs gained ÷ views × 1,000 | Compare videos and formats; Shorts usually convert at a fraction of long-form — measure, don't assume |
+| Returning viewer share | returning ÷ unique viewers | Low (< ~20%) with high views = one-off hits, no series pull |
+| Impressions trend | impressions per video, last 10 vs previous 10 | Falling with stable CTR = YouTube testing it on fewer people; fix retention first |
+
+Per-video classification against Studio's typical-performance range (or the median views of the last 10 uploads at the same age):
+
+| Result | Rule | Action |
+|--------|------|--------|
+| Outlier | > 2× median at 7 days | Make a sequel or a series from it within a month; link it from older videos |
+| On track | 0.5–2× median | Keep the format |
+| Under | < 0.5× median at 7 days | Change the packaging (title, thumbnail) once, re-check at 28 days; don't delete and reupload |
+
+Judge long-form at 7 and 28 days, Shorts at 7 days. Call a pattern only across 3+ comparable videos.
+
 ### Step 4: Title and thumbnail audit
 
 | Element | Good | Fix |
@@ -87,6 +119,8 @@ Retention curve reading: a cliff in the first 30 seconds = intro problem; a stea
 | Title + thumbnail | Complementary (title says what, thumbnail shows why or the stakes) | Never repeat the same words in both |
 | Consistency | Recognisable style per series | Template per series |
 | Testing | Use Test & Compare (up to 3 thumbnails) on new uploads | Test one variable at a time |
+
+Testing rules: variants must differ in one idea (face vs object, text vs no text, stakes vs result), not in small tweaks; let the test finish rather than overriding early; log the winner and the losing idea so the series template improves. Studio picks the winner on watch time, not only clicks, so a "lower CTR" winner can be correct.
 
 ## Strategy Formulation
 
@@ -170,23 +204,41 @@ Publish at a fixed slot; Studio's "when your viewers are on YouTube" beats gener
 
 ## Output Format
 
+Label every number with its source: `[Studio]`, `[public]`, `[user-provided]` or `[assumption]`. Write `n/a` instead of estimating CTR, retention or traffic shares you have not seen.
+
 ```
 YOUTUBE AUDIT: [Channel] (URL)
-Goal: [..] | Access: [fetched / Studio screenshots]
+Goal: [..] | Stage: [subscriber tier] | Access: [fetched / Studio screenshots]
 Subscribers: X | Videos: Y | Total views: Z | Avg views (last 20 long-form): W
 
 --- CURRENT STATE ---
 Format mix: Long-form X% / Shorts Y% / Live Z%
 Cadence: X long-form/week, Y Shorts/week
 Traffic sources: Browse X% / Suggested Y% / Search Z% / Shorts feed … / External …
-CTR: X% | Avg view duration: Y | Avg % viewed: Z% | Returning viewers: W%
+CTR: X% → [weak/typical/strong] | Avg view duration: Y | Avg % viewed: Z% | Retention at 30 s: V% | Returning viewers: W%
+Subs per 1,000 views: long-form X / Shorts Y
 Top performers: [3 videos — why]
+
+--- DIAGNOSIS ---
+Primary constraint: [packaging / retention / topic / discovery / Shorts bridge / none — scale]
+Evidence: [the CTR × retention read and 1–2 supporting numbers]
+Dominant traffic source → implication: [..]
+
+--- VIDEO SCORECARD (last 5–10 long-form) ---
+| Video | Length | Views vs median | CTR | Avg % viewed | Verdict (outlier / on track / under) |
+|-------|--------|-----------------|-----|--------------|--------------------------------------|
+| .. | .. | ..× | ..% | ..% | .. |
 
 --- STRENGTHS ---
 - [...]
 
 --- GAPS ---
 - [...]
+
+--- PRIORITY ACTIONS ---
+1. [Action] — [metric it moves] — [effort: low/med/high]
+2. [...]
+3. [...]
 
 --- CONTENT PILLARS & SERIES (3–5) ---
 1. [Pillar] — [Series name/hook] — [Length] — [Frequency]
@@ -197,8 +249,8 @@ Long-form: [..] | Shorts: [..] | Posts: [..] | Slot: [from Studio or stated fall
 
 --- TITLE & THUMBNAIL ---
 [Current pattern] → [Recommended pattern]
-Examples: [3 title rewrites with thumbnail concept]
-Testing: [Test & Compare plan]
+Examples: [3 title rewrites (≤ 60 characters) with thumbnail concept (≤ 3 words)]
+Testing: [Test & Compare plan — variable tested per video]
 
 --- RETENTION FIXES ---
 [Intro structure, pacing, chapters, open loops, ending]
@@ -210,14 +262,16 @@ Testing: [Test & Compare plan]
 0–30 days: [3 actions]
 30–90 days: [3 actions]
 90+ days: [3 actions]
-KPIs: [CTR, AVD/%, returning viewers, subs per video, browse share]
+KPIs: [metric — current → target, review date] (CTR, AVD/%, returning viewers, subs per 1,000 views, browse + suggested share)
 
 --- CHANNEL PAGE ---
 [Banner, trailer, About, playlists, end screens]
 
 --- ASSUMPTIONS & MISSING DATA ---
-[...]
+[What was assumed, which Studio screenshots to send next]
 ```
+
+For a narrow request (title rewrites, a Shorts question), give the deliverable first, then DIAGNOSIS, PRIORITY ACTIONS and ASSUMPTIONS & MISSING DATA; skip sections that do not apply.
 
 ## Common Pitfalls
 
@@ -237,6 +291,16 @@ KPIs: [CTR, AVD/%, returning viewers, subs per video, browse share]
 
 8. **One CTA too many.** Stacked asks dilute; point to the next video.
 
+9. **Comparing videos of different lengths on average percentage viewed.** A 25-minute video at 35% can hold viewers longer than an 8-minute one at 50%. Compare similar lengths or use absolute view duration.
+
+10. **Deleting and reuploading underperformers.** It throws away the video's history and comments. Change title and thumbnail once, then judge at 28 days.
+
+11. **Judging a video at 48 hours.** Search and suggested traffic build for weeks. Read at 7 and 28 days against the channel's own median.
+
+12. **Polishing packaging on a topic nobody wants.** When CTR and retention are both low, the topic is the problem. Re-select topics from top performers, search and comments first.
+
+13. **Mixing Shorts and long-form metrics.** Different feeds, different viewers, different benchmarks. Report them separately.
+
 ## Verification Checklist
 
 - [ ] Last 20–30 uploads reviewed (or the limitation stated); no CTR/retention figures invented
@@ -249,3 +313,8 @@ KPIs: [CTR, AVD/%, returning viewers, subs per video, browse share]
 - [ ] Shorts strategy includes an explicit bridge to long-form
 - [ ] Channel page checklist applied
 - [ ] Growth plan split 0–30 / 30–90 / 90+ days with KPIs
+- [ ] Every number labelled with its source; `n/a` used instead of estimates
+- [ ] One primary constraint named from the CTR × retention read, with evidence
+- [ ] Video scorecard compares each video with the channel's own median, at a stated age
+- [ ] Shorts and long-form reported separately (CTR, retention, subs per 1,000 views)
+- [ ] Priority actions ranked; benchmarks phrased as starting points

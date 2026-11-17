@@ -1,19 +1,56 @@
 
-```
-    ____  __  ___   _____ __ __ ______    __   _____
-   / __ \/  |/  /  / ___// //_//  / /   / /  / ___/
-  / / / / /|_/ /   \__ \/ ,<   / // /   / /   \__ \
- / /_/ / /  / /   ___/ / /| |_/ // /___/ /______/ /
-/_____/_/  /_/   /____/_/ |_/___/_____/_____/____/
-```
-# Digital-Marketing-Skills
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" alt="Digital Marketing Skills" width="600">
+  </picture>
+</p>
 
+<p align="center">
+  <b>Agent Skills for performance marketers: paid ads, organic social, AI search, tracking, brand and competitive intel.</b><br>
+  Drop them into any agent and get structured, data-grounded answers instead of generic marketing advice.
+</p>
 
-A collection of Agent Skills for digital marketing — paid ads, organic social, campaign diagnostics, tracking, competitive intelligence, brand positioning, and brand identity.
+<p align="center">
+  <a href="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml"><img src="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml/badge.svg" alt="Validate skills"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.2.0-7c3aed" alt="Version 1.2.0"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-15-6d28d9" alt="15 skills"></a>
+  <a href="#testing"><img src="https://img.shields.io/badge/evals-60-16a34a" alt="60 evals"></a>
+  <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/format-Agent%20Skills-0f172a" alt="Agent Skills format"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+</p>
 
-Each skill is a self-contained `SKILL.md`: a `description:` trigger, an **Inputs** section that says what data to ask for (and forbids inventing metrics), a decision framework with current platform facts, a fixed output format, common pitfalls, and a verification checklist. Every skill ships with `evals/evals.json` — realistic test prompts with assertions and machine checks — and the repo validates structure in CI.
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude%20Code-✓-7c3aed?style=flat-square" alt="Claude Code">
+  <img src="https://img.shields.io/badge/Cursor-✓-0f172a?style=flat-square" alt="Cursor">
+  <img src="https://img.shields.io/badge/Codex-✓-0f172a?style=flat-square" alt="Codex">
+  <img src="https://img.shields.io/badge/ChatGPT-✓-0f172a?style=flat-square" alt="ChatGPT">
+  <img src="https://img.shields.io/badge/any%20SKILL.md%20runtime-✓-0f172a?style=flat-square" alt="Any SKILL.md runtime">
+</p>
 
-The skills are agent-agnostic (Claude Code, Claude.ai, Cursor, Codex, Hermes, custom GPTs, pasted into any chat) and versioned: platform facts carry an `updated` date, and every change bumps the version (see [CHANGELOG.md](CHANGELOG.md)). **Current version: 1.1.0** (platform facts verified October 2026).
+<p align="center">
+  <a href="#skills">Skills</a> ·
+  <a href="#install--use">Install</a> ·
+  <a href="#testing">Testing</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="assets/demo-workflow.svg" alt="Animated example: a question about a doubled Meta CPA triggers the meta-ads-diagnostics skill, which returns data confidence, a diagnosis, three actions and a verification line" width="860">
+</p>
+
+## Why these skills
+
+Each skill is a self-contained `SKILL.md`: a `description:` trigger, an **Inputs** section that says what data to ask for (and forbids inventing metrics), a decision framework with current platform facts, a fixed output format, common pitfalls, and a verification checklist. Every skill ships with `evals/evals.json`: realistic test prompts with assertions and machine checks. CI validates the structure of every skill.
+
+The skills are agent-agnostic (Claude Code, Claude.ai, Cursor, Codex, Hermes, custom GPTs, or pasted into any chat) and versioned: platform facts carry an `updated` date, and every change bumps the version (see [CHANGELOG.md](CHANGELOG.md)). **Current version: 1.2.0** (platform facts reviewed November 2026).
+
+<p align="center">
+  <img src="assets/skill-map.svg" alt="Animated map of the 15 skills across five funnel stages: research, position, acquire, grow and convert" width="900">
+</p>
 
 ## Skills
 
@@ -167,6 +204,7 @@ The validator checks frontmatter, section order, cross-references, README links 
 
 ```
 .github/workflows/validate.yml   # CI: structural validation on every push/PR
+assets/                          # README logo + animated SVG visuals
 scripts/
 ├── validate_skills.py           # frontmatter, sections, evals, README checks
 └── run_evals.py                 # run eval prompts through any LLM and grade

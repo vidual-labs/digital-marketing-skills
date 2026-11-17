@@ -1,13 +1,13 @@
 ---
 name: branding
 description: Use when defining, refreshing or documenting a brand identity system — visual identity (logo, colour, typography, imagery, layout), brand voice and tone matrix, vocabulary, copy standards by channel, naming conventions, touchpoint consistency and brand guidelines for humans and AI content tools. Also use when someone asks for "brand guidelines", "tone of voice", "a style guide for our content", "our brand feels inconsistent" or needs a brand brief for designers or AI writing. Don't use for one-off ad copy (meta-ads-creative, tiktok-ads), competitive positioning (market-positioning) or competitor analysis (competitor-research).
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. No tools required; a contrast checker or browsing helps for colour accessibility checks but is optional.
 metadata:
   category: brand
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [branding, brand-identity, visual-identity, brand-voice, tone-of-voice, brand-guidelines, copywriting, naming, design-system, accessibility]
   related_skills: [market-positioning, competitor-research, landing-page-funnel, instagram-organic, linkedin-organic, youtube-organic, meta-ads-creative]
 ---
@@ -40,6 +40,7 @@ Ask for (or extract from the conversation):
 - **Competitor look and feel** to differentiate from
 - **Constraints**: accessibility requirements, legal (trademarks, regulated claims), languages and scripts, budget for fonts and photography
 - **Personality cues**: 3–5 adjectives the team uses, and 3 they reject
+- **Equity evidence** (for existing brands): which assets customers recognise — recall surveys, "describe our logo" answers, social comments, store staff anecdotes. If none exists, say so; recognition is then *unknown*, not *zero*
 
 Data rules: do not invent hex codes for an existing brand — ask for them or mark values as proposals. Check trademarks and domains only if you can; otherwise flag them as to-do items. Where this skill cites standards (WCAG levels, platform safe zones) the versions are current as of `metadata.updated`; confirm against the platform if it matters legally.
 
@@ -53,6 +54,24 @@ Data rules: do not invent hex codes for an existing brand — ask for them or ma
 | Experiential | Touchpoint standards, templates, content and AI usage rules | Touchpoint playbook |
 
 Build in that order. Visual decisions made before the strategic and verbal ones get redone.
+
+## 0. Scope Decision: New, Evolve, Refresh or Rebrand
+
+Decide the scope before designing anything; most "rebrand" requests are really an inconsistency problem or a refresh. State the scope and the reason in the output.
+
+| Signal | Scope | What changes | What stays |
+|--------|-------|--------------|------------|
+| No assets, or assets never used consistently and no recognition evidence | **New** | Everything, built in pillar order | Nothing to protect |
+| Strategy still right, guide still right, touchpoints drift from it | **Enforce** | Templates, tokens, training, distribution | The guide |
+| Strategy right; identity dated, inaccessible or not working in new channels (dark mode, small avatars, motion) | **Evolve / refresh** | Redraw logo, adjust palette for contrast, update type, add missing systems | Recognised assets (colour, shape, mark), name |
+| Positioning, audience or offer has changed materially (new segment, merger, reputation damage) | **Rebrand** | Strategy, then verbal, then visual | Only assets that still fit the new strategy |
+
+Decision rules (starting points — prefer the user's own research):
+
+- **Recognised assets are kept by default.** If an asset is recognised unprompted by roughly half or more of surveyed customers, or is how people describe the brand ("the red one"), evolve it rather than replace it. Replacing a recognised asset needs a strategic reason, not a taste reason.
+- **If the touchpoint audit (section 6) passes most checks against the current guide, the problem is enforcement, not identity.** Fix templates before redesigning.
+- **If most touchpoints fail *the same way* (e.g. every team abandoned the guide's colour on social), suspect the guide**: it may not work in that channel. Update the guide for that channel rather than forcing compliance.
+- **If the user asks for a rebrand but gives no change in positioning, audience or offer**, recommend evolve/refresh and say what evidence would justify a full rebrand.
 
 ## 1. Strategic Foundation
 
@@ -84,7 +103,21 @@ Build in that order. Visual decisions made before the strategic and verbal ones 
 | Neutrals | 4–6 | Text, backgrounds, borders, surfaces (define light and dark mode sets) |
 | Semantic | 4 | Success, warning, error, info — must not clash with brand colours |
 
-Rules: exact hex (and optionally OKLCH/HSL for design systems); every text/background pairing meets **WCAG 2.2 AA** (4.5:1 body, 3:1 large text and UI components); check the palette in greyscale for hierarchy; define which pairings are allowed; never rely on colour alone to convey meaning.
+Rules: exact hex (and optionally OKLCH/HSL for design systems); every text/background pairing meets **WCAG 2.2 AA**; check the palette in greyscale for hierarchy; define which pairings are allowed; never rely on colour alone to convey meaning.
+
+| Use of the pairing | WCAG 2.2 AA minimum | Stricter target when |
+|--------------------|---------------------|----------------------|
+| Body text (normal size) | 4.5:1 | 7:1 (AAA) for low-light, glare, outdoor, older audiences or long reading |
+| Large text (≥ 18 pt / 24 px regular, or ≥ 14 pt / ~18.7 px bold) | 3:1 | 4.5:1 (AAA) in the same conditions |
+| UI components and meaningful graphics (borders, icons, focus rings, chart lines) | 3:1 against adjacent colours | — |
+| Logo and pure decoration | No requirement | Still check the logo on its allowed backgrounds |
+
+Contrast diagnostics:
+
+- **If the brand's primary colour fails 4.5:1 on white and on the darkest neutral**, do not use it for body text or text buttons; use it for large display type, fills behind dark/white text that passes, or illustration, and add a darker "text-safe" shade of the same hue.
+- **If a pairing passes only as large text**, label it "large text / UI only" in the pairing matrix so no one uses it for body copy.
+- **If you cannot compute ratios** (no contrast tool), give the pairings and mark them "to verify" rather than asserting pass/fail.
+- Report every allowed pairing as a row: `foreground hex on background hex — ratio — use (body / large / UI) — PASS/FAIL`.
 
 ### 2.3 Typography
 
@@ -193,7 +226,7 @@ Average 12–20 words; vary rhythm; active voice; one idea per paragraph; headli
 
 ### CTA rules
 
-One primary CTA per screen; verb first ("Get", "Start", "Book"); specific ("Get the pricing sheet" beats "Download"); primary CTA uses the accent/action colour, secondary is outline or text; minimum 44×44 px tap target.
+One primary CTA per screen; verb first ("Get", "Start", "Book"); specific ("Get the pricing sheet" beats "Download"); primary CTA uses the accent/action colour, secondary is outline or text; tap targets 44×44 px as the brand standard (WCAG 2.2 AA minimum is 24×24 CSS px; 44×44 meets AAA and common platform guidance).
 
 ## 5. Naming Conventions
 
@@ -204,6 +237,10 @@ One primary CTA per screen; verb first ("Get", "Start", "Book"); specific ("Get 
 | Campaigns | Internal `YYYY-channel-campaign`; external emotional or benefit-led |
 | Files | `brand_channel_asset_version_YYYY-MM-DD.ext` |
 | Design tokens | `color.brand.primary`, `space.4`, `font.heading` |
+
+### Voice conformance check
+
+To audit existing copy (or AI output) against the voice, score a sample of 5–10 pieces per channel 1–3 on each voice attribute: 3 = clearly expresses it, 2 = neutral, 1 = breaks the "is not" boundary. A channel averaging below 2 on any attribute is off-voice; fix it with the tone-matrix row for that context and two rewritten examples. Any banned-word hit is an automatic 1 for that piece.
 
 ## 6. Touchpoint Consistency and AI Usage
 
@@ -220,11 +257,24 @@ One primary CTA per screen; verb first ("Get", "Start", "Book"); specific ("Get 
 
 The **brand prompt pack** (voice attributes, tone matrix, vocabulary, three good and three bad examples, visual style prompts) is now a standard deliverable: it is how the brand survives AI-assisted production.
 
+### Scoring the audit and ordering fixes
+
+Mark each touchpoint **PASS** (matches the standard), **PARTIAL** (one element off, e.g. right colour wrong font) or **FAIL**. Consistency score = (PASS + 0.5 × PARTIAL) ÷ touchpoints audited.
+
+| Consistency score | Reading (starting point) | Action |
+|-------------------|--------------------------|--------|
+| ≥ 80% | Consistent | Maintain; fix the stragglers |
+| 50–79% | Drifting | Ship templates and tokens for the failing channels; brief owners |
+| < 50% | Broken | Check whether the guide itself is the problem (section 0) before enforcing it |
+
+Fix order: (1) **multipliers** — templates and tokens that generate many outputs (email signature, social templates, deck master, design tokens, prompt pack); (2) **highest-reach single touchpoints** (homepage, app store listing, top-spend ads); (3) the rest. Every fix gets an owner and a date.
+
 ## Output Format
 
 ```
 BRAND IDENTITY GUIDE: [Brand]
 Date: [Date] | Status: [proposal / approved] | Positioning: [one line]
+Scope: [NEW / ENFORCE / EVOLVE / REBRAND] — [reason; recognised assets kept]
 
 --- STRATEGIC FOUNDATION ---
 Promise: [..] | Personality: [adj (is / is not) ×3–4] | Values: [value → behaviour]
@@ -232,7 +282,8 @@ Promise: [..] | Personality: [adj (is / is not) ×3–4] | Values: [value → be
 --- VISUAL IDENTITY ---
 Logo: [type, variants, clear space, files]
 Colour: Primary [hex] | Secondary [hex…] | Accent [hex] | Neutrals [hex…] | Semantic [hex…]
-  Accessibility: [pairings checked, WCAG 2.2 AA pass/fail]
+  Contrast matrix (one row per allowed pairing):
+  [fg hex] on [bg hex] — [ratio or "to verify"] — [body / large / UI] — [PASS / FAIL]
 Typography: [family, weights, scale with ratio, fallbacks, licence]
 Imagery: [photo, illustration, people, screenshots, AI policy, alt text]
 Layout & motion: [grid, spacing, radius, elevation, max width, motion, dark mode]
@@ -251,7 +302,9 @@ CTA rules: [..]
 [Products, features, campaigns, files, tokens]
 
 --- TOUCHPOINT AUDIT ---
-[Touchpoint → pass/fail → fix] ×5+
+| Touchpoint | Standard | Status (PASS/PARTIAL/FAIL) | Fix | Priority | Owner/date |
+[×5+ rows]
+Consistency score: [x%] → [Consistent / Drifting / Broken]
 
 --- AI USAGE ---
 Brand prompt pack: [voice, vocabulary, examples, visual prompts, review and disclosure rules]
@@ -279,15 +332,24 @@ Brand prompt pack: [voice, vocabulary, examples, visual prompts, review and disc
 
 6. **Fonts nobody can use.** Confirm licences for web, app and desktop before specifying; open-source fonts avoid surprises.
 
-7. **A 60-page guide nobody opens.** Lead with examples; keep the rules scannable; publish tokens and templates, not just PDFs.
+7. **Throwing away recognised assets.** A new CEO's taste is not a reason to drop a colour or mark customers recognise. Run the scope decision (section 0); evolve recognised assets unless the strategy changed.
 
-8. **No rules for AI tools.** Without a prompt pack and a review step, AI output drifts off-brand fastest of all.
+8. **Enforcing a guide that does not work.** If every team breaks the same rule, the rule is probably wrong for that channel. Update the guide, then enforce it.
+
+9. **Asserting contrast you did not measure.** "Passes AA" without a ratio is a guess. Give ratios, or mark the pairing "to verify".
+
+10. **Confusing tap-target levels.** WCAG 2.2 AA requires targets of at least 24×24 CSS px (or enough spacing); 44×44 is the AAA level and common platform guidance. Specify 44×44 as the brand standard and cite the right level.
+
+11. **A 60-page guide nobody opens.** Lead with examples; keep the rules scannable; publish tokens and templates, not just PDFs.
+
+12. **No rules for AI tools.** Without a prompt pack and a review step, AI output drifts off-brand fastest of all.
 
 ## Verification Checklist
 
+- [ ] Scope stated (new / enforce / evolve / rebrand) with the reason, and recognised assets kept or their replacement justified
 - [ ] Strategic foundation stated (promise, personality with is/is-not, values, positioning line)
 - [ ] Colour palette with exact hex for primary, secondary, accent, neutrals and semantic colours
-- [ ] Text/background pairings checked against WCAG 2.2 AA with pass/fail noted
+- [ ] Contrast matrix lists every allowed pairing with ratio (or "to verify"), use and PASS/FAIL; stricter target applied where conditions demand it
 - [ ] Typography specified with weights, scale, fallbacks and licence status
 - [ ] Imagery rules cover photography, illustration, people, screenshots, AI-generated media and alt text
 - [ ] Layout, spacing, radius, motion and dark-mode rules defined
@@ -296,6 +358,6 @@ Brand prompt pack: [voice, vocabulary, examples, visual prompts, review and disc
 - [ ] Vocabulary list has 10+ use/avoid pairs plus writing conventions
 - [ ] Copy standards and CTA rules given for the channels the brand uses
 - [ ] Naming conventions for products, features, campaigns, files and tokens
-- [ ] Touchpoint audit of 5+ touchpoints with pass/fail and fixes
+- [ ] Touchpoint audit of 5+ touchpoints with PASS/PARTIAL/FAIL, consistency score, and fixes ordered multipliers first with owners
 - [ ] Brand prompt pack for AI tools included
 - [ ] Existing brand values not invented; proposals labelled as proposals; open items listed

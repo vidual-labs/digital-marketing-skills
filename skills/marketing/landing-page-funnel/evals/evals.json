@@ -1,6 +1,6 @@
 {
   "skill_name": "landing-page-funnel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,38 @@
         "Form reduction is specific (which fields now, which later) and a multi-step approach is proposed",
         "CTA 'Submit' is replaced with an outcome label and a risk reducer is added",
         "Testimonial is flagged as too vague with the specific formula recommended; no testimonials are invented",
-        "Test plan includes sample size reasoning relative to ~20 conversions/week and says the page was not fetched"
+        "Test plan includes sample size reasoning relative to ~20 conversions/week and says the page was not fetched",
+        "Message match is scored per element and the overall score is the lowest element (1 or 2 here, since the H1 and offer are missing)"
       ],
       "checks": [
-        {"type": "contains", "value": "MESSAGE MATCH SCORE"},
-        {"type": "regex", "pattern": "48 hours"},
-        {"type": "regex", "pattern": "149"},
-        {"type": "contains", "value": "TEST PLAN"},
-        {"type": "regex", "pattern": "Submit"}
+        {
+          "type": "contains",
+          "value": "MESSAGE MATCH SCORE"
+        },
+        {
+          "type": "regex",
+          "pattern": "48 hours"
+        },
+        {
+          "type": "regex",
+          "pattern": "149"
+        },
+        {
+          "type": "contains",
+          "value": "TEST PLAN"
+        },
+        {
+          "type": "regex",
+          "pattern": "Submit"
+        },
+        {
+          "type": "regex",
+          "pattern": "not fetched|could ?n[o']t (be )?fetch|without the URL"
+        },
+        {
+          "type": "contains",
+          "value": "LEAK DIAGNOSIS"
+        }
       ]
     },
     {
@@ -36,9 +60,18 @@
         "Gives duration/sample-size reasoning rather than a fixed '2 weeks'"
       ],
       "checks": [
-        {"type": "regex", "pattern": "sample size|underpowered|statistical"},
-        {"type": "regex", "pattern": "colou?r"},
-        {"type": "contains", "value": "QUICK WINS"}
+        {
+          "type": "regex",
+          "pattern": "sample size|underpowered|statistical"
+        },
+        {
+          "type": "regex",
+          "pattern": "colou?r"
+        },
+        {
+          "type": "contains",
+          "value": "QUICK WINS"
+        }
       ]
     },
     {
@@ -54,10 +87,62 @@
         "Form is email + password only with a privacy line and a lower-commitment fallback"
       ],
       "checks": [
-        {"type": "regex", "pattern": "6 hours"},
-        {"type": "regex", "pattern": "2,?300"},
-        {"type": "regex", "pattern": "FAQ"},
-        {"type": "regex", "pattern": "no (credit )?card"}
+        {
+          "type": "regex",
+          "pattern": "6 hours"
+        },
+        {
+          "type": "regex",
+          "pattern": "2,?300"
+        },
+        {
+          "type": "regex",
+          "pattern": "FAQ"
+        },
+        {
+          "type": "regex",
+          "pattern": "no (credit )?card"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "test-feasibility-math",
+      "prompt": "Our demo-request page gets about 12,000 visitors a week and converts at 2.5%. We want to A/B test a new headline and expect maybe a 10% relative lift. Marketing also wants to test a 3-variant version of the hero image at the same time. Our CRO tool says we should be done in 2 weeks. Is that realistic? Give me the plan.",
+      "files": [],
+      "expected_output": "Works the sample-size math: about 62,000 visitors per variant for a 10% relative lift at 2.5% baseline (95% confidence, 80% power), so roughly 10+ weeks for a two-variant test at 12,000 visitors/week — 2 weeks is not realistic. Recommends a bolder headline change (e.g. 20% MDE → about 15,600 per variant, ~3 full weeks), not running the 3-variant hero test simultaneously on the same traffic (or accounting for the extra variants), fixed duration with no peeking, a down-funnel guardrail (demo show rate or SQLs), and verifying tracking first.",
+      "assertions": [
+        "Calculates or closely approximates visitors per variant (about 60,000+ for a 10% relative lift at 2.5%) and converts it into weeks at 12,000 visitors/week (about 10 or more)",
+        "Concludes that 2 weeks is not realistic for a 10% MDE and explains why stopping early or peeking would inflate false positives",
+        "Proposes a feasible alternative (bolder change with a larger MDE, sequential tests, or a higher-traffic metric) with its own sample and duration",
+        "Addresses the extra hero variants: more variants need more traffic, and overlapping tests on the same page confound results",
+        "Includes a down-funnel guardrail such as demo show rate, SQLs or pipeline"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "TEST PLAN"
+        },
+        {
+          "type": "regex",
+          "pattern": "6[0-3],?\\d{3}|62k|6[0-3]k"
+        },
+        {
+          "type": "regex",
+          "pattern": "per variant"
+        },
+        {
+          "type": "regex",
+          "pattern": "Weeks at current traffic:|\\b1[0-1](\\.\\d)?\\s*weeks"
+        },
+        {
+          "type": "regex",
+          "pattern": "peek|stop(ping)? early"
+        },
+        {
+          "type": "regex",
+          "pattern": "guardrail"
+        }
       ]
     }
   ]

@@ -1,6 +1,6 @@
 {
   "skill_name": "geo-ai-seo",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -16,10 +16,22 @@
         "Includes a technical access check (robots.txt for search bots, indexing) and a measurement plan"
       ],
       "checks": [
-        {"type": "regex", "pattern": "8[,.]?000|8k"},
-        {"type": "regex", "pattern": "^##? ?.*\\?"},
-        {"type": "regex", "pattern": "robots\\.txt"},
-        {"type": "contains", "value": "MEASUREMENT"}
+        {
+          "type": "regex",
+          "pattern": "8[,.]?000|8k"
+        },
+        {
+          "type": "regex",
+          "pattern": "^##? ?.*\\?"
+        },
+        {
+          "type": "regex",
+          "pattern": "robots\\.txt"
+        },
+        {
+          "type": "contains",
+          "value": "MEASUREMENT"
+        }
       ]
     },
     {
@@ -32,13 +44,30 @@
         "Explains the difference between blocking GPTBot (training) and allowing OAI-SearchBot/PerplexityBot (search) and gives robots.txt guidance",
         "Recommends entity and third-party presence work (review sites, directories, Reddit/communities, Wikipedia/Wikidata where appropriate)",
         "Proposes specific content (comparison page, 'best for architects' answer-first page) using PlanWright's real facts (400 firms, 2019)",
-        "Includes a monthly citation-check and AI referral measurement plan"
+        "Includes a monthly citation-check and AI referral measurement plan",
+        "Gives a DIAGNOSIS that first confirms search agents (OAI-SearchBot, PerplexityBot) are not blocked by the GPTBot rule or a WAF, then names entity and third-party presence as the likely failing layers rather than jumping straight to content rewrites"
       ],
       "checks": [
-        {"type": "regex", "pattern": "OAI-SearchBot"},
-        {"type": "regex", "pattern": "GPTBot"},
-        {"type": "regex", "pattern": "400"},
-        {"type": "regex", "pattern": "citation"}
+        {
+          "type": "regex",
+          "pattern": "OAI-SearchBot"
+        },
+        {
+          "type": "regex",
+          "pattern": "GPTBot"
+        },
+        {
+          "type": "regex",
+          "pattern": "400"
+        },
+        {
+          "type": "regex",
+          "pattern": "citation"
+        },
+        {
+          "type": "contains",
+          "value": "DIAGNOSIS"
+        }
       ]
     },
     {
@@ -54,10 +83,63 @@
         "No invented statistics or claims beyond the given facts"
       ],
       "checks": [
-        {"type": "regex", "pattern": "£\\s?65"},
-        {"type": "regex", "pattern": "12,?000"},
-        {"type": "regex", "pattern": "FAQPage|schema"},
-        {"type": "min_count", "pattern": "^#{2,3} .*\\?", "count": 4}
+        {
+          "type": "regex",
+          "pattern": "£\\s?65"
+        },
+        {
+          "type": "regex",
+          "pattern": "12,?000"
+        },
+        {
+          "type": "regex",
+          "pattern": "FAQPage|schema"
+        },
+        {
+          "type": "min_count",
+          "pattern": "^#{2,3} .*\\?",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "technical-layer-before-content",
+      "prompt": "We rebuilt our insurance comparison site as a React single-page app in August. Since then we've vanished from Perplexity and ChatGPT answers, and our AI Overview impressions in Search Console dropped too. Our robots.txt is 'User-agent: * / Disallow: /api/' plus 'User-agent: ClaudeBot / Disallow: /' and 'User-agent: PerplexityBot / Disallow: /'. Cloudflare Bot Fight Mode is on. The content team wants to rewrite all 60 guides answer-first. Where should we start?",
+      "files": [],
+      "expected_output": "Diagnoses the access/rendering layer first: PerplexityBot is explicitly blocked, Cloudflare Bot Fight Mode may challenge AI search agents, and client-side rendering may hide content from crawlers that do not execute JavaScript; checks indexing in Search Console and Bing. Explains ClaudeBot is Anthropic's training crawler (blocking it is a separate choice from Claude-SearchBot), gives corrected robots.txt lines, and defers the 60-guide rewrite until access is fixed, then pilots it. Measurement with a multi-run citation log and baseline.",
+      "assertions": [
+        "Identifies Access (layer 1) as the failing layer and tells the team to fix it before rewriting content",
+        "Flags the explicit PerplexityBot block and the Cloudflare bot setting as likely causes for Perplexity/ChatGPT disappearance",
+        "Explains that client-side rendering can hide content and recommends server-side rendering or prerendering for key pages, plus checking indexing",
+        "Correctly separates ClaudeBot (training) from Claude-SearchBot (search) and gives concrete robots.txt lines",
+        "Suggests piloting the answer-first rewrite on a subset after access is fixed, with a citation baseline to measure the effect"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "DIAGNOSIS"
+        },
+        {
+          "type": "regex",
+          "pattern": "Failing layer:.*Access"
+        },
+        {
+          "type": "regex",
+          "pattern": "PerplexityBot"
+        },
+        {
+          "type": "regex",
+          "pattern": "Claude-SearchBot"
+        },
+        {
+          "type": "regex",
+          "pattern": "server-side render|server-rendered|SSR|prerender"
+        },
+        {
+          "type": "regex",
+          "pattern": "Bot Fight|WAF"
+        }
       ]
     }
   ]

@@ -1,13 +1,13 @@
 ---
 name: linkedin-organic
 description: Use when developing LinkedIn organic strategy for a personal profile or company page — profile/page audit, content pillars, post formats (text, document carousels, native video, newsletters), posting cadence, comment strategy and B2B thought-leadership growth. Also use when someone asks "how do I grow on LinkedIn", wants a LinkedIn content calendar, or asks whether to post from the personal profile or the company page. Don't use for LinkedIn Ads, recruiting/job posts, or cold outreach sequences.
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Browsing is optional; LinkedIn blocks most unauthenticated fetches, so expect to work from screenshots and analytics exports the user provides.
 metadata:
   category: organic-social
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [linkedin, organic, b2b, content-strategy, thought-leadership, personal-branding, company-page, growth]
   related_skills: [instagram-organic, youtube-organic, pinterest-organic, competitor-research, branding, market-positioning]
 ---
@@ -67,7 +67,29 @@ Engagement rate by impressions (preferred): `(reactions + comments + reposts) ÷
 | 20K–100K | > 1.5% | 0.5–1.5% | < 0.5% |
 | > 100K | > 0.8% | 0.3–0.8% | < 0.3% |
 
-Company pages typically run at a fraction of personal-profile rates; compare pages with pages.
+Company pages typically run at a fraction of personal-profile rates; compare pages with pages. Never benchmark an impressions-based rate against the follower-based table.
+
+### Step 2b: Quality and fit ratios
+
+Reach on LinkedIn is only useful when it reaches the buyer. Compute these alongside engagement rate:
+
+| Ratio | Formula | Starting-point read (replace with the account's own median after 20+ posts) |
+|-------|---------|------------------------------------------------------------------------------|
+| Comment ratio | comments ÷ reactions | > 0.2 = conversation; < 0.05 = applause only, weak for dwell and distribution |
+| Audience fit | % of followers (or post viewers) in target titles/industries/seniority | > 40% good; < 20% means growth is coming from the wrong people |
+| Profile views per post | profile views ÷ posts (same period) | Rising = the content creates curiosity about the author |
+| Lead signal | DMs, demo requests or "found you on LinkedIn" mentions per month | The outcome metric; track it manually if needed |
+| Repost ratio | reposts ÷ reactions | High on frameworks and data; low on stories (normal) |
+
+Per-post classification against the account's own **median impressions** (last 20–30 posts):
+
+| Result | Rule | Action |
+|--------|------|--------|
+| Outlier winner | > 2× median impressions, or top 10% on comment ratio | Write a follow-up or the deeper version within 2 weeks; add to Featured if it converts |
+| Solid | 0.7–2× median | Keep the pillar and format |
+| Miss | < 0.5× median | Check first line, link in body, topic fit — then try the idea once more in another format |
+
+Fewer than 5 posts in a format: label the read provisional.
 
 ### Step 3: Format audit (last 20–30 posts)
 
@@ -89,6 +111,18 @@ Company pages typically run at a fraction of personal-profile rates; compare pag
 3. Which posts led to profile views, follows and DMs?
 4. Is there a recognisable voice and recurring format, or random topics?
 5. Do reach drops line up with link posts, long gaps or engagement-bait phrasing?
+
+### Step 5: Diagnostic rules
+
+| If… | Then likely… | Fix |
+|-----|--------------|-----|
+| Link posts < 0.5× the median of text posts | Off-platform links are suppressing reach | Native text/document post; link in the first comment or edited in afterwards |
+| High impressions, low comment ratio (< 0.05) | Content is agreeable but gives nothing to respond to | Take a position, add a specific story or number, close with a question about the reader's experience |
+| High engagement, audience fit < 20% | Peers and other creators engage, buyers don't | Rewrite pillars around buyer problems; shift comment flywheel targets to accounts buyers follow |
+| Good fit, impressions fine, no leads | No conversion path | Headline promise, Featured lead magnet or booking link, a soft CTA every 3–4 posts |
+| Steady decline after a posting gap | Lost consistency | Resume a sustainable cadence for 4+ weeks before judging |
+| Video underperforms text | Horizontal, no captions, slow start, or audience prefers reading | Vertical, captions, payoff in the first 3 seconds; keep it only if 4–6 tries still trail text |
+| Company page < 1% of the founders' impressions per post | Normal structural limit | Move origination to people; the page reposts with commentary |
 
 ## Strategy Formulation
 
@@ -114,6 +148,17 @@ Mix for most B2B accounts: ~40% text, 20% document carousels, 20% native video, 
 
 Business hours of the target audience's time zone, Tuesday to Thursday mornings as a fallback; use Analytics to confirm. Reply to comments in the first 60–90 minutes — early conversation extends distribution.
 
+Capacity → plan (starting points, scale to the time actually available):
+
+| Time per week | Plan |
+|---------------|------|
+| ~1 hour | 1 post + 10 min commenting on 3 days; reuse one idea across text and a comment |
+| ~2 hours | 2 posts + 15–20 min commenting on 3–4 days |
+| 4–5 hours | 3–4 posts (one document or video) + daily commenting |
+| 8+ hours or support | Daily posts, a newsletter every 2–4 weeks, a video series |
+
+Commenting comes before posting volume for accounts under ~10K followers: when time is short, cut a post, not the comments.
+
 ### Writing a post that travels
 
 - First line = the whole idea or the tension; write it last
@@ -122,6 +167,16 @@ Business hours of the target audience's time zone, Tuesday to Thursday mornings 
 - End with a question that invites experience, not "agree?"
 - No external link in the body; no "like and share"; no tagging people who did not contribute
 - Hashtags: 0–3, topical; they are labels, not reach
+
+Pre-publish score (draft passes at 4 of 5):
+
+| Check | Pass when |
+|-------|-----------|
+| First line | States the idea or tension and works alone above the fold |
+| Specificity | At least one number, name, example or result the author actually owns |
+| Audience | A buyer in the target title would care, not only peers |
+| Ending | A question that invites experience, or a clear next step |
+| Hygiene | No link in body, no engagement bait, 0–3 hashtags, tags only for contributors |
 
 ### Growth tactics
 
@@ -182,16 +237,29 @@ Business hours of the target audience's time zone, Tuesday to Thursday mornings 
 
 ## Output Format
 
+Label every number with its source: `[analytics]`, `[public]`, `[user-provided]` or `[assumption]`. Write `n/a` instead of estimating.
+
 ```
 LINKEDIN AUDIT: [Name / Page] (URL)
-Type: [Personal / Company / Both] | Goal: [..] | Access: [screenshots / analytics export]
-Followers: X | Connections: Y | Posts (90 days): Z | Engagement rate: W% (by [impressions/followers])
+Type: [Personal / Company / Both] | Goal: [..] | Target audience: [titles, industries] | Access: [screenshots / analytics export]
+Followers: X | Connections: Y | Posts (90 days): Z | Engagement rate: W% (by [impressions/followers]) → [strong/average/weak] vs tier
 
 --- CURRENT STATE ---
 Format mix: Text X% / Document Y% / Video Z% / Image … / Poll … / Link …
 Cadence: X posts/week | Commenting: [yes/no, how much]
-Audience fit: [top titles vs target]
+Audience fit: [% in target titles, or n/a] | Comment ratio: [comments ÷ reactions]
 Top performers: [3 posts — format, topic, why]
+
+--- FORMAT SCORECARD ---
+| Format | Posts | Median impressions | Comment ratio | Verdict (scale / keep / fix / cut / untested) |
+|--------|-------|--------------------|---------------|-----------------------------------------------|
+| Text | .. | .. | .. | .. |
+| Link | .. | .. | .. | .. |
+| [other formats used] | .. | .. | .. | .. |
+
+--- DIAGNOSIS ---
+Primary constraint: [reach / audience fit / conversation / conversion path / cadence / page-only posting]
+Evidence: [the 1–3 numbers that show it]
 
 --- STRENGTHS ---
 - [...]
@@ -199,19 +267,24 @@ Top performers: [3 posts — format, topic, why]
 --- GAPS ---
 - [...]
 
+--- PRIORITY ACTIONS ---
+1. [Action] — [metric it moves] — [effort: low/med/high]
+2. [...]
+3. [...]
+
 --- CONTENT PILLARS (4–5) ---
 1. [Pillar] — [What it proves] — [Format] — [Frequency]
 2. [...]
 
 --- CADENCE ---
-Posts/week: [..] | Days: [..] | Reply window: first 60–90 min
+Posts/week: [..] | Days: [..] | Commenting: [min/day, days/week] | Reply window: first 60–90 min
 Weekly plan: [Tue: text framework (expertise) …]
 
 --- GROWTH PLAN ---
 0–30 days: [3 actions]
 30–90 days: [3 actions]
 90+ days: [3 actions]
-KPIs: [impressions, engagement by impressions, followers from target titles, profile views, DMs/leads]
+KPIs: [metric — current → target, review date] (engagement by impressions, audience fit, comment ratio, profile views, DMs/leads)
 
 --- PROFILE OPTIMIZATION ---
 Headline: [rewrite] | About (first 3 lines): [rewrite] | Featured: [items] | Primary button: [Follow/Connect]
@@ -224,8 +297,10 @@ Comment approach: [length, angle, timing]
 [Who posts what, how the page amplifies]
 
 --- ASSUMPTIONS & MISSING DATA ---
-[...]
+[What was assumed, what to send next]
 ```
+
+For a narrow request (a post rewrite, a single decision), give the deliverable first, then DIAGNOSIS, PRIORITY ACTIONS and ASSUMPTIONS & MISSING DATA; skip sections that do not apply.
 
 ## Common Pitfalls
 
@@ -245,6 +320,16 @@ Comment approach: [length, angle, timing]
 
 8. **Ignoring video.** The dedicated video feed is extra distribution most B2B accounts have not claimed.
 
+9. **Measuring impressions instead of fit.** Viral posts that reach other creators do not book meetings. Track audience fit and lead signals alongside impressions.
+
+10. **Engagement pods and reciprocal-comment groups.** They inflate numbers from the wrong audience and train the feed to show posts to peers, not buyers. Earn comments from target accounts via the flywheel.
+
+11. **Post and leave.** Not replying in the first hour wastes the conversation that extends distribution. Block 30 minutes after publishing.
+
+12. **Generic, AI-sounding text.** Polished but interchangeable posts earn no comments. Add one owned detail per post — a number, a client situation (anonymised), a mistake.
+
+13. **Judging a format on one or two posts.** Organic results are noisy. Compare 5+ posts against the account's median before cutting a format.
+
 ## Verification Checklist
 
 - [ ] Profile/page reviewed from provided screenshots or fetched data; limitations stated
@@ -257,3 +342,9 @@ Comment approach: [length, angle, timing]
 - [ ] Personal-profile vs company-page roles defined
 - [ ] No recommendation relies on retired features (e.g. Creator Mode toggle, page hashtags)
 - [ ] Growth plan with 0–30 / 30–90 / 90+ day actions and KPIs
+- [ ] Every number labelled with its source; nothing estimated for posts not seen
+- [ ] Format scorecard filled with median impressions, comment ratio and a verdict per format
+- [ ] Audience fit addressed (target titles vs actual audience), not only reach
+- [ ] One primary constraint named with its evidence, and priority actions ranked
+- [ ] Cadence and commenting fit the stated hours per week (capacity table applied)
+- [ ] Benchmarks phrased as starting points; the account's own medians preferred

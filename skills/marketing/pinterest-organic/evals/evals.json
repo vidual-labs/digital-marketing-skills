@@ -1,6 +1,6 @@
 {
   "skill_name": "pinterest-organic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -16,11 +16,26 @@
         "Uses outbound clicks and email signups as KPIs, not followers"
       ],
       "checks": [
-        {"type": "contains", "value": "KEYWORD LIST"},
-        {"type": "contains", "value": "BOARD STRUCTURE"},
-        {"type": "regex", "pattern": "Rich Pins"},
-        {"type": "regex", "pattern": "outbound click"},
-        {"type": "regex", "pattern": "fresh pin"}
+        {
+          "type": "contains",
+          "value": "KEYWORD LIST"
+        },
+        {
+          "type": "contains",
+          "value": "BOARD STRUCTURE"
+        },
+        {
+          "type": "regex",
+          "pattern": "Rich Pins"
+        },
+        {
+          "type": "regex",
+          "pattern": "outbound click"
+        },
+        {
+          "type": "regex",
+          "pattern": "fresh pin"
+        }
       ]
     },
     {
@@ -33,12 +48,26 @@
         "Assesses niche fit honestly — planning-intent audience vs B2B payroll — and sets modest expectations",
         "Explains that 20 pins/day is outdated and penalised; fresh quality pins at 1–5/day are the current norm",
         "Offers a bounded test plan with KPIs (outbound clicks, signups) or a clear recommendation to deprioritise",
-        "Does not invent impression or traffic forecasts"
+        "Does not invent impression or traffic forecasts",
+        "Gives an explicit NICHE FIT verdict of Test or Deprioritize (not Go) with a decision rule for any test"
       ],
       "checks": [
-        {"type": "regex", "pattern": "20 pins"},
-        {"type": "regex", "pattern": "fresh"},
-        {"type": "regex", "pattern": "B2B"}
+        {
+          "type": "regex",
+          "pattern": "20 pins"
+        },
+        {
+          "type": "regex",
+          "pattern": "fresh"
+        },
+        {
+          "type": "regex",
+          "pattern": "B2B"
+        },
+        {
+          "type": "regex",
+          "pattern": "NICHE FIT:\\s*(Test|Deprioriti[sz]e)"
+        }
       ]
     },
     {
@@ -51,13 +80,67 @@
         "Titles are ≤100 characters with the main keyword near the start; descriptions are 2–3 sentences with a call to action",
         "Specifies 2:3 ratio / 1000×1500 px, text overlay 3–6 words, brand consistency",
         "Suggests keyword-named boards (e.g. 'Linen Bedding Ideas', 'Bedroom Decor') rather than brand-named boards",
-        "Uses the given facts (OEKO-TEX, free EU shipping, €189) without inventing reviews"
+        "Uses the given facts (OEKO-TEX, free EU shipping, €189) without inventing reviews",
+        "Writes at least 3 pins in the PIN n: format with character counts shown for titles and descriptions"
       ],
       "checks": [
-        {"type": "regex", "pattern": "2:3"},
-        {"type": "regex", "pattern": "1000\\s?[x×]\\s?1500"},
-        {"type": "regex", "pattern": "OEKO-TEX"},
-        {"type": "regex", "pattern": "board"}
+        {
+          "type": "regex",
+          "pattern": "2:3"
+        },
+        {
+          "type": "regex",
+          "pattern": "1000\\s?[x×]\\s?1500"
+        },
+        {
+          "type": "regex",
+          "pattern": "OEKO-TEX"
+        },
+        {
+          "type": "regex",
+          "pattern": "board"
+        },
+        {
+          "type": "min_count",
+          "pattern": "^PIN \\d+:",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "analytics-funnel-diagnosis",
+      "prompt": "Our home organisation shop's Pinterest (claimed site, 12 keyword boards, 2 fresh pins/day for 8 months) gets about 210,000 monthly impressions and 4,800 saves, but only 380 outbound clicks. Our top pins are infographics like '10 pantry storage hacks' that show every tip in the image. Shopify says Pinterest sends 6 orders a month. Should we post more pins or what's wrong?",
+      "files": [],
+      "expected_output": "A funnel diagnosis using the given numbers (save rate ~2.3%, outbound click rate ~0.18%) that identifies the saves→outbound click stage as the break: pins answer the need in-image so there is no reason to click. Recommends new designs for the same URLs with overlays promising more on the page, CTAs in descriptions, links to exact product/collection pages, UTM tagging, and checking the landing page only after clicks improve. Does not recommend simply posting more pins and does not invent benchmarks.",
+      "assertions": [
+        "Computes ratios from the user's data (save rate about 2.3%, outbound click rate about 0.18%) and compares them with the account's own pins rather than quoting an invented industry benchmark",
+        "Identifies the saves-to-outbound-clicks stage as the first breaking stage, explaining that infographics that give away every tip leave no reason to click",
+        "Recommends new designs for the same URLs with a click reason in the overlay, rather than deleting pins or simply increasing volume",
+        "Addresses conversion separately (UTM tagging, landing page check) and does not forecast specific future traffic numbers",
+        "Uses the FUNNEL DIAGNOSIS block from the output format"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "FUNNEL DIAGNOSIS"
+        },
+        {
+          "type": "regex",
+          "pattern": "Breaking stage:.*(outbound|click)"
+        },
+        {
+          "type": "regex",
+          "pattern": "0\\.18\\s?%|0\\.2\\s?%"
+        },
+        {
+          "type": "regex",
+          "pattern": "UTM"
+        },
+        {
+          "type": "regex",
+          "pattern": "design"
+        }
       ]
     }
   ]

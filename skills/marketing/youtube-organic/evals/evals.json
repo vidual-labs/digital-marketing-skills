@@ -1,6 +1,6 @@
 {
   "skill_name": "youtube-organic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,38 @@
         "Flags CTR 3.1% as weak and provides concrete title rewrites and thumbnail concepts with a Test & Compare plan",
         "Addresses the 35% first-30-second drop by removing the jingle/'welcome back' and starting with the payoff",
         "Shorts strategy explicitly bridges to the long-form tutorials",
-        "Cadence recommendation is realistic (e.g. 1 long-form/week + 2–4 Shorts) with a fixed slot"
+        "Cadence recommendation is realistic (e.g. 1 long-form/week + 2–4 Shorts) with a fixed slot",
+        "Names a primary constraint from the CTR × retention read (low CTR and weak early retention: packaging plus intro) with evidence"
       ],
       "checks": [
-        {"type": "contains", "value": "TITLE & THUMBNAIL"},
-        {"type": "contains", "value": "RETENTION FIXES"},
-        {"type": "contains", "value": "SHORTS STRATEGY"},
-        {"type": "regex", "pattern": "Test & Compare|test and compare"},
-        {"type": "regex", "pattern": "welcome back|jingle|intro"}
+        {
+          "type": "contains",
+          "value": "TITLE & THUMBNAIL"
+        },
+        {
+          "type": "contains",
+          "value": "RETENTION FIXES"
+        },
+        {
+          "type": "contains",
+          "value": "SHORTS STRATEGY"
+        },
+        {
+          "type": "regex",
+          "pattern": "Test & Compare|test and compare"
+        },
+        {
+          "type": "regex",
+          "pattern": "welcome back|jingle|intro"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY ACTIONS"
+        }
       ]
     },
     {
@@ -36,9 +60,18 @@
         "Recommends long-form topics derived from the best-performing Shorts"
       ],
       "checks": [
-        {"type": "regex", "pattern": "related video|bridge|link"},
-        {"type": "regex", "pattern": "returning viewers|subscribers per"},
-        {"type": "regex", "pattern": "long-form|long form"}
+        {
+          "type": "regex",
+          "pattern": "related video|bridge|link"
+        },
+        {
+          "type": "regex",
+          "pattern": "returning viewers|subscribers per"
+        },
+        {
+          "type": "regex",
+          "pattern": "long-form|long form"
+        }
       ]
     },
     {
@@ -54,9 +87,59 @@
         "Avoids clickbait the video cannot pay off"
       ],
       "checks": [
-        {"type": "regex", "pattern": "Test & Compare|test and compare"},
-        {"type": "regex", "pattern": "thumbnail"},
-        {"type": "min_count", "pattern": "index fund", "count": 1}
+        {
+          "type": "regex",
+          "pattern": "Test & Compare|test and compare"
+        },
+        {
+          "type": "regex",
+          "pattern": "thumbnail"
+        },
+        {
+          "type": "min_count",
+          "pattern": "index fund",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "ctr-retention-matrix-video-scorecard",
+      "prompt": "Help me figure out what's wrong with my tech-review channel (38k subs). Last 6 long-form videos, 7 days after upload each: A) 'Budget phone ranking' 12 min, 9.4% CTR, 28% avg viewed, 41k views; B) 'Why I left Android' 15 min, 8.8% CTR, 24% avg viewed, 36k views; C) 'Laptop buying guide' 18 min, 3.2% CTR, 58% avg viewed, 9k views; D) 'Monitor calibration explained' 16 min, 3.0% CTR, 61% avg viewed, 7k views; E) 'Earbuds tier list' 11 min, 2.6% CTR, 31% avg viewed, 4k views; F) 'Smartwatch review' 10 min, 7.9% CTR, 52% avg viewed, 30k views. Retention on A and B drops 45% in the first 30 seconds. I upload weekly and want more watch time.",
+      "files": [],
+      "expected_output": "Video scorecard against the median (~19.5k views), CTR × retention classification per video: A/B high CTR low retention (promise mismatch / intro), C/D low CTR high retention (packaging), E low/low (topic), F high/high (scale); primary constraint named with evidence; fixes per group (match first frame to thumbnail and cut intro for A/B; retitle and Test & Compare for C/D; drop or rethink topic E; sequel/series for F).",
+      "assertions": [
+        "Classifies each video with the CTR × retention matrix: A and B high CTR / low retention, C and D low CTR / high retention, E low on both, F strong on both",
+        "Prescribes different fixes per group: intro and promise alignment for A/B, retitling and Test & Compare on C/D, topic rethink for E, sequel or series built on F",
+        "Compares views against the channel's own median of these videos at the same age rather than a generic benchmark",
+        "Notes that average percentage viewed should be compared across similar lengths or via absolute view duration",
+        "Does not recommend deleting and reuploading underperforming videos"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "VIDEO SCORECARD"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:"
+        },
+        {
+          "type": "regex",
+          "pattern": "packaging"
+        },
+        {
+          "type": "regex",
+          "pattern": "Test & Compare|test and compare"
+        },
+        {
+          "type": "regex",
+          "pattern": "median"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "^\\s*\\d+\\.\\s*(Delete|Re-?upload)"
+        }
       ]
     }
   ]

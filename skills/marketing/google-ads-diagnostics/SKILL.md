@@ -1,13 +1,13 @@
 ---
 name: google-ads-diagnostics
 description: Use when analyzing Google Ads performance data and recommending optimizations — Search campaign structure, keyword health, search terms and negatives, Quality Score, responsive search ad strength, assets, Smart Bidding strategy and budget scaling. Also use when the user shares a Google Ads export, screenshot or report and asks why CPC is high, conversions dropped, or how to scale. Don't use for generating keyword lists (google-ads-keywords), landing page fixes (landing-page-funnel), or conversion tag bugs (gtm-debugging).
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Needs performance data from the user (export, screenshot or pasted table); no Google Ads API access required.
 metadata:
   category: paid-search
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [google-ads, ppc, diagnostics, campaign-optimization, search-terms, negative-keywords, quality-score, smart-bidding, performance-max]
   related_skills: [google-ads-keywords, landing-page-funnel, gtm-debugging, meta-ads-diagnostics]
 ---
@@ -55,9 +55,43 @@ Data rules: work only from the user's numbers. If a level is missing, say which 
 | Conversion rate | > 8% | 3–8% | < 2% |
 | CPA vs target | ≤ 0.8× | 0.8–1.2× | > 1.5× |
 
-Industry averages differ widely (legal and B2B SaaS convert at 2–4%; e-commerce brand terms at 10%+). Prefer the account's own trend over these numbers.
+Industry averages differ widely by vertical, brand vs non-brand and region. Prefer the account's own trend (same period last year, or the previous 30 days) over these numbers, and say which baseline you used.
+
+### Minimum data before judging
+
+Small samples produce confident-sounding wrong calls. Use these as starting floors; when the user gives their own conversion rate, compute the floor from it.
+
+| Decision | Minimum evidence (starting point) | Why |
+|----------|-----------------------------------|-----|
+| Pause a keyword / negate a relevant search term for "no conversions" | Clicks ≥ ~3 ÷ account conversion rate (e.g. ~60 clicks at 5% CVR), or spend ≥ ~2× target CPA | Below that, zero conversions is within normal noise |
+| Call a keyword a winner | ≥ ~5 conversions in the window | One or two conversions can be luck |
+| Compare two periods | Same length, same weekdays, both outside a known learning period or promo | Weekday mix and promos distort short comparisons |
+| Judge the most recent days | Exclude the last N days, where N is the account's typical conversion lag | Conversions are attributed to the click date and arrive late |
+| Judge a bid strategy change | ≥ 2 weeks after the change, or ~3 conversion cycles, whichever is longer | The strategy is still learning |
+
+Irrelevant intent (jobs, free, wrong product) needs no minimum — negate on the first sighting.
 
 ## Diagnostic Framework
+
+### Triage: decompose the symptom first
+
+Most complaints reduce to one driver. Decompose before recommending anything:
+
+- **CPA = CPC ÷ conversion rate.** If CPA rose 40%, check whether CPC rose, CVR fell, or both.
+- **Conversions = clicks × conversion rate.** If conversions fell, check whether traffic fell or CVR fell.
+- **Clicks = impressions × CTR**, and impressions are capped by impression share.
+
+State the primary driver in the output (CPC, CVR, traffic volume, or tracking) with the percentage change of each component. Then route:
+
+| Primary driver | Pattern | Check first | Then |
+|----------------|---------|-------------|------|
+| Tracking | Conversions fall to near zero or jump on one date; clicks steady; GA4 and Ads disagree suddenly | Phase 0, change history, tag/consent changes | Route to `gtm-debugging`; freeze bid changes until fixed |
+| CVR | Clicks and CPC steady, CVR down | Landing page / site changes, offer or price change, form errors, search terms drift | `landing-page-funnel`; Phase 3 for query drift |
+| CPC | CVR steady, CPC up | Auction insights (new competitor, overlap rate), Quality Score components, tightened targets, lost IS (rank) | Phase 4, Phase 6 |
+| Traffic volume | Impressions down, CTR steady | Lost IS (budget) vs (rank), paused keywords, disapprovals, seasonality, location/schedule edits | Phase 7, policy status |
+| CTR | Impressions steady, CTR down | Ad strength, new competitor ads, lost top-of-page position, assets removed | Phase 5 |
+
+Always open **change history** for the date the metric moved; a change made on that day is the default suspect until ruled out.
 
 ### Phase 0: Trust the data first
 
@@ -66,6 +100,14 @@ Before optimizing, confirm the conversion data is real:
 - Are the right actions set as **primary** conversions? Micro-conversions (page views, button clicks) set as primary inflate volume and mislead Smart Bidding.
 - Is **enhanced conversions** or offline conversion import in place for lead-gen? Without it, Smart Bidding optimizes toward form fills, not sales.
 - Did conversion counts change suddenly on a date that matches a tag or consent change? If so, route to `gtm-debugging` before touching bids.
+- Is the **conversion count setting** right? Lead-gen actions usually count "One" per click; purchases count "Every".
+- Is the bid strategy status **Learning** or **Limited**? Judge performance only outside learning periods.
+
+| Phase 0 finding | Data confidence | What you may recommend |
+|-----------------|-----------------|------------------------|
+| Primary actions correct, no anomalies | High | Full audit |
+| Micro-conversions as primary, or lead quality unknown | Medium | Structure, negatives, QS, ads; bid changes only after the conversion fix |
+| Tracking break or sudden unexplained shift | Low | Tracking fix and negatives for irrelevant intent only; no bid, target or budget changes |
 
 ### Phase 1: Account and campaign structure
 
@@ -82,7 +124,7 @@ Before optimizing, confirm the conversion data is real:
 
 | Segment | Definition (30 days) | Action |
 |---------|---------------------|--------|
-| Wasted spend | Spend > 2× target CPA, 0–1 conversions | Pause, or tighten match type and add negatives if the search terms show salvageable intent |
+| Wasted spend | Spend > 2× target CPA, 0–1 conversions, and past the minimum-data floor | Pause, or tighten match type and add negatives if the search terms show salvageable intent |
 | Underperformers | CPA > 1.5× target with ≥ 3 conversions | Lower bids (manual) or move to a separate campaign with a looser target; check landing page match |
 | Winners | CPA ≤ 0.8× target and ≥ 5 conversions | Add exact-match variants from their search terms; ensure not limited by budget or low impression share |
 | Zero impressions | 30+ days, no impressions | Pause; the query space is empty or bids too low — do not keep for "completeness" |
@@ -163,6 +205,29 @@ Smart Bidding hygiene:
 
 Scaling rule: increase budgets by at most ~30% per week on Smart Bidding so the system adapts without re-entering learning.
 
+Read lost impression share as a pair:
+
+| Lost IS (budget) | Lost IS (rank) | Meaning | First move |
+|------------------|----------------|---------|------------|
+| High | Low | Budget is the only cap | Raise budget if CPA is on target; otherwise cut waste first |
+| Low | High | Ad Rank is the cap | Quality Score and ad relevance; a target that is too tight also shows as rank loss |
+| High | High | Both | Do not add budget until rank issues and waste are addressed — more budget buys the same weak auctions |
+| Low | Low | Saturated for this keyword set | Growth needs new keywords, geographies or campaign types, not more budget |
+
+### Order of changes
+
+Changes interact, so sequence them by risk to Smart Bidding learning:
+
+| Order | Change type | Learning risk |
+|-------|-------------|---------------|
+| 1 | Tracking fixes, negatives for irrelevant intent, disapproval fixes | Low (tracking fixes may change conversion volume — note it) |
+| 2 | Asset additions, RSA headline swaps, landing page fixes | Low |
+| 3 | Pausing wasted keywords, adding exact-match winners | Low–Medium |
+| 4 | Budget changes ≤ ~30% | Low–Medium |
+| 5 | Target CPA / ROAS changes (≤ 20% steps), bid strategy switches, primary conversion changes, restructures | High — one at a time, then wait |
+
+Never bundle two High-risk changes in the same week: when results move you will not know which one caused it.
+
 ### Phase 8: Performance Max and Demand Gen (when present)
 
 - Check asset group performance by **channel** (Search, Shopping, Display, YouTube, Discover, Gmail, Maps) in the campaign report and search themes insights
@@ -178,9 +243,13 @@ GOOGLE ADS AUDIT: [Account / Campaign name]
 Date range: [Start] – [End] | Currency: [XXX]
 Spend: [X] | Conversions: [Y] | CPA: [Z] (target [T]) | ROAS: [R] (if tracked)
 Data confidence: [High / Medium / Low — what is missing]
+Baseline used: [prior period / same period last year / starting-point benchmarks]
 
 --- HEALTH SCORE: X/10 ---
-[One-line rationale]
+[One-line rationale, naming the deductions]
+
+--- PRIMARY DRIVER ---
+[Tracking / CVR / CPC / Traffic volume / CTR] — [component changes, e.g. CPC +8%, CVR −31%]
 
 0. CONVERSION TRACKING
    [Primary actions correct? Enhanced conversions? Anomalies?] → [Fix]
@@ -215,13 +284,28 @@ Data confidence: [High / Medium / Low — what is missing]
    [Channel mix, brand exclusions, negatives, URL expansion]
 
 PRIORITY CHANGES (implementation order)
-1. [Highest impact, lowest risk — usually negatives and tracking fixes]
-2. [...]
+1. [Area] Current: [state] → Change: [action] → Expected: [effect] | Learning risk: [Low / Medium / High]
+2. [Area] Current: [...] → Change: [...] → Expected: [...] | Learning risk: [...]
 3. [...]
 
+NOT EVALUATED: [Phases skipped and the data needed, or "None"]
 ESTIMATED IMPACT: [Range, with assumptions stated]
 RE-CHECK DATE: [Date, usually 14 days]
 ```
+
+Write "n/a — [reason]" under a numbered section instead of deleting it, so every audit has the same sections. Cite the user's numbers next to every claim.
+
+Health score rubric (start at 10, deduct; floor 1):
+
+| Finding | Deduction |
+|---------|-----------|
+| Tracking broken or primary conversions wrong | −3 |
+| Irrelevant search terms ≥ ~10% of spend | −2 |
+| CPA > 1.5× target (or ROAS < 0.67× target) | −2 |
+| Target set below achieved CPA (above achieved ROAS) and delivery throttled | −1 |
+| Spend-weighted Quality Score ≤ 5, or ad strength Poor/Average on top-spend ad groups | −1 |
+| Structural issue (brand mixed with non-brand, PMax cannibalization, fragmentation) | −1 |
+| Missing core assets (sitelinks, callouts) | −1 |
 
 ## Common Pitfalls
 
@@ -241,9 +325,20 @@ RE-CHECK DATE: [Date, usually 14 days]
 
 8. **Optimizing for clicks.** High CTR with no conversions is expensive curiosity. CPA, ROAS and conversion quality are the only north stars.
 
+9. **Judging the last few days before conversions arrive.** Conversion lag makes the newest days look worse. Exclude the account's typical lag window, or compare by conversion time only when the user's report is set up that way.
+
+10. **Recommending a fix without naming the driver.** "CPA is up, raise the target" skips the decomposition. Split CPA into CPC and CVR first; a CVR drop is a site or tracking problem that no bid change fixes.
+
+11. **Pausing keywords on too few clicks.** Zero conversions after 15 clicks is noise in most accounts. Apply the minimum-data floor; negate only irrelevant intent on sight.
+
+12. **Bundling high-risk changes.** A target change, a bid strategy switch and a restructure in one week make the result unreadable. Order changes by learning risk and space the High-risk ones.
+
 ## Verification Checklist
 
 - [ ] Conversion tracking sanity-checked (primary actions, enhanced/offline conversions, anomalies) before recommending bid changes
+- [ ] Primary driver named, with CPA or conversion change decomposed into CPC, CVR and volume components where the data allows
+- [ ] Pause and negate calls respect the minimum-data floor (irrelevant intent excepted); recent days inside the conversion lag are not judged
+- [ ] Health score follows the deduction rubric and its rationale names the deductions
 - [ ] Audit based on ≥ 14 days of data, or a stated caveat if less
 - [ ] Every phase that had data was evaluated; missing data called out explicitly
 - [ ] Negatives listed with match type and the level (account / campaign / ad group) to add them
@@ -253,5 +348,5 @@ RE-CHECK DATE: [Date, usually 14 days]
 - [ ] Bid strategy recommendation matches conversion volume (15 / 30 / 50 thresholds) and includes a wait period
 - [ ] Budget scaling stays within ~30% per week on Smart Bidding
 - [ ] PMax brand exclusions and negatives addressed when PMax is present
-- [ ] Priority changes ordered to avoid resetting learning
+- [ ] Priority changes ordered by learning risk, each tagged Low / Medium / High, with no two High-risk changes in the same week
 - [ ] Estimated impact given as a range with assumptions, in the account's currency

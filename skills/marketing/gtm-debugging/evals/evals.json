@@ -1,6 +1,6 @@
 {
   "skill_name": "gtm-debugging",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -15,10 +15,22 @@
         "States a root cause with a confidence level"
       ],
       "checks": [
-        {"type": "regex", "pattern": "ecommerce"},
-        {"type": "regex", "pattern": "ecommerce:\\s*null"},
-        {"type": "contains", "value": "VERIFICATION"},
-        {"type": "contains", "value": "ROOT CAUSE"}
+        {
+          "type": "regex",
+          "pattern": "ecommerce"
+        },
+        {
+          "type": "regex",
+          "pattern": "ecommerce:\\s*null"
+        },
+        {
+          "type": "contains",
+          "value": "VERIFICATION"
+        },
+        {
+          "type": "contains",
+          "value": "ROOT CAUSE"
+        }
       ]
     },
     {
@@ -32,13 +44,39 @@
         "Describes checking the Consent tab in Tag Assistant for default and update states",
         "Recommends verifying the gtag('consent','update') call and the Consent Initialization trigger",
         "Corrects the assumption that Preview shows production behaviour by explaining consent state is visible there",
-        "Includes a test with consent denied and granted in incognito"
+        "Includes a test with consent denied and granted in incognito",
+        "Compares the 70% drop with the CMP's opt-in/denial rate to separate expected consent loss from a bug, and identifies basic vs advanced consent mode",
+        "Confidence is Medium or Low (not High) because nothing has been reproduced yet, and the evidence needed to raise it is listed"
       ],
       "checks": [
-        {"type": "regex", "pattern": "consent"},
-        {"type": "regex", "pattern": "Consent Initialization"},
-        {"type": "regex", "pattern": "gtag\\('consent'"},
-        {"type": "contains", "value": "VERIFICATION"}
+        {
+          "type": "regex",
+          "pattern": "consent"
+        },
+        {
+          "type": "regex",
+          "pattern": "Consent Initialization"
+        },
+        {
+          "type": "regex",
+          "pattern": "gtag\\('consent'"
+        },
+        {
+          "type": "contains",
+          "value": "VERIFICATION"
+        },
+        {
+          "type": "regex",
+          "pattern": "opt-in|denial rate|accept rate"
+        },
+        {
+          "type": "regex",
+          "pattern": "basic|advanced"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Confidence:\\s*(Medium|Low)"
+        }
       ]
     },
     {
@@ -54,10 +92,70 @@
         "Mentions that the first load should not fire the History-based tag"
       ],
       "checks": [
-        {"type": "regex", "pattern": "History Change|history"},
-        {"type": "regex", "pattern": "enhanced measurement|automatic page_view|send a page view"},
-        {"type": "contains", "value": "FIX 1"},
-        {"type": "regex", "pattern": "DebugView"}
+        {
+          "type": "regex",
+          "pattern": "History Change|history"
+        },
+        {
+          "type": "regex",
+          "pattern": "enhanced measurement|automatic page_view|send a page view"
+        },
+        {
+          "type": "contains",
+          "value": "FIX 1"
+        },
+        {
+          "type": "regex",
+          "pattern": "DebugView"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "meta-pixel-capi-double-purchases",
+      "prompt": "Meta Events Manager reports about 1.9x the Purchase events our Shopify backend shows for October (412 vs 217 orders). We have the Meta Pixel as a Custom HTML tag in GTM firing on the thank-you page with fbq('track','Purchase',{value:..., currency:'EUR'}), and last month we installed the Facebook & Instagram Shopify app which also sends server events via Conversions API. GA4 purchase counts match Shopify. Why the doubling and how do we fix it?",
+      "files": [],
+      "expected_output": "Uses the ~1.9x ratio to infer two complete Purchase sources: the GTM Pixel tag and the Shopify app (which itself sends browser Pixel and CAPI events), with no shared event ID between the GTM browser event and the app's server event. Recommends keeping one browser source (usually removing the GTM Pixel tag or disabling the app's pixel) and making sure browser and server events share an identical eventID/event_id and event name; verifies with Network tab (facebook.com/tr ev/eid), Events Manager Test Events and deduplication status, and the backend count.",
+      "assertions": [
+        "Uses the 412 vs 217 (~1.9x) ratio as evidence of two near-complete sources rather than a partial misfire",
+        "Identifies the GTM Custom HTML Pixel and the Shopify app as overlapping sources, and that the GTM fbq call sends no eventID",
+        "Fix keeps a single browser source and requires identical eventID (browser) and event_id (server) plus matching event name",
+        "Verification covers the Network tab (facebook.com/tr with ev and eid), Events Manager Test Events / deduplication, and comparing against Shopify orders",
+        "Findings use OK / ISSUE / NOT CHECKED statuses, and the root cause states a confidence level and data impact since the app install"
+      ],
+      "checks": [
+        {
+          "type": "regex",
+          "pattern": "event_?id|eventID"
+        },
+        {
+          "type": "regex",
+          "pattern": "dedup"
+        },
+        {
+          "type": "regex",
+          "pattern": "facebook\\.com/tr|Test Events"
+        },
+        {
+          "type": "contains",
+          "value": "ROOT CAUSE"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Confidence:\\s*(High|Medium|Low)"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Data impact:"
+        },
+        {
+          "type": "regex",
+          "pattern": "NOT CHECKED|ISSUE"
+        },
+        {
+          "type": "contains",
+          "value": "FIX 1"
+        }
       ]
     }
   ]

@@ -1,13 +1,13 @@
 ---
 name: instagram-organic
 description: Use when developing Instagram organic strategy — auditing a profile, defining content pillars, choosing a Reels/carousel/story mix, setting a posting cadence, and planning follower and reach growth around Instagram's current ranking signals (watch time, likes, sends). Also use when someone asks "why did my reach drop", wants an Instagram content calendar, or asks how to grow an account from scratch. Don't use for Instagram paid ads (meta-ads-creative, meta-ads-diagnostics), influencer contracting, or Instagram Shop setup.
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Browsing is optional; when a profile cannot be fetched, the skill works from screenshots and Insights exports the user provides.
 metadata:
   category: organic-social
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [instagram, organic, social-media, content-strategy, reels, carousels, growth, engagement]
   related_skills: [tiktok-ads, linkedin-organic, youtube-organic, pinterest-organic, competitor-research, branding]
 ---
@@ -70,6 +70,30 @@ Engagement rate by followers (public fallback): `(likes + comments) ÷ followers
 
 Also read: **non-follower share of reach** (growth accounts want > 40% on Reels), **sends per reach** and **saves per reach** (the strongest signals for distribution), **average watch time** and **replays** on Reels, and **profile visits → follows** conversion.
 
+Do not mix the two engagement formulas in one comparison, and never benchmark a reach-based rate against the follower-based table — reach-based rates run higher by construction.
+
+### Step 2b: Signal ratios and per-post thresholds
+
+Compute these per post, then average per format. They are the numbers the rest of the plan is built on.
+
+| Ratio | Formula | Starting-point read (replace with the account's own median once 20+ posts exist) |
+|-------|---------|------------------------------------------------------------------------------------|
+| Sends per reach | shares ÷ reach × 100 | ≥ 1% strong, 0.3–1% normal, < 0.3% weak — content is not being forwarded |
+| Saves per reach | saves ÷ reach × 100 | ≥ 1.5% strong (carousels), < 0.5% weak — no reason to keep it |
+| Non-follower reach share (Reels) | non-follower reach ÷ reach | > 40% healthy for growth; < 20% means Reels are not leaving the follower base |
+| Follows per 1,000 reach | follows ÷ reach × 1,000 | Use to compare formats and series; low with high reach = profile or topic mismatch |
+| Profile visit → follow | follows ÷ profile visits × 100 | < 10% means the profile does not convert visitors (fix bio, name field, pinned posts) |
+
+Per-post classification relative to the account's own **median reach for that format** (last 20–30 posts):
+
+| Result | Rule | Action |
+|--------|------|--------|
+| Outlier winner | > 2× median reach, or top 10% on sends/reach | Make 2–3 variants (same topic, new hook) within 2 weeks; pin if it converts |
+| Solid | 0.7–2× median | Keep in the rotation |
+| Miss | < 0.5× median at 7 days | Check hook and topic; do not repost it unchanged |
+
+Judge with at least 5 posts per format before calling a format "weak"; fewer than that, label the read as provisional. Evaluate Reels at 72 hours and again at 7 days, not at 24 hours.
+
 ### Step 3: Format mix (last 20–30 posts)
 
 | Format | Role in 2026 | Notes |
@@ -82,7 +106,16 @@ Also read: **non-follower share of reach** (growth accounts want > 40% on Reels)
 | Collabs | Shared distribution | Post appears on up to 5 accounts with pooled engagement |
 | Trial Reels | Testing | Shown to non-followers first; use to test hooks before the followers see them |
 
-Diagnostic: if Reels are under ~40% of posts and the goal is growth, reach is being left on the table; if the goal is retention and sales, carousels and Stories carry more weight than their reach suggests.
+Format decision rules (apply to the per-format averages from Step 2b):
+
+| If… | Then… |
+|-----|-------|
+| Goal is growth and Reels are < 40% of posts | Shift toward Reels (target 50–60%) before changing anything else |
+| A format has the lowest reach/post **and** the lowest sends + saves per reach | Cut it to ≤ 10% of posts or drop it |
+| A format has low reach but the highest saves/reach (often carousels) | Keep it — it serves retention and sales; improve slide 1 instead of cutting it |
+| Reels reach is high but follows per 1,000 reach is low | Topic or profile mismatch: tie Reels to the pillars and fix the profile before posting more |
+| Goal is sales/retention | Weight carousels and Stories above their reach share; measure link clicks, DMs and profile actions |
+| Fewer than 5 posts of a format in the sample | Treat as untested — schedule 4–6 posts before judging |
 
 ### Step 4: Pattern analysis
 
@@ -91,6 +124,21 @@ Diagnostic: if Reels are under ~40% of posts and the goal is growth, reach is be
 3. What do the top 5 posts share — hook style, topic, length, caption structure, posting time?
 4. Which posts drove profile visits and follows (Insights per post)?
 5. Where do reach drops coincide with cadence gaps, reposts or format changes?
+
+### Step 5: Reach-drop diagnosis
+
+Locate the drop first, then pick the cause. Check **Account Status** (Settings → Account Status) for content that is not eligible to be recommended before anything else — it is the fastest way to confirm or rule out a recommendation problem.
+
+| Symptom | Likely cause | Check | Fix |
+|---------|--------------|-------|-----|
+| Non-follower reach collapsed, follower reach stable | Lost recommendation eligibility: reposted or unoriginal content, watermarked clips from other apps, guideline issues | Account Status; count of reposts/recycled clips in the last 30 days | Stop reposting; publish only original Reels; remove or appeal flagged posts; expect recovery over weeks, not days |
+| All reach down, cadence dropped or was erratic | Fewer posts, weaker velocity | Posts/week before vs after | Return to the sustainable cadence for 4+ weeks before judging |
+| One format down, others stable | Creative fatigue or format shift in the account | Per-format reach and watch time | Refresh hooks/covers for that format; test with Trial Reels |
+| Reach stable, engagement rate down | Audience mismatch or bought/inactive followers | Follower growth spikes, follows from off-niche content | Return to niche pillars; never buy followers or join engagement pods |
+| Reach down across the whole niche at once | Seasonality or a platform change | Compare peers; note the date | Hold strategy; keep cadence; re-check in 2–3 weeks |
+| Sudden drop after hashtag or caption changes | Usually coincidence — hashtags are labels, not reach | Timeline of changes | Revert to ≤ 5 topical hashtags and look for the real cause above |
+
+Change one thing at a time during recovery so the cause stays readable.
 
 ## Strategy Formulation
 
@@ -121,6 +169,16 @@ Mix for growth accounts: ~50–60% Reels, 30–40% carousels, ≤ 10% single ima
 ### Timing
 
 Post when the audience is active (Insights → Audience → Most active times), roughly 15–30 minutes before the peak. Generic windows (weekday late morning and early evening local time) are a fallback, not a rule. Consistency of slot matters more than the exact hour.
+
+### Testing protocol
+
+| Rule | Why |
+|------|-----|
+| Test one variable at a time (hook, cover, length, topic) | Otherwise the winner teaches nothing |
+| Use Trial Reels for hook tests; 2–3 variants of the same idea | Non-follower response without spending the followers' attention |
+| Compare at the same age (72 h and 7 d) against the format median | Reels accumulate reach over days |
+| Call a winner only on a clear gap (e.g. > 1.5× the other variant on sends/reach or watch time) | Small gaps are noise at organic sample sizes |
+| Log every test (date, variable, result) | Patterns appear across 10+ tests, not one |
 
 ### Reels craft
 
@@ -168,22 +226,41 @@ Post when the audience is active (Insights → Audience → Most active times), 
 
 ## Output Format
 
+Label every number with its source: `[Insights]`, `[public]`, `[user-provided]` or `[assumption]`. Write `n/a` instead of estimating a figure you do not have.
+
 ```
 INSTAGRAM AUDIT: @handle (URL)
-Account type: [creator / business] | Goal: [..] | Access: [fetched / screenshots / Insights export]
+Account type: [creator / business] | Goal: [..] | Stage: [follower tier] | Access: [fetched / screenshots / Insights export]
 
 --- CURRENT STATE ---
-Followers: X | Following: Y | Posts: Z
-Engagement rate: W% (by [reach/followers]) | Non-follower reach share: V% (if known)
-Format mix (last N posts): Reels X%, Carousels Y%, Single Z%
+Followers: X | Following: Y | Posts: Z [source]
+Engagement rate: W% (by [reach/followers], formula: [..]) → [strong/average/weak] vs tier
+Non-follower reach share: V% | Profile visit → follow: U% (or n/a)
+Format mix (last N posts): Reels X% / Carousels Y% / Single Z%
 Cadence: X posts/week, Stories Y days/week
 Top performers: [3 posts — format, topic, why]
+
+--- FORMAT SCORECARD ---
+| Format | Posts | Avg reach | Sends/reach | Saves/reach | Verdict (scale / keep / fix / cut / untested) |
+|--------|-------|-----------|-------------|-------------|-----------------------------------------------|
+| Reels | .. | .. | ..% | ..% | .. |
+| Carousels | .. | .. | ..% | ..% | .. |
+| Single images | .. | .. | ..% | ..% | .. |
+
+--- DIAGNOSIS ---
+Primary constraint: [reach / recommendation eligibility / format mix / hook & watch time / profile conversion / cadence]
+Evidence: [the 1–3 numbers that show it]
 
 --- STRENGTHS ---
 - [...]
 
 --- GAPS ---
 - [...]
+
+--- PRIORITY ACTIONS ---
+1. [Action] — [expected signal it moves] — [effort: low/med/high]
+2. [...]
+3. [...]
 
 --- CONTENT PILLARS (3–5) ---
 1. [Pillar] — [Promise to audience] — [Series format] — [Frequency]
@@ -198,14 +275,16 @@ Posting windows: [from Insights or stated fallback]
 0–30 days: [3 actions]
 30–90 days: [3 actions]
 90+ days: [3 actions]
-KPIs to track: [reach from non-followers, sends/reach, saves/reach, profile visits→follows]
+KPIs to track: [metric — current → target, review date] (non-follower reach share, sends/reach, saves/reach, profile visit → follow)
 
 --- PROFILE OPTIMIZATION ---
 Name field: [..] | Bio rewrite: [..] | Links: [..] | Pinned posts: [..] | Highlights: [..]
 
 --- ASSUMPTIONS & MISSING DATA ---
-[...]
+[What was assumed, what to send next to firm up the plan]
 ```
+
+For a narrow question (a reach drop, a single post review), keep CURRENT STATE, DIAGNOSIS, PRIORITY ACTIONS, GROWTH PLAN and ASSUMPTIONS & MISSING DATA, and drop the sections that do not apply.
 
 ## Common Pitfalls
 
@@ -225,6 +304,16 @@ Name field: [..] | Bio rewrite: [..] | Links: [..] | Pinned posts: [..] | Highli
 
 8. **Judging a Reel after 24 hours.** Reels gain distribution over days; evaluate at 72 hours and again at 7 days.
 
+9. **Cross-posting clips with another app's watermark.** Recycled, watermarked video is treated as unoriginal. Export clean files and re-edit natively.
+
+10. **Calling a format dead on three posts.** Organic results are noisy. Judge on 5+ posts per format against the account's own median, and label smaller samples as provisional.
+
+11. **Mixing engagement formulas.** A reach-based rate compared with a follower-based benchmark looks great and means nothing. Name the formula and benchmark like with like.
+
+12. **Buying followers or joining engagement pods.** Inactive or off-niche followers drag every rate down and confuse who the content is shown to. Grow through niche content, collabs and replies.
+
+13. **Changing everything during a reach drop.** Five simultaneous changes hide the cause. Check Account Status first, then change one variable per week.
+
 ## Verification Checklist
 
 - [ ] Last 20–30 posts analysed (or the limitation stated)
@@ -238,3 +327,9 @@ Name field: [..] | Bio rewrite: [..] | Links: [..] | Pinned posts: [..] | Highli
 - [ ] Profile optimisation covers name field, bio, links, pinned posts, highlights
 - [ ] Hashtag guidance limited to ≤ 5 topical tags
 - [ ] Strategy tailored to the account's follower stage
+- [ ] Every number labelled with its source; nothing estimated for posts not seen
+- [ ] Format scorecard filled with sends/reach and saves/reach per format, and a verdict per format
+- [ ] Format calls based on 5+ posts each, or labelled provisional
+- [ ] One primary constraint named with the evidence behind it
+- [ ] For reach drops: Account Status check recommended and the drop located (follower vs non-follower, one format vs all)
+- [ ] Benchmarks phrased as starting points; the account's own medians preferred where available

@@ -1,13 +1,13 @@
 ---
 name: gtm-debugging
 description: Use when diagnosing and fixing Google Tag Manager or tracking bugs — tags not firing, triggers misconfigured, data layer variables undefined, GA4 events missing or duplicated, Google Ads or Meta Pixel conversions not recording, Conversions API deduplication, consent mode v2 blocking tags, cross-domain tracking, single-page-app pageviews, and server-side GTM forwarding. Also use when someone says "my conversions stopped", "GA4 shows nothing", "events fire twice" or shares a Tag Assistant screenshot. Don't use for analytics reporting questions or for campaign optimization (google-ads-diagnostics, meta-ads-diagnostics).
-version: 1.1.0
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. Needs the user to run Tag Assistant / browser DevTools and report back, or to paste container exports, data layer snippets and console output; no direct site access required.
 metadata:
   category: conversion-tracking
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [gtm, google-tag-manager, debugging, ga4, datalayer, event-tracking, consent-mode, conversions-api, server-side-tagging, cross-domain]
   related_skills: [landing-page-funnel, google-ads-diagnostics, meta-ads-diagnostics]
 ---
@@ -44,6 +44,40 @@ Ask for, in this order of usefulness:
 Data rules: do not guess what the container contains — ask for the export or screenshots. If you cannot access the site, walk the user through Tag Assistant step by step and reason from what they report. Mark any fix that depends on an unverified assumption. Google renames things (the GA4 Configuration tag is now the **Google tag**, Tag Assistant replaced the legacy extension) — map old names to current ones when the user's screenshots differ.
 
 ## Diagnostic Framework
+
+### Triage: locate where the data stops
+
+Tracking data passes through a chain: page → data layer → GTM trigger → tag → network hit → platform. Find the first link that breaks; everything after it is a symptom, not a cause.
+
+| What the user observes | Where it breaks | Start at |
+|------------------------|-----------------|----------|
+| No event in Preview's left panel for the action | Site code / data layer push missing or mistimed | Phase 1, then Data Layer tab (Phase 2) |
+| Event in Preview, tag under "Not fired" | Trigger condition or consent | Phase 3, Phase 6 |
+| Tag "Fired" but status Failed, or no network hit | Tag config, Custom HTML error, blocked request | Phase 5, Network tab |
+| Network hit sent, platform shows nothing | Wrong ID, consent state in the hit, filters, processing delay | Network-hit table below, Phase 8 |
+| Works in Preview, fails for real users | Consent, published version differs, ad blockers | Phase 6, Pitfall 6 |
+| Numbers too high | Duplicate sources | Phase 7 |
+| Numbers dropped on a specific date | A change on that date (container version, CMP, site release, plugin) | Container Versions, CMP change log, then the row above that matches |
+
+### Reading a network hit
+
+When Preview is ambiguous, the request itself is the ground truth. Ask the user to filter the Network tab and copy the request URL or payload.
+
+| Platform | Request to look for | Parameters that matter |
+|----------|--------------------|------------------------|
+| GA4 | `/g/collect` (google-analytics.com, or the server container's domain) | `tid` = Measurement ID, `en` = event name, `ep.*` / `epn.*` = parameters, `gcs` = consent state |
+| Google Ads | requests to `googleadservices.com/pagead/conversion/` or a `/pagead/` path on google.com | conversion ID and label in the path/query, `value`, `currency_code`, `gcs` |
+| Meta Pixel | `facebook.com/tr` | `id` = Pixel ID, `ev` = event name, `eid` = event ID used for deduplication |
+
+`gcs` reads `G1` + `ad_storage` digit + `analytics_storage` digit (1 = granted, 0 = denied): `G111` both granted, `G100` both denied, `G101` analytics only. A hit with `G100` under advanced consent mode is a cookieless ping, not a broken tag. If the parameter format differs from this, treat the Consent tab as the reference and say so.
+
+### Confidence levels
+
+| Confidence | Evidence required |
+|------------|-------------------|
+| High | Reproduced in Preview **and** the failing condition, variable value or network hit is shown in the user's evidence |
+| Medium | Configuration seen (export or screenshots) and the cause explains every symptom, but not reproduced |
+| Low | Inferred from the symptom description alone; list what would confirm it |
 
 ### Phase 1: Is the container loading?
 
@@ -188,12 +222,24 @@ Correct order: consent default → consent update (after user choice) → tags. 
 | Google Ads conversions missing entirely in the EEA | `ad_storage` / `ad_user_data` default denied and never updated | Fix the update call; enable modelling via consent mode (basic vs advanced) |
 | Default set too late | CMP loads after GTM | Put the default inline before the snippet, or use the CMP template on Consent Initialization |
 | Non-Google tags (Meta, TikTok) fire despite denial | They do not read Google consent signals | Set "Additional consent checks" on those tags to require `ad_storage` (or use a consent-aware trigger) |
+| Consent tab shows the default after the user clicked Accept | CMP update fires on a later event, or the CMP template is not the one sending the update | Confirm one update source; the update must happen before the conversion event in the left panel |
+
+Basic vs advanced consent mode decides what "denied" looks like:
+
+| Mode | When consent is denied | What you see | Implication |
+|------|------------------------|--------------|-------------|
+| Basic | Google tags are blocked until consent is granted | No hits at all for denied users | No modelling input from those users; a drop equal to the denial rate is expected |
+| Advanced | Google tags load and send cookieless pings | Hits with `gcs=G100` (or similar), no cookies | Modelling can recover part of the gap; the tag is working |
+
+Expected loss vs bug: if the drop roughly matches the share of users who deny (ask the CMP's reporting for the opt-in rate), it is consent behaving as designed — the fix is the banner and modelling, not GTM. If granted users are also missing, it is a bug.
 
 ### Phase 7: Cross-domain and duplicates
 
 **Cross-domain (GA4)**: configure domains in GA4 Admin → Data streams → Configure tag settings → Configure your domains (not in a GTM linker tag). Verify the `_gl` parameter is appended to cross-domain links and that both sites load the same Google tag. Google Ads uses the Conversion Linker tag; enable "Link across domains" there.
 
-**Duplicate events**: count fires per action in Preview; check for multiple triggers on one tag; check whether the data layer push itself happens twice (framework double-render, plugin plus hard-coded code); check enhanced measurement overlap; for click triggers, use the most specific selector so parent and child do not both match.
+**Meta Pixel + Conversions API**: the browser event's `eventID` and the server event's `event_id` must be identical, and the event name must match exactly (`Purchase` ≠ `purchase`). In Events Manager, compare the browser and server rows and the deduplication status per event. Two partner integrations (e.g. a platform app and a GTM server tag) both sending server events is a common second source.
+
+**Duplicate events**: first measure the ratio — platform count ÷ true count (orders in the shop backend, leads in the CRM). About 2× points to two complete sources; a ratio between 1× and 2× points to a source that fires only on some pages, browsers or consent states. Then count fires per action in Preview; check for multiple triggers on one tag; check whether the data layer push itself happens twice (framework double-render, plugin plus hard-coded code); check enhanced measurement overlap; for click triggers, use the most specific selector so parent and child do not both match.
 
 ### Phase 8: Verify end to end
 
@@ -202,6 +248,8 @@ Correct order: consent default → consent update (after user choice) → tags. 
 3. Google Ads → Goals → Conversions: status "Recording conversions" within 24 hours (use Tag Assistant to see the conversion hit immediately)
 4. Meta Events Manager → Test Events: browser and server events appear once each, deduplicated
 5. Re-test with consent **denied** and **granted** in a fresh incognito session
+6. Test with ad blockers off for the reproduction, then once with one on to know the expected loss
+7. If test hits are missing from reports but present in DebugView, check GA4 data filters (internal / developer traffic) and allow for processing delay (standard reports can take 24–48 hours) before calling it a bug
 
 ## Output Format
 
@@ -210,17 +258,24 @@ GTM DIAGNOSIS: [Site]
 Container: GTM-XXXXXXX | Environment: [web / server-side / both] | CMP: [name or none]
 Issue reported: [Description, since when]
 
+--- TRIAGE ---
+Break point: [Site code / Data layer / Trigger / Tag / Network hit / Platform / Consent]
+Evidence used: [Preview / Network tab / container export / symptom description only]
+
 --- FINDINGS ---
-1. CONTAINER LOAD: [OK / problem — evidence]
-2. DATA LAYER: [Issues — key mismatches, timing, schema]
-3. TRIGGERS: [Trigger] — [Problem] — [Evidence from Preview]
-4. VARIABLES: [Variable] — [Problem] — [Evidence]
-5. TAGS: [Tag] — [Problem] — [Evidence]
-6. CONSENT: [Default/update state, which tags are blocked, evidence from Consent tab]
-7. DUPLICATES / CROSS-DOMAIN / SPA: [Findings]
+Status per line is one of OK / ISSUE / NOT CHECKED (say what evidence is missing).
+1. CONTAINER LOAD: [OK / ISSUE / NOT CHECKED] — [evidence]
+2. DATA LAYER: [OK / ISSUE / NOT CHECKED] — [key mismatches, timing, schema]
+3. TRIGGERS: [OK / ISSUE / NOT CHECKED] — [Trigger] — [Problem] — [Evidence from Preview]
+4. VARIABLES: [OK / ISSUE / NOT CHECKED] — [Variable] — [Problem] — [Evidence]
+5. TAGS: [OK / ISSUE / NOT CHECKED] — [Tag] — [Problem] — [Evidence]
+6. CONSENT: [OK / ISSUE / NOT CHECKED] — [Default/update state, mode, which tags are blocked, Consent tab evidence]
+7. DUPLICATES / CROSS-DOMAIN / SPA: [OK / ISSUE / NOT CHECKED] — [Findings]
 
 --- ROOT CAUSE ---
-[One or two sentences; confidence High / Medium / Low and why]
+[One or two sentences]
+Confidence: [High / Medium / Low] — [evidence that sets the level, per the confidence table]
+Data impact: [What was over/under-counted, since when, and whether history can be corrected]
 
 --- FIXES (in order) ---
 FIX 1: [Name]
@@ -257,7 +312,15 @@ FIX 2: [...]
 
 7. **Not checking for a second source of the same tag.** Shopify apps, WordPress plugins and hard-coded pixels fire alongside GTM and create duplicates.
 
-8. **Treating a reporting drop as a tracking bug without checking consent and attribution changes first.** A new CMP banner can halve "conversions" without breaking any tag.
+8. **Treating a reporting drop as a tracking bug without checking consent and attribution changes first.** A new CMP banner can halve "conversions" without breaking any tag. Compare the drop with the CMP's opt-in rate before touching tags.
+
+9. **Starting in the middle of the chain.** Rewriting a tag when the data layer never pushed the event wastes the fix. Use the triage table and fix the first broken link only.
+
+10. **Testing with an ad blocker or strict browser privacy on.** Blocked `gtm.js` or `/g/collect` looks like a broken setup. Reproduce in a clean profile first.
+
+11. **Deduplicating Pixel and CAPI with mismatched IDs or names.** Sending an `event_id` is not enough; the browser and server values and event names must be identical. Verify in Events Manager, not just in the code.
+
+12. **Calling a fix verified from Preview alone.** Preview proves the workspace, not production or the platform. Finish with DebugView / Events Manager / the Ads conversion status on the published version.
 
 ## Verification Checklist
 
@@ -270,4 +333,8 @@ FIX 2: [...]
 - [ ] Duplicate sources ruled out (second snippet, plugin, enhanced measurement, multiple triggers)
 - [ ] Fixes list the exact place and change, with data layer or consent code where needed
 - [ ] Verification steps cover Preview, DebugView/Events Manager/Ads, consent denied and granted, and published version
-- [ ] Root cause stated with a confidence level and open questions listed
+- [ ] Root cause stated with a confidence level that matches the confidence table, and open questions listed
+- [ ] Triage names the first broken link in the chain; findings for unexamined areas say NOT CHECKED rather than OK
+- [ ] For consent-related drops, the drop was compared with the opt-in rate and basic vs advanced mode was identified
+- [ ] For duplicates, the over-count ratio against a source of truth (backend orders, CRM) was used to locate the second source
+- [ ] Data impact stated: what was miscounted, since when

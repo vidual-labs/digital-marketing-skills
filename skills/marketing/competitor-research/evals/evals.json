@@ -1,6 +1,6 @@
 {
   "skill_name": "competitor-research",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,17 @@
         "Deep dives state sources and dates; any traffic/follower figures are labelled as fetched or estimated",
         "Includes paid-ad presence checks via Meta Ad Library / Google Ads Transparency Center and AI assistant recommendations for the category",
         "Gaps are quantified and checked against the brand's capacity (founder video)",
-        "Includes a research date, limitations and a watchlist"
+        "Includes a research date, limitations and a watchlist",
+        "Includes a threat ranking that scores every identified competitor on audience, offer, discovery and momentum and uses the totals to choose the deep dives"
       ],
       "checks": [
         {"type": "contains", "value": "COMPETITOR TABLE"},
         {"type": "contains", "value": "MARKET GAPS"},
         {"type": "regex", "pattern": "Ad Library|Transparency Center"},
         {"type": "contains", "value": "LIMITATIONS"},
-        {"type": "regex", "pattern": "Date:"}
+        {"type": "regex", "pattern": "Date:"},
+        {"type": "contains", "value": "THREAT RANKING"},
+        {"type": "regex", "pattern": "\\[(OBS|USER|EST|INF)\\b"}
       ]
     },
     {
@@ -39,7 +42,10 @@
         {"type": "regex", "pattern": "Ad Library"},
         {"type": "regex", "pattern": "G2|Capterra"},
         {"type": "regex", "pattern": "SWOT"},
-        {"type": "not_regex", "pattern": "\\d{2,3}k monthly visits"}
+        {
+          "type": "not_regex",
+          "pattern": "\\d{2,3}k monthly visits"
+        }
       ]
     },
     {
@@ -52,13 +58,41 @@
         "Each gap is quantified using the provided counts (e.g. 'none have YouTube >500 subs', '3 of 5 onboarding complaints')",
         "Feasibility is tied to the team (3 marketers, on-camera product person) so video is prioritized over channels they can't staff",
         "Recommendations span positioning, channel, content, paid and experience, in priority order",
-        "Flags pricing (monthly) as a product/positioning decision rather than a marketing-only action"
+        "Flags pricing (monthly) as a product/positioning decision rather than a marketing-only action",
+        "Each gap has a 'why empty' note and an Evidence × Demand × Feasibility score with an ACT NOW / TEST / PARK priority; monthly pricing is routed to a product/pricing owner"
       ],
       "checks": [
         {"type": "contains", "value": "MARKET GAPS"},
         {"type": "regex", "pattern": "YouTube"},
         {"type": "regex", "pattern": "onboarding"},
-        {"type": "contains", "value": "STRATEGIC RECOMMENDATIONS"}
+        {"type": "contains", "value": "STRATEGIC RECOMMENDATIONS"},
+        {"type": "regex", "pattern": "ACT NOW"},
+        {"type": "regex", "pattern": "\\[USER\\]"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "threat-ranking-and-ad-library-reading",
+      "prompt": "We sell a scheduling app for physiotherapy clinics in Spain (2–15 therapists). I found 9 competitors and only have time to deep-dive 4. Here's what I have: Doctoralia (huge brand, mostly patient marketplace, ads on Google), Clinic Cloud (same segment, 22 Meta ads all started in the last 3 weeks, hiring 2 SDRs), Fisio Software X (same segment, 3 Meta ads all from February, no new content since spring), Jane App (not active in Spain that I can see), Agenda Pro (same segment, 1 Meta ad running since May, ranks top 3 for 'software fisioterapia'), Excel/Google Calendar (what 40% of our lost deals said they'd keep using), Physitrack (exercise prescription, partners with clinics), Nubimed (multi-specialty clinics, larger), Mindbody (gyms/wellness). We lose most deals to Clinic Cloud. Which 4 should I deep-dive and what do the ad patterns tell me?",
+      "files": [],
+      "expected_output": "Threat ranking table scoring all nine on audience, offer, discovery and momentum with totals and DEEP DIVE / WATCHLIST / LIST decisions; Clinic Cloud deep-dived (top total and most deals lost to it); Agenda Pro deep-dived; spreadsheets/calendar kept as an indirect substitute and likely deep-dived or explicitly handled given 40% of lost deals; Doctoralia not deep-dived on fame alone; ad-library reading labelled [INF]: Clinic Cloud's 22 new ads = active test/scale, Fisio Software X's stale batch = deprioritised paid, Agenda Pro's single long-running ad = probable performer to study; Jane App 'no ads' checked across region/libraries before concluding; evidence tags on figures; limitations.",
+      "assertions": [
+        "Scores all nine competitors on the four threat factors with totals and a decision per competitor, rather than choosing by brand size",
+        "Deep-dives Clinic Cloud (justified by both score and most lost deals) and includes Excel/Google Calendar as an indirect substitute given 40% of lost deals",
+        "Does not deep-dive Doctoralia, Mindbody or Physitrack on fame or adjacency alone; places them on WATCHLIST or LIST with reasons",
+        "Interprets the ad patterns correctly and labels them as inferences: 22 new ads in 3 weeks = active testing/scaling; stale February batch = deprioritised; single ad running since May = likely performer",
+        "Warns that 'not active in Spain' for Jane App must be checked across ad libraries, country filters and name variants before concluding no paid activity",
+        "Tags figures with evidence labels ([USER], [INF], etc.) and does not invent spend, traffic or follower numbers"
+      ],
+      "checks": [
+        {"type": "contains", "value": "THREAT RANKING"},
+        {"type": "regex", "pattern": "Clinic Cloud.*DEEP DIVE|DEEP DIVE.*Clinic Cloud"},
+        {"type": "min_count", "pattern": "\\b(DEEP DIVE|WATCHLIST|LIST)\\b", "count": 9},
+        {"type": "regex", "pattern": "\\[INF"},
+        {"type": "regex", "pattern": "\\[USER\\]"},
+        {"type": "regex", "pattern": "Excel|spreadsheet|Google Calendar"},
+        {"type": "contains", "value": "LIMITATIONS"},
+        {"type": "not_regex", "pattern": "€\\s?\\d[\\d.,]*\\s*(k|K)?\\s*(/|per)\\s*(month|mes)"}
       ]
     }
   ]

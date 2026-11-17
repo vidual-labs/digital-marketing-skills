@@ -1,6 +1,6 @@
 {
   "skill_name": "linkedin-organic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,38 @@
         "Rewrites the headline from a job title to who she helps + outcome + proof",
         "Cadence fits 2 hours/week (e.g. 2–3 posts and 15–20 min commenting on 2–3 days) rather than daily posting",
         "Includes a comment flywheel with target account types (CISOs, security communities)",
-        "Does not recommend the retired Creator Mode toggle; mentions setting Follow as primary button if relevant"
+        "Does not recommend the retired Creator Mode toggle; mentions setting Follow as primary button if relevant",
+        "Format scorecard shows link posts far below the text-post median (1,100 vs 7,800 impressions, ~0.14×) and gives each format a verdict"
       ],
       "checks": [
-        {"type": "contains", "value": "CONTENT PILLARS"},
-        {"type": "contains", "value": "COMMENT STRATEGY"},
-        {"type": "regex", "pattern": "link post|external link"},
-        {"type": "regex", "pattern": "Headline"},
-        {"type": "not_regex", "pattern": "turn on creator mode"}
+        {
+          "type": "contains",
+          "value": "CONTENT PILLARS"
+        },
+        {
+          "type": "contains",
+          "value": "COMMENT STRATEGY"
+        },
+        {
+          "type": "regex",
+          "pattern": "link post|external link"
+        },
+        {
+          "type": "regex",
+          "pattern": "Headline"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "turn on creator mode"
+        },
+        {
+          "type": "contains",
+          "value": "FORMAT SCORECARD"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:"
+        }
       ]
     },
     {
@@ -36,9 +60,18 @@
         "Provides a measurable plan (what to post where, KPIs)"
       ],
       "checks": [
-        {"type": "regex", "pattern": "personal profile"},
-        {"type": "regex", "pattern": "advocacy|employees"},
-        {"type": "regex", "pattern": "company page"}
+        {
+          "type": "regex",
+          "pattern": "personal profile"
+        },
+        {
+          "type": "regex",
+          "pattern": "advocacy|employees"
+        },
+        {
+          "type": "regex",
+          "pattern": "company page"
+        }
       ]
     },
     {
@@ -54,9 +87,58 @@
         "Explains the reasoning for each change briefly"
       ],
       "checks": [
-        {"type": "regex", "pattern": "first comment"},
-        {"type": "not_regex", "pattern": "please like and share"},
-        {"type": "not_regex", "pattern": "^excited to share"}
+        {
+          "type": "regex",
+          "pattern": "first comment"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "please like and share"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "^excited to share"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "high-reach-no-leads-audience-fit",
+      "prompt": "I run a 3-person HR software consultancy and I've grown my LinkedIn from 2k to 11k followers this year. My posts average 15k impressions and 250 reactions, but almost no comments (maybe 6 per post) and zero inbound leads. Analytics says my top follower titles are 'Content Creator', 'Founder' and 'Marketing Manager'; I sell to HR directors at 500+ employee companies. I'm in two engagement pods. About 3 hours a week. What's going on?",
+      "files": [],
+      "expected_output": "Diagnoses audience fit (followers are creators/marketers, not HR directors) and low comment ratio (~0.02) as the problem rather than reach, names engagement pods as a cause and recommends leaving them, re-aims pillars and comment flywheel at accounts HR directors follow, adds a conversion path (headline promise, Featured lead magnet/booking link), sets KPIs on audience fit and leads rather than impressions, and fits 3 hours a week.",
+      "assertions": [
+        "Names audience fit as the primary constraint, citing top titles vs the HR-director target",
+        "Calculates or cites the comment ratio (about 6 ÷ 250 ≈ 0.02) as applause-only engagement",
+        "Recommends leaving the engagement pods and explains how they skew the audience",
+        "Re-targets pillars and the comment flywheel toward HR leaders and the accounts they follow",
+        "Adds a conversion path and KPIs on audience fit and leads, with a cadence that fits 3 hours/week"
+      ],
+      "checks": [
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:.*(fit|audience)"
+        },
+        {
+          "type": "regex",
+          "pattern": "audience fit"
+        },
+        {
+          "type": "regex",
+          "pattern": "pod"
+        },
+        {
+          "type": "regex",
+          "pattern": "comment ratio|comments ÷ reactions|comments/reactions"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY ACTIONS"
+        },
+        {
+          "type": "contains",
+          "value": "COMMENT STRATEGY"
+        }
       ]
     }
   ]

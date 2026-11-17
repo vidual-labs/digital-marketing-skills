@@ -1,6 +1,6 @@
 {
   "skill_name": "instagram-organic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,38 @@
         "Diagnoses that single images (57% of posts) under-deliver while Reels and carousels earn shares and saves, and shifts the mix accordingly",
         "Cadence is realistic for a two-person team (not daily posting) and includes a Stories routine for shop conversion",
         "3–5 pillars each have a recurring series format",
-        "Profile section uses native multiple links and pinned posts; hashtags limited to ≤5"
+        "Profile section uses native multiple links and pinned posts; hashtags limited to ≤5",
+        "Includes a format scorecard with sends/reach and saves/reach per format (e.g. Reels ~0.8% sends, carousels ~2.2% saves, images ~0.2% sends) and a verdict per format"
       ],
       "checks": [
-        {"type": "contains", "value": "CONTENT PILLARS"},
-        {"type": "contains", "value": "GROWTH PLAN"},
-        {"type": "regex", "pattern": "sends|shares"},
-        {"type": "regex", "pattern": "saves"},
-        {"type": "not_regex", "pattern": "(10|15|20|30) hashtags"}
+        {
+          "type": "contains",
+          "value": "CONTENT PILLARS"
+        },
+        {
+          "type": "contains",
+          "value": "GROWTH PLAN"
+        },
+        {
+          "type": "regex",
+          "pattern": "sends|shares"
+        },
+        {
+          "type": "regex",
+          "pattern": "saves"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "(10|15|20|30) hashtags"
+        },
+        {
+          "type": "contains",
+          "value": "FORMAT SCORECARD"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:"
+        }
       ]
     },
     {
@@ -33,13 +57,30 @@
         "Identifies the reposting of others' content (12 in ~30 days) as the likely cause given Instagram's original-content rules",
         "Explains that 30 hashtags do not help and recommends ≤5 topical hashtags",
         "Gives a concrete recovery plan (stop reposts, original Reels, series, sends-focused content) with a timeline and KPIs",
-        "Does not promise a specific reach number"
+        "Does not promise a specific reach number",
+        "Recommends checking Account Status for recommendation eligibility and locates the drop (non-follower vs follower reach) before prescribing fixes"
       ],
       "checks": [
-        {"type": "regex", "pattern": "repost"},
-        {"type": "regex", "pattern": "original"},
-        {"type": "regex", "pattern": "hashtag"},
-        {"type": "contains", "value": "GROWTH PLAN"}
+        {
+          "type": "regex",
+          "pattern": "repost"
+        },
+        {
+          "type": "regex",
+          "pattern": "original"
+        },
+        {
+          "type": "regex",
+          "pattern": "hashtag"
+        },
+        {
+          "type": "contains",
+          "value": "GROWTH PLAN"
+        },
+        {
+          "type": "regex",
+          "pattern": "Account Status"
+        }
       ]
     },
     {
@@ -55,9 +96,58 @@
         "Keeps the skill's output structure or a clear request list"
       ],
       "checks": [
-        {"type": "regex", "pattern": "screenshot|Insights|export"},
-        {"type": "not_regex", "pattern": "Followers: \\d{2,}"},
-        {"type": "regex", "pattern": "assum"}
+        {
+          "type": "regex",
+          "pattern": "screenshot|Insights|export"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "Followers: \\d{2,}"
+        },
+        {
+          "type": "regex",
+          "pattern": "assum"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "reallocate-mix-small-sample-and-profile-conversion",
+      "prompt": "Help me decide what to post more of on Instagram. Ceramics studio, 3,100 followers, goal is selling workshop seats. Last 60 days from Insights: 14 Reels (avg reach 4,800, 22 shares, 18 saves, 9 follows each, non-follower share 58%), 3 carousels (avg reach 1,500, 4 shares, 41 saves), 11 single images (avg reach 700, 1 share, 6 saves). Profile visits 2,900 total but only 140 new follows. Link in bio is a Linktree with 9 links. I can do about 5 hours a week.",
+      "files": [],
+      "expected_output": "Per-format scorecard computing sends/reach and saves/reach (Reels ~0.46% sends / 0.38% saves; carousels ~0.27% sends / 2.7% saves; images ~0.14% / 0.86%), keeps/scales Reels for reach, keeps carousels for saves while labelling the 3-post read as provisional, cuts single images, diagnoses profile conversion (~4.8% visit→follow) as the primary constraint with fixes to bio, name field, native links and pinned posts, and a cadence that fits 5 hours a week.",
+      "assertions": [
+        "Computes sends/reach and saves/reach per format from the given numbers rather than using likes",
+        "Labels the carousel verdict provisional because there are only 3 carousels, and schedules more to test it given the high saves/reach",
+        "Recommends cutting or sharply reducing single images (lowest reach by far, 700 vs 4,800, and lowest sends/reach at ~0.14%)",
+        "Identifies profile visit → follow (~5%) as the main constraint and fixes it: name-field keyword, bio promise, native links (up to 5) instead of 9 Linktree links, pinned posts with workshop proof/offer",
+        "Cadence fits ~5 hours/week and ties to workshop sales (Stories with link/booking, KPIs on link clicks or DMs)"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "FORMAT SCORECARD"
+        },
+        {
+          "type": "regex",
+          "pattern": "^Primary constraint:"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY ACTIONS"
+        },
+        {
+          "type": "regex",
+          "pattern": "provisional|untested|small sample"
+        },
+        {
+          "type": "regex",
+          "pattern": "profile visit"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\[(Insights|user-provided)\\]"
+        }
       ]
     }
   ]

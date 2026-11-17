@@ -2,6 +2,40 @@
 
 All notable changes to the skills in this repository. Versions follow [semver](https://semver.org/) per skill; a repo-wide release bumps every skill that changed. See [CONTRIBUTING.md](CONTRIBUTING.md) for the bump rules.
 
+## 1.2.0 — 2026-11-17
+
+Repo-wide release: every skill bumped from 1.1.0 to 1.2.0 after a substantive review pass. Evals grow from 45 to 60 prompts (one new eval per skill).
+
+### Repository
+
+- **Added** `assets/`: static light/dark logo and two animated SVG visuals (`demo-workflow.svg`, `skill-map.svg`) for the README.
+- **Changed** README header: centered logo, badges (CI, version, skills, evals, format, license, supported agents) and quick-nav links; replaced the ASCII banner.
+
+### All skills (universal changes)
+
+- Diagnostic skills now decompose the headline metric first and name a single **primary driver/constraint** before recommending changes.
+- Thresholds are stated as starting points relative to the account's own median or baseline, with explicit minimum-data floors before pausing, scaling or calling winners.
+- Output formats gained scorecards, diagnosis blocks and explicit "not evaluated" / assumptions lines so answers are comparable and gradeable.
+- Common Pitfalls and Verification Checklists expanded; each skill gained a new eval (`evals/evals.json` id 4) and stricter machine checks on existing evals.
+
+### Per-skill updates
+
+- **meta-ads-creative** — Added awareness-level angle table, data-driven iteration table (hook rate, hold rate, link CTR, post-click CVR, frequency vs the account median) naming the one element to change, set-diversity rules, policy-safe rewrite table and test-design table (uneven spend is not a verdict); output gains AWARENESS, PROOF USED, ITERATION READ, "Changes vs control", character counts and a structured TEST PLAN; new eval 4 (iterate a fatigued winner).
+- **meta-ads-diagnostics** — Added CPA decomposition triage (CPM × link CTR × CVR) routing the primary driver, minimum-data floors, data-confidence gating, Advantage+ vs manual rules, scaling table and change order by learning reset; output gains Baseline used, PRIMARY DRIVER, DO NOT CHANGE YET, NOT EVALUATED, `Learning reset:` per change and a health-score rubric; fixed the vague kill rule (spend ≥ 3× target CPA and CPA > 1.5× target, outside learning); new eval 4 (Q4 CPM spike, not creative).
+- **google-ads-keywords** — Added 8-class intent classification with default actions, decision-rule tables (split ad group, exact vs phrase, search-term action with conversion-based click floor, negative level) and a negative-conflict check (e.g. "free" blocking [gluten free cake]); output gains SUMMARY, intent tags, NEGATIVE CONFLICTS and SEPARATE CAMPAIGNS blocks; fixed 80-character checklist rule; new eval 4.
+- **google-ads-diagnostics** — Added metric-decomposition triage (CPA = CPC ÷ CVR) routing each driver to first checks, minimum-data floors, data-confidence gating, lost-IS (budget vs rank) reading and changes ordered by Smart Bidding learning risk; output gains Baseline used, PRIMARY DRIVER, `Learning risk:` per change, NOT EVALUATED and a health-score rubric; removed unverifiable industry CVR benchmarks; new eval 4.
+- **tiktok-ads** — Added "Reading Creative Tests" (Scale / Iterate / Kill / Wait verdicts against the account's own median), hook-type selection table and Spark Ads authorization guidance; output gains TEST READ, "Builds on:", character counts, muted and safe-zone check and a structured TESTING PLAN; fixed inconsistent safe-zone guidance (bottom ~35% plus right-hand button column); new eval 4.
+- **instagram-organic** — Added signal-ratio table (sends/saves per reach, non-follower share, follows per 1,000 reach) and per-format median classification (min 5 posts); "if X then Y" format-mix rules, reach-drop diagnosis starting with Account Status, Trial Reels testing protocol; output gains FORMAT SCORECARD, DIAGNOSIS with "Primary constraint:", PRIORITY ACTIONS and source-labelled numbers; 5 new pitfalls, new eval 4.
+- **linkedin-organic** — Added quality/fit ratios (comments ÷ reactions, target-title audience share, profile views per post), median-based post classification and diagnostic rules (link suppression, applause-only posts, audience mismatch, no conversion path); hours-per-week plan table and 5-point pre-publish score; output gains FORMAT SCORECARD, DIAGNOSIS, PRIORITY ACTIONS; new eval 4 (high reach, no leads).
+- **youtube-organic** — Added CTR × retention matrix naming the primary constraint, supporting ratios and median-based video classification at 7/28 days; Test & Compare rules; output gains DIAGNOSIS, VIDEO SCORECARD, PRIORITY ACTIONS, retention at 30 s, Shorts vs long-form split; new eval 4.
+- **pinterest-organic** — Added Go/Test/Deprioritize niche-fit table, funnel diagnosis (impressions → saves → outbound clicks → conversions) against the account's own top pins, board/pin maintenance table (archive, don't delete); output gains NICHE FIT, FUNNEL DIAGNOSIS, per-board actions and `PIN n:` lines with character counts; 3 new pitfalls; new eval 4.
+- **geo-ai-seo** — Fixed crawler classification (ClaudeBot is a training crawler; removed outdated `anthropic-ai`) with a per-company table of search, user-fetch and training crawlers, note that blocking Google-Extended doesn't remove AI Overviews eligibility, and a sample robots.txt; added six-layer "Why are we not cited?" diagnosis, sub-question map, query → page-type table, citation log with ≥3 runs; output gains DIAGNOSIS, robots.txt changes and ASSUMPTIONS & PLACEHOLDERS; new eval 4.
+- **landing-page-funnel** — Added leak-diagnosis table (symptom → cause → first fix → evidence), 1–5 message-match scoring where the lowest element wins, sample-size math (16·p(1−p)/(p·MDE)²) with weeks-at-current-traffic feasibility check and ship/test/research table; output gains LEAK DIAGNOSIS, keep/defer/remove form fields, full test-plan lines and ASSUMPTIONS & MISSING DATA; new eval 4.
+- **gtm-debugging** — Added first-broken-link triage, Network-tab reading guide (GA4 `/g/collect` incl. `gcs`, Google Ads, Meta `ev`/`eid`), evidence-based confidence levels, basic vs advanced consent mode, consent-loss vs bug rule, Pixel + CAPI dedup rules, ad-blocker and GA4 filter steps; output gains TRIAGE, OK/ISSUE/NOT CHECKED status, Confidence and Data impact lines; new eval 4 (Pixel + CAPI double purchases).
+- **branding** — Added Scope Decision (new / enforce / evolve / rebrand) that keeps recognised assets by default, WCAG 2.2 AA contrast table (AAA target for tough conditions), 1–3 voice check for copy and AI output, touchpoint consistency score; output gains `Scope:`, contrast matrix and touchpoint audit with owners; fixed tap-target guidance (WCAG 2.2 AA = 24×24 px, 44×44 kept as brand standard); new eval 4 (rebrand request with recognised assets).
+- **market-positioning** — Added repeatable messaging-overlap calculation with Distinct/Blurred/Interchangeable bands, blocker rule, strategy diagnosis (PROCEED / DIFFERENTIATE / RE-SEGMENT / PIVOT), Phase 4a point-of-difference scoring (want / prove / claimed / copyable) and category-choice table; output gains Strategy Diagnosis, Candidate Points of Difference, scored consistency audit and `Decision:`; new eval 4.
+- **competitor-research** — Added evidence tags ([OBS]/[USER]/[EST]/[INF]), Phase 1b threat ranking, ad-library pattern reading, review-sampling method, "why is this gap empty" check and gap scoring (ACT NOW / TEST / PARK); output gains Threat Ranking, scored Market Gaps and recommendations with metric and owner; new eval 4.
+
 ## 1.1.0 — 2026-10-02
 
 Repo-wide release: every skill bumped from 1.0.0 to 1.1.0. Platform facts verified as of 2026-10-02.

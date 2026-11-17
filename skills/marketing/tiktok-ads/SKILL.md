@@ -1,13 +1,13 @@
 ---
 name: tiktok-ads
-description: Use when creating TikTok ad creatives and copy — hook-driven video concepts, second-by-second scripts, in-app ad text, Spark Ads briefs, format and placement choice, and creative testing plans for TikTok Ads Manager. Also use when the user asks to "make this ad feel native", adapt Meta or YouTube creative for TikTok, or write UGC-style scripts for TikTok campaigns. Don't use for TikTok organic growth, TikTok Shop seller operations, creator outreach negotiations, or performance diagnostics of a running TikTok account.
-version: 1.1.0
+description: Use when creating TikTok ad creatives and copy — hook-driven video concepts, second-by-second scripts, in-app ad text, Spark Ads briefs, format and placement choice, and creative testing plans for TikTok Ads Manager. Also use when the user asks to "make this ad feel native", adapt Meta or YouTube creative for TikTok, or write UGC-style scripts for TikTok campaigns. Also use when reading creative test results (view rates, CTR, CPA per ad) to decide which creatives to scale, iterate or kill. Don't use for TikTok organic growth, TikTok Shop seller operations, creator outreach negotiations, or account-level diagnostics (bidding, budget, structure) of a running TikTok account.
+version: 1.2.0
 author: vidual-labs
 license: MIT
 compatibility: Works in any agent that reads SKILL.md. No tools or TikTok API access required.
 metadata:
   category: paid-social
-  updated: 2026-10-02
+  updated: 2026-11-17
   tags: [tiktok, tiktok-ads, creative, copywriting, video-ads, ugc, spark-ads, direct-response, performance-marketing]
   related_skills: [meta-ads-creative, meta-ads-diagnostics, instagram-organic, youtube-organic]
 ---
@@ -25,8 +25,9 @@ Create native-feeling creative concepts, scripts and ad text for TikTok advertis
 - Adapting Meta, YouTube or TV creative so it survives on TikTok
 - Producing hook variations for creative testing
 - Writing ad text, display names and CTA choices for TikTok Ads Manager
+- Reading per-creative test results and writing the next round of creatives
 
-Don't use for: organic TikTok content strategy, TikTok Shop catalog or seller logistics, influencer contract negotiation, or diagnosing campaign metrics (apply the structure of `meta-ads-diagnostics` with TikTok's metrics instead).
+Don't use for: organic TikTok content strategy, TikTok Shop catalog or seller logistics, influencer contract negotiation, or account-level diagnostics such as bidding, budget and structure (apply the structure of `meta-ads-diagnostics` with TikTok's metrics instead).
 
 ## Inputs
 
@@ -39,6 +40,7 @@ Ask for (or extract from the conversation):
 - **Production reality**: who can film (founder, team, creators), budget for UGC, existing footage
 - **Landing destination**: website, instant form, app store, TikTok Shop
 - **Markets and languages** — hooks and slang are locale-specific
+- **Creative results** when iterating: per-creative impressions, 2-second and 6-second view rates, average watch time or completion, CTR, conversions, CPA, spend, days live, and the target CPA
 
 Data rules: do not fabricate testimonials or statistics; write `[insert proof]` and say what is missing. Keep claims inside TikTok's ad policies (no exaggerated before/after, no health or finance claims without substantiation, age-gated categories flagged). Field names and limits below reflect Ads Manager in 2026; if the UI differs, follow the UI and mention it.
 
@@ -66,7 +68,7 @@ There is no separate headline/description pair for standard in-feed video ads; c
 | Show the product in a real place, in real hands | White-background product shots |
 | Hook in 1–2 seconds | Spend 3 seconds "setting the scene" |
 
-Keep the top ~130 px and bottom ~35% of the frame (caption, buttons, sound row) free of essential text.
+Keep the top ~130 px, the bottom ~35% (display name, ad text, CTA, sound row) and the right-hand edge (like, comment, share buttons) free of essential text and faces. Check against the safe-zone overlay in Ads Manager or the Creative Center before export.
 
 ## Hook Formulas
 
@@ -82,6 +84,19 @@ Users decide in roughly 1–2 seconds. The hook is both the first spoken line an
 8. **Comment reply / stitch style**: "Replying to @user: yes, here's how…" — feels like community, not an ad.
 
 Hook rules: no greeting, no self-introduction, on-screen text mirrors the spoken hook, and the hook must still work muted.
+
+### Choosing hook types
+
+Pick the three hook types for a set from the product and the audience, not at random.
+
+| Situation | Lead hook types | Why |
+|-----------|-----------------|-----|
+| The product does something visible in seconds | Demo, pattern interrupt | Proof in frame 1 beats any claim |
+| Solves an everyday annoyance | Statement, POV, story | Recognition stops the scroll |
+| Skeptical category or higher price | Result (with real proof), comment reply, story | Doubt needs evidence and a human voice |
+| B2B or software | Statement ("the mistake…"), comment reply, screen demo with a face in frame | Pure screen recordings feel like ads; a person makes it native |
+| Retargeting / warm | Comment reply answering the #1 objection, offer-led statement | They know the product; remove the reason they did not buy |
+| Regulated claims (health, finance, beauty) | Demo, story, routine | Show use; avoid outcome promises the policy restricts |
 
 ## Script Structures
 
@@ -144,43 +159,6 @@ Creator sourcing: TikTok One (creator marketplace) and Symphony (AI creative too
 | App installs | Download, Install now |
 | TikTok Shop | Shop now (product anchor) |
 
-## Output Format
-
-```
-TIKTOK AD SET: [Campaign name]
-Objective: [Reach / Traffic / Leads / App / Conversions / Shop]
-Campaign type: [In-Feed auction / Spark Ads / Smart+ / Search]
-Audience & funnel stage: [Who, cold/warm/retargeting]
-Destination: [URL / instant form / app store / TikTok Shop]
-Policy notes: [Claims to avoid or substantiate]
-
---- CREATIVE 1 (Hook: [type]) ---
-Length: [15 s / 30 s / 60 s] | Style: [founder-to-camera / UGC / demo / stitch]
-Sound: [original voice / trending sound to verify / voiceover]
-Ad text (≤ 100 chars, key words in first 40): [..]
-Display name: [..]
-CTA: [Button]
-
-SCRIPT
-[0:00–0:02] HOOK — Spoken: "..." — On-screen: "..." — Visual: ...
-[0:02–0:07] — Spoken: "..." — On-screen: "..." — Visual: ...
-[0:07–0:12] — ...
-[...]
-
-Pinned comment: [CTA, link note or objection answer]
-Hypothesis: [What this creative tests]
-
---- CREATIVE 2 (Hook: [different type]) ---
-[...]
-
---- CREATIVE 3 (Hook: [different type]) ---
-[...]
-
-TESTING PLAN: [Variable per test, how to isolate it, success metric]
-```
-
-Produce at least three creatives with different hook types. Same body, different hooks is a valid first test; different concepts is the second.
-
 ## Testing Strategy
 
 | Test | Change | Keep constant | Metric |
@@ -192,7 +170,95 @@ Produce at least three creatives with different hook types. Same body, different
 | CTA | Button + spoken CTA | Creative | CTR, CVR |
 | Spark vs dark | Same video via creator account vs brand | Everything | CPM, CTR, CPA |
 
+One variable per test. When a test ends, write down the verdict and the next test it implies before briefing new creative.
+
+Spark Ads need the post owner's authorization: the creator turns on ad authorization for the post and sends an authorization code, which carries an expiry. Confirm the authorization window covers the planned flight and put it in the creator brief.
+
 Use the TikTok Creative Center (Top Ads, Keyword Insights, Trend Discovery) to check what is working in the category before filming, and check that a "trending" sound is licensed for commercial use in Ads Manager's Commercial Music Library.
+
+## Reading Creative Tests
+
+Judge each creative against the median of the account's own creatives in the same campaign and objective. If there is no history, the first test round's median becomes the baseline; avoid importing benchmarks from other accounts or from Meta.
+
+| Metric | Definition | Tells you about |
+|--------|-----------|-----------------|
+| 2-second view rate | 2-second views ÷ impressions | The hook (frame 1 and the first line) |
+| 6-second view rate | 6-second views ÷ impressions | Whether the hook's promise is paid off |
+| Average watch time / completion | Average seconds watched; 100% views ÷ impressions | Pacing and length |
+| CTR (destination) | Clicks ÷ impressions | Whether the video gives a reason to act |
+| Conversion rate | Conversions ÷ clicks | Fit between the video's promise and the destination |
+| CPA / ROAS | Cost ÷ conversions; value ÷ cost | The verdict |
+
+### If X then Y
+
+| Pattern (vs account median) | Diagnosis | Next iteration |
+|-----------------------------|-----------|----------------|
+| Low 2-second view rate | Hook fails | Same body, 3 new hooks (different types) |
+| Good 2-second, low 6-second view rate | The second beat is slow or off-promise | Tighten 0:02–0:06; show the product or result earlier |
+| Good view rates, low CTR | No reason to act | Stronger spoken + on-screen CTA, offer on screen, interactive add-on, pinned comment |
+| Good CTR, low conversion rate | Video promises something the destination does not deliver, or a tracking issue | Align offer and landing page; check the event fires before changing creative |
+| Good across the board, CPA rising week over week | Fatigue | New hooks on the winner first, then a new concept with the same insight |
+| CPM high on every creative | Audience or auction, not creative | Account-level fix (broaden, budget, bidding), not a new script |
+
+### Verdicts and minimum data
+
+| Verdict | Rule (starting points; tighten with the account's own data) |
+|---------|------------------------------------------------------------|
+| **Scale** | CPA ≤ target with ≥ ~5–10 conversions, and view rates at or above the median |
+| **Iterate** | One step clearly weak (per the table above) while another is clearly strong, or CPA within ~1.0–1.5× target |
+| **Kill** | Spend ≥ ~2× target CPA with no conversion, or CPA > ~1.5× target past the floor with no strong step worth keeping |
+| **Wait** | Below the floor: under a few thousand impressions for view-rate calls, or under ~1× target CPA spend for CPA calls, or fewer than ~3 days live |
+
+TikTok creative tends to wear out faster than on other platforms. For always-on spend, plan new hooks every 1–2 weeks and a new concept when hook refreshes stop restoring the 2-second view rate.
+
+## Output Format
+
+```
+TIKTOK AD SET: [Campaign name]
+Objective: [Reach / Traffic / Leads / App / Conversions / Shop]
+Campaign type: [In-Feed auction / Spark Ads / Smart+ / Search] — [one-line reason]
+Audience & funnel stage: [Who, cold/warm/retargeting]
+Destination: [URL / instant form / app store / TikTok Shop]
+Proof used: [Facts the user supplied, or "none supplied — placeholders used"]
+Policy notes: [Claims to avoid or substantiate, or "None"]
+
+TEST READ (only when results were shared; otherwise "n/a — new set")
+| Creative | 2s VR | 6s VR | CTR | CVR | CPA | Spend | Verdict | Reason |
+| [name] | [..] | [..] | [..] | [..] | [..] | [..] | [Scale / Iterate / Kill / Wait] | [weak or strong step vs median] |
+Baseline: [account median / first-round median]
+
+--- CREATIVE 1 (Hook: [type]) ---
+Builds on: [new concept | iteration of [creative] — changes [one element]]
+Length: [15 s / 30 s / 60 s] | Style: [founder-to-camera / UGC / demo / stitch]
+Sound: [original voice / Commercial Music Library track / voiceover]
+Ad text ([n] chars; ≤ 100, key words in first 40): [..]
+Display name ([n] chars; ≤ 20): [..]
+CTA: [Button]
+
+SCRIPT
+[0:00–0:02] HOOK — Spoken: "..." — On-screen: "..." — Visual: ...
+[0:02–0:07] — Spoken: "..." — On-screen: "..." — Visual: ...
+[0:07–0:12] — ...
+[...]
+
+Muted & safe-zone check: [Hook readable without sound? Text clear of top, bottom ~35% and right edge?]
+Pinned comment: [CTA, link note or objection answer]
+Hypothesis: If [what this creative does differently], then [metric] beats [baseline] because [insight].
+
+--- CREATIVE 2 (Hook: [different type]) ---
+[...]
+
+--- CREATIVE 3 (Hook: [different type]) ---
+[...]
+
+TESTING PLAN
+Test: [Hook / Length / Style / Sound / CTA / Spark vs dark]
+Variable: [what changes] | Constant: [what stays]
+Metric: [2s VR / 6s VR / CTR / CPA] | Minimum data: [floor before a verdict]
+Decision rule: [what result leads to Scale / Iterate / Kill, and the next test]
+```
+
+Produce at least three creatives with different hook types. Same body, different hooks is a valid first test; different concepts is the second. Fill every line; write "n/a — [reason]" rather than deleting one.
 
 ## Common Pitfalls
 
@@ -204,24 +270,33 @@ Use the TikTok Creative Center (Top Ads, Keyword Insights, Trend Discovery) to c
 
 4. **Over-production.** iPhone footage with jump cuts routinely beats agency films here. Spend on more concepts, not more polish.
 
-5. **Ignoring Spark Ads.** Running a creator's video as a dark post throws away the social proof and the creator's profile credibility.
+5. **Ignoring Spark Ads.** Running a creator's video as a dark post throws away the social proof and the creator's profile credibility. Secure the authorization code early and check its expiry against the flight.
 
 6. **Writing a 2,000-character caption.** Ad text is 100 characters and mostly hidden. Put the argument in the video.
 
 7. **Using unlicensed sounds.** Organic trending sounds are often not cleared for ads. Check the Commercial Music Library or use original audio.
 
-8. **One hook across ten ads.** TikTok's system detects near-duplicates and throttles them. Rotate hooks weekly.
+8. **One hook across ten ads.** Near-duplicate creatives compete with each other and fatigue together. Rotate hooks every 1–2 weeks.
+
+9. **Fixing the wrong step.** A new hook will not fix a low conversion rate, and a new landing page will not fix a 2-second view rate in the bottom of the account. Read the funnel per creative before rewriting.
+
+10. **Calling tests too early.** A creative with 800 impressions and no conversion has not lost. Apply the minimum-data floor and mark it "Wait".
+
+11. **Judging against someone else's benchmarks.** View rates vary by category, audience and objective. Use the account's median, or the first round's median when there is no history.
+
+12. **Hiding text under the UI.** The right-hand button column and the caption area cover more than expected. Check the safe-zone overlay before export.
 
 ## Verification Checklist
 
-- [ ] At least 3 creatives with distinct hook types and a stated hypothesis each
+- [ ] At least 3 creatives with distinct hook types, chosen from the hook-selection table, each with an if/then hypothesis
 - [ ] Every hook lands in the first 2 seconds, spoken and on screen, and works muted
 - [ ] Scripts are timestamped with spoken line, on-screen text and visual direction per segment
-- [ ] Ad text ≤ 100 characters with the key words in the first 40; display name ≤ 20 characters
+- [ ] Ad text ≤ 100 characters with the count shown and key words in the first 40; display name ≤ 20 characters with the count shown
 - [ ] CTA matches the objective and destination
-- [ ] Safe zones respected (no essential text in the top ~130 px or bottom third)
+- [ ] Safe zones respected (no essential text in the top ~130 px, bottom ~35% or right-hand button column)
 - [ ] Sound choice is commercially licensed or original
-- [ ] Campaign type chosen deliberately (In-Feed, Spark, Smart+, Search) with a reason
+- [ ] Campaign type chosen deliberately (In-Feed, Spark, Smart+, Search) with a reason; Spark authorization noted when creators are involved
 - [ ] Proof is real or marked `[insert proof]`; claims are policy-safe
 - [ ] Pinned comment strategy included
-- [ ] Testing plan isolates one variable per test with a named metric
+- [ ] If results were shared, TEST READ gives every creative a Scale / Iterate / Kill / Wait verdict against the account baseline, and the new creatives follow from those verdicts
+- [ ] Testing plan isolates one variable per test with a named metric, minimum data and decision rule
