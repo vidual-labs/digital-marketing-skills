@@ -15,7 +15,7 @@
   <a href="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml"><img src="https://github.com/vidual-labs/digital-marketing-skills/actions/workflows/validate.yml/badge.svg" alt="Validate skills"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.2.0-7c3aed" alt="Version 1.2.0"></a>
   <a href="#skills"><img src="https://img.shields.io/badge/skills-15-6d28d9" alt="15 skills"></a>
-  <a href="#testing"><img src="https://img.shields.io/badge/evals-tested-16a34a" alt="Evals"></a>
+  <a href="#testing"><img src="https://img.shields.io/badge/evals-60-16a34a" alt="60 evals"></a>
   <a href="https://agentskills.io/specification"><img src="https://img.shields.io/badge/format-Agent%20Skills-0f172a" alt="Agent Skills format"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
 </p>

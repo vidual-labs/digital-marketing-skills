@@ -1,6 +1,6 @@
 {
   "skill_name": "tiktok-ads",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,45 @@
         "Scripts are timestamped with spoken line, on-screen text and visual per segment",
         "Ad text is ≤100 characters and the display name ≤20 characters",
         "Recommends Spark Ads for the creator videos and notes commercial music licensing",
-        "Includes a pinned comment and a testing plan isolating one variable"
+        "Includes a pinned comment and a testing plan isolating one variable",
+        "Hook types are chosen to fit a visibly demonstrable product (e.g. a demo hook is included) and the testing plan states a minimum-data floor and decision rule"
       ],
       "checks": [
-        {"type": "min_count", "pattern": "^--- CREATIVE", "count": 3},
-        {"type": "regex", "pattern": "\\[0:00[–-]0:02\\]"},
-        {"type": "regex", "pattern": "Ad text"},
-        {"type": "regex", "pattern": "Spark"},
-        {"type": "regex", "pattern": "Pinned comment"}
+        {
+          "type": "min_count",
+          "pattern": "^--- CREATIVE",
+          "count": 3
+        },
+        {
+          "type": "regex",
+          "pattern": "\\[0:00[–-]0:02\\]"
+        },
+        {
+          "type": "regex",
+          "pattern": "Ad text"
+        },
+        {
+          "type": "regex",
+          "pattern": "Spark"
+        },
+        {
+          "type": "regex",
+          "pattern": "Pinned comment"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Ad text \\(\\d+ chars",
+          "count": 3
+        },
+        {
+          "type": "min_count",
+          "pattern": "^Muted & safe-zone check:",
+          "count": 3
+        },
+        {
+          "type": "regex",
+          "pattern": "Decision rule:"
+        }
       ]
     },
     {
@@ -36,10 +67,22 @@
         "Keeps essential text out of the bottom third / safe zones"
       ],
       "checks": [
-        {"type": "regex", "pattern": "9:16"},
-        {"type": "regex", "pattern": "logo"},
-        {"type": "regex", "pattern": "\\[0:00"},
-        {"type": "regex", "pattern": "Learn more|Sign up|Get quote"}
+        {
+          "type": "regex",
+          "pattern": "9:16"
+        },
+        {
+          "type": "regex",
+          "pattern": "logo"
+        },
+        {
+          "type": "regex",
+          "pattern": "\\[0:00"
+        },
+        {
+          "type": "regex",
+          "pattern": "Learn more|Sign up|Get quote"
+        }
       ]
     },
     {
@@ -55,9 +98,69 @@
         "Mentions policy caution for skincare/health claims"
       ],
       "checks": [
-        {"type": "regex", "pattern": "Smart\\+"},
-        {"type": "regex", "pattern": "100 char"},
-        {"type": "regex", "pattern": "polic"}
+        {
+          "type": "regex",
+          "pattern": "Smart\\+"
+        },
+        {
+          "type": "regex",
+          "pattern": "100 char"
+        },
+        {
+          "type": "regex",
+          "pattern": "polic"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "creative-test-read-next-round",
+      "prompt": "First TikTok creative test for our $45 meal-replacement shake bundle, conversions campaign, target CPA $25, 8 days live. A (founder demo): 21k impressions, 2s view rate 38%, 6s view rate 21%, CTR 1.6%, 22 purchases, spend $420. B (studio product shot): 15k impr, 2s 22%, 6s 9%, CTR 0.7%, 8 purchases, spend $330. C (POV skit): 18k impr, 2s 41%, 6s 12%, CTR 0.9%, 9 purchases, spend $300. D (UGC unboxing promoting the 3-pack): 12k impr, 2s 35%, 6s 20%, CTR 1.9%, 5 purchases, spend $260. Tell me what to scale, fix or kill, then write the next round.",
+      "files": [],
+      "expected_output": "A TEST READ table with a verdict per creative against the round's own median: A Scale (CPA ~$19, strong view rates); B Kill (CPA ~$41, weakest hook and hold, studio look); C Iterate (best 2s view rate but 6s drops — slow second beat; tighten 0:02–0:06); D Iterate or check destination (high CTR but CPA ~$52 — conversion-rate/destination mismatch on the 3-pack, check the landing page and event before rewriting). Next round: three creatives that follow from the verdicts (new hooks on A's body, C re-cut with an earlier payoff, D aligned with the destination), no weight-loss or health outcome claims, ad text with character counts, and a testing plan with one variable per test and a decision rule.",
+      "assertions": [
+        "Computes CPAs (A ~$19, B ~$41, C ~$33, D ~$52) and compares view rates against the round's median rather than outside benchmarks",
+        "Gives A a Scale verdict and B a Kill verdict with reasons tied to the metrics",
+        "Diagnoses C as a strong hook with a weak second beat (2s 41% but 6s 12%) and proposes tightening the 0:02–0:06 segment",
+        "Diagnoses D as a post-click/destination problem (high CTR 1.9%, poor conversion) and recommends checking the 3-pack landing page or tracking before rewriting the video",
+        "Next-round creatives each state which verdict they build on, avoid unsubstantiated health or weight-loss claims, and the testing plan isolates one variable"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "TEST READ"
+        },
+        {
+          "type": "min_count",
+          "pattern": "\\b(Scale|Iterate|Kill|Wait)\\b",
+          "count": 4
+        },
+        {
+          "type": "regex",
+          "pattern": "6s|6-second"
+        },
+        {
+          "type": "regex",
+          "pattern": "landing page|destination|conversion rate|CVR"
+        },
+        {
+          "type": "min_count",
+          "pattern": "^--- CREATIVE",
+          "count": 3
+        },
+        {
+          "type": "min_count",
+          "pattern": "^Builds on:",
+          "count": 3
+        },
+        {
+          "type": "contains",
+          "value": "TESTING PLAN"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "\\blose (\\d+|weight)\\b"
+        }
       ]
     }
   ]

@@ -1,6 +1,6 @@
 {
   "skill_name": "meta-ads-creative",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,48 @@
         "Each hook line is under 125 characters and front-loads the value",
         "Headlines are ≤40 characters with the offer or outcome in the first ~27",
         "Uses the real proof provided (1,200 reviews, 4.7 stars, 30% off) and nothing invented",
-        "Creative direction specifies 4:5 and 9:16 ratios or safe zones and a first-2-second action"
+        "Creative direction specifies 4:5 and 9:16 ratios or safe zones and a first-2-second action",
+        "Header states stage (cold) and an awareness level, and the TEST PLAN names the isolated variable, primary metric and minimum data before a call"
       ],
       "checks": [
-        {"type": "min_count", "pattern": "^--- Ad Variation", "count": 3},
-        {"type": "regex", "pattern": "Primary text"},
-        {"type": "regex", "pattern": "Headline"},
-        {"type": "regex", "pattern": "Hypothesis"},
-        {"type": "regex", "pattern": "4:5|9:16"}
+        {
+          "type": "min_count",
+          "pattern": "^--- Ad Variation",
+          "count": 3
+        },
+        {
+          "type": "regex",
+          "pattern": "Primary text"
+        },
+        {
+          "type": "regex",
+          "pattern": "Headline"
+        },
+        {
+          "type": "regex",
+          "pattern": "Hypothesis"
+        },
+        {
+          "type": "regex",
+          "pattern": "4:5|9:16"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Hook \\(\\d+ chars\\)",
+          "count": 3
+        },
+        {
+          "type": "contains",
+          "value": "TEST PLAN"
+        },
+        {
+          "type": "regex",
+          "pattern": "AWARENESS:\\s*\\w"
+        },
+        {
+          "type": "regex",
+          "pattern": "PROOF USED:.*(1[,.]?200|4[.,]7)"
+        }
       ]
     },
     {
@@ -36,10 +70,22 @@
         "Creative direction is 9:16 with safe-zone guidance"
       ],
       "checks": [
-        {"type": "regex", "pattern": "0[–-]2\\s?s|0:00"},
-        {"type": "regex", "pattern": "BACK10"},
-        {"type": "regex", "pattern": "9:16"},
-        {"type": "regex", "pattern": "caption"}
+        {
+          "type": "regex",
+          "pattern": "0[–-]2\\s?s|0:00"
+        },
+        {
+          "type": "regex",
+          "pattern": "BACK10"
+        },
+        {
+          "type": "regex",
+          "pattern": "9:16"
+        },
+        {
+          "type": "regex",
+          "pattern": "caption"
+        }
       ]
     },
     {
@@ -55,9 +101,74 @@
         "Delivers three variations in the skill's output format"
       ],
       "checks": [
-        {"type": "regex", "pattern": "policy|personal attribute"},
-        {"type": "min_count", "pattern": "^--- Ad Variation", "count": 3},
-        {"type": "not_regex", "pattern": "Are you anxious at night\\?\\s*$"}
+        {
+          "type": "regex",
+          "pattern": "policy|personal attribute"
+        },
+        {
+          "type": "min_count",
+          "pattern": "^--- Ad Variation",
+          "count": 3
+        },
+        {
+          "type": "not_regex",
+          "pattern": "Are you anxious at night\\?\\s*$"
+        },
+        {
+          "type": "regex",
+          "pattern": "^POLICY NOTES:\\s*(?!None)\\S"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "iterate-fatigued-winner-from-data",
+      "prompt": "Our best Meta ad for a €49 ergonomic laptop stand is a 20s UGC video (creator unboxing at her desk, hook: 'My neck stopped hurting the week I did this'). Four weeks ago: hook rate 34%, hold rate 14%, link CTR 1.3%, CPA €18. Last 7 days: hook rate 19%, hold rate 13%, link CTR 0.8%, CPA €29, frequency 3.4 on a broad prospecting ad set. 900 reviews, 4.6 stars, 30-day free returns. Write the next round of ads.",
+      "files": [],
+      "expected_output": "An ITERATION READ that names the hook (first 1–2 seconds) as the weak step — hook rate fell 34%→19% while hold rate held at 13–14% — with fatigue context (frequency 3.4, CTR down). Three iteration variations keep the winning UGC angle and each change one named element, mostly the opening (new first frame/line), with one possibly changing speaker or format. Uses only the supplied proof (900 reviews, 4.6 stars, 30-day returns), avoids a health claim about curing neck pain, counts hook characters, and gives a TEST PLAN for a hook test with minimum data.",
+      "assertions": [
+        "ITERATION READ identifies the hook as the weak step by citing hook rate falling (34% to 19%) while hold rate stayed roughly stable, and mentions frequency 3.4 as fatigue",
+        "Variations keep the winning UGC/creator angle and each states the single element it changes (at least two change the opening/hook)",
+        "Does not rewrite the whole concept from scratch or change the offer and format all at once",
+        "Uses only the provided proof (900 reviews, 4.6 stars, 30-day free returns) and avoids medical claims such as curing neck pain",
+        "TEST PLAN isolates the hook as the variable and judges on hook rate then CTR, with a minimum-data rule"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "ITERATION READ"
+        },
+        {
+          "type": "regex",
+          "pattern": "hook rate"
+        },
+        {
+          "type": "regex",
+          "pattern": "34\\s?%.*19\\s?%|19\\s?%.*34\\s?%"
+        },
+        {
+          "type": "min_count",
+          "pattern": "^--- Ad Variation",
+          "count": 3
+        },
+        {
+          "type": "min_count",
+          "pattern": "^Changes vs control:",
+          "count": 3
+        },
+        {
+          "type": "min_count",
+          "pattern": "Hook \\(\\d+ chars\\)",
+          "count": 3
+        },
+        {
+          "type": "contains",
+          "value": "TEST PLAN"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "\\b(cures?|eliminates?) (your )?neck pain"
+        }
       ]
     }
   ]

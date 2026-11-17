@@ -1,6 +1,6 @@
 {
   "skill_name": "meta-ads-diagnostics",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "evals": [
     {
       "id": 1,
@@ -13,14 +13,39 @@
         "Recommends consolidating the four ad sets (learning limited) into fewer, broader ad sets",
         "Recommends new creative given the top ad has run since March and frequency is high",
         "Scaling guidance is ≤20% per day and changes are batched to reset learning once",
-        "Attribution setting is named when quoting results and data trust is confirmed (CAPI on, EMQ 7.2)"
+        "Attribution setting is named when quoting results and data trust is confirmed (CAPI on, EMQ 7.2)",
+        "Names a primary driver with component changes (CTR −36%, CPM +36%, frequency up) and tags each priority change Learning reset Yes/No"
       ],
       "checks": [
-        {"type": "contains", "value": "HEALTH SCORE"},
-        {"type": "contains", "value": "PRIORITY CHANGES"},
-        {"type": "regex", "pattern": "20\\s?%"},
-        {"type": "regex", "pattern": "fatigue"},
-        {"type": "regex", "pattern": "learning"}
+        {
+          "type": "contains",
+          "value": "HEALTH SCORE"
+        },
+        {
+          "type": "contains",
+          "value": "PRIORITY CHANGES"
+        },
+        {
+          "type": "regex",
+          "pattern": "20\\s?%"
+        },
+        {
+          "type": "regex",
+          "pattern": "fatigue"
+        },
+        {
+          "type": "regex",
+          "pattern": "learning"
+        },
+        {
+          "type": "contains",
+          "value": "PRIMARY DRIVER"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Learning reset:\\s*(Yes|No)",
+          "count": 2
+        }
       ]
     },
     {
@@ -36,10 +61,22 @@
         "Points to gtm-debugging-style verification steps for the tracking layer"
       ],
       "checks": [
-        {"type": "regex", "pattern": "attribution"},
-        {"type": "regex", "pattern": "consent|cookie banner"},
-        {"type": "regex", "pattern": "conversions api|capi"},
-        {"type": "not_regex", "pattern": "^\\s*(pause the campaign|yes, pause)"}
+        {
+          "type": "regex",
+          "pattern": "attribution"
+        },
+        {
+          "type": "regex",
+          "pattern": "consent|cookie banner"
+        },
+        {
+          "type": "regex",
+          "pattern": "conversions api|capi"
+        },
+        {
+          "type": "not_regex",
+          "pattern": "^\\s*(pause the campaign|yes, pause)"
+        }
       ]
     },
     {
@@ -55,9 +92,63 @@
         "Describes how to compare manual vs Advantage+ (same creative, enough time, same attribution)"
       ],
       "checks": [
-        {"type": "regex", "pattern": "advantage\\+ sales"},
-        {"type": "regex", "pattern": "highest volume"},
-        {"type": "regex", "pattern": "existing customer"}
+        {
+          "type": "regex",
+          "pattern": "advantage\\+ sales"
+        },
+        {
+          "type": "regex",
+          "pattern": "highest volume"
+        },
+        {
+          "type": "regex",
+          "pattern": "existing customer"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "q4-cpm-spike-not-creative",
+      "prompt": "Meta sales campaign (Advantage+ sales, highest volume, broad, 9 live ads, 7-day click/1-day view, CAPI on, EMQ 8.1, Shopify orders match within 6%). Comparing Nov 10–16 to Oct 27–Nov 2: spend $9,750 vs $9,800, CPM $20.10 vs $14.20, link CTR 1.22% vs 1.25%, purchases ÷ link clicks 3.1% vs 3.0%, CPA $53 vs $38 (target $45), frequency 2.1 vs 1.9. Activity history shows no edits. My boss wants all-new creative and three new interest ad sets by Friday. Is he right?",
+      "files": [],
+      "expected_output": "An audit in the skill's format whose PRIMARY DRIVER is CPM (about +42%) with CTR and conversion rate essentially flat and frequency in band — a seasonal/auction cost increase heading into Black Friday/Q4, not creative fatigue or a targeting failure. Data confidence High. Advises against replacing all creative and against splitting into interest ad sets (would fragment budget and reset learning); recommends holding structure, keeping the creative pipeline on its normal cadence, planning for the sale period (offers, budget expectations, evaluating vs. last year's seasonal CPMs), and lists those tempting changes under DO NOT CHANGE YET with a re-check date.",
+      "assertions": [
+        "Decomposes the CPA rise and identifies CPM (+~42%) as the primary driver, noting CTR and conversion rate are roughly flat",
+        "Attributes the CPM increase to seasonal auction pressure (Q4 / Black Friday period) and notes frequency 2.1 is within the prospecting band, so it is not creative fatigue",
+        "Advises against replacing all creative and against adding three interest ad sets, explaining learning resets and over-segmentation",
+        "Lists the boss's proposed changes under DO NOT CHANGE YET or equivalent, with reasoning",
+        "States data confidence as High based on CAPI, EMQ 8.1 and the 6% order gap, and names the attribution setting"
+      ],
+      "checks": [
+        {
+          "type": "contains",
+          "value": "PRIMARY DRIVER"
+        },
+        {
+          "type": "regex",
+          "pattern": "PRIMARY DRIVER[^\\n]*\\n[^\\n]*CPM"
+        },
+        {
+          "type": "regex",
+          "pattern": "season|auction|black friday|BFCM|Q4"
+        },
+        {
+          "type": "contains",
+          "value": "DO NOT CHANGE YET"
+        },
+        {
+          "type": "regex",
+          "pattern": "7-day click"
+        },
+        {
+          "type": "min_count",
+          "pattern": "Learning reset:\\s*(Yes|No)",
+          "count": 1
+        },
+        {
+          "type": "not_regex",
+          "pattern": "^\\s*(yes|he is right)\\b"
+        }
       ]
     }
   ]
